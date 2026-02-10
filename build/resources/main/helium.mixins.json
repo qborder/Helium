@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.helium.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "com.helium.mixin.HeliumMixinPlugin",
+  "client": [
+    "math.MathHelperMixin",
+    "render.GlStateManagerMixin",
+    "render.GlStateManagerLegacyMixin",
+    "render.EntityCullingMixin",
+    "render.BlockEntityCullingMixin",
+    "particle.ParticleManagerMixin",
+    "tick.ClientWorldMixin",
+    "network.ClientConnectionMixin",
+    "multiplayer.ServerListWidgetMixin",
+    "multiplayer.MultiplayerScreenMixin",
+    "multiplayer.MultiplayerScreenAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

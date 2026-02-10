@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "helium",
+  "version": "${version}",
+  "name": "Helium",
+  "description": "Client-side performance optimizations for Minecraft. Faster math, less GC pressure, smarter rendering. Zero visual changes. Requires Sodium.",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/helium/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.helium.HeliumClient"
+    ],
+    "modmenu": [
+      "com.helium.compat.HeliumModMenuIntegration"
+    ],
+    "sodium:config_api_user": [
+      "com.helium.compat.HeliumSodiumConfig"
+    ]
+  },
+  "mixins": [
+    "helium.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": ">=1.21.1 <=1.21.11",
+    "java": ">=21",
+    "fabric-api": "*",
+    "sodium": ">=0.6.0"
+  },
+  "suggests": {
+    "lithium": "*",
+    "iris": "*",
+    "immediatelyfast": "*",
+    "yet_another_config_lib_v3": "*",
+    "modmenu": "*"
+  }
+}

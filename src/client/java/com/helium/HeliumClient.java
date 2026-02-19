@@ -3,8 +3,10 @@ package com.helium;
 import com.helium.config.HeliumConfig;
 import com.helium.math.FastMath;
 import com.helium.memory.BufferPool;
+import com.helium.memory.NativeMemoryManager;
 import com.helium.memory.ObjectPool;
 import com.helium.render.GLStateCache;
+import com.helium.render.RenderPipeline;
 import com.helium.resource.BackgroundResourceProcessor;
 import com.helium.startup.FastStartup;
 import com.helium.threading.EventPoller;
@@ -25,6 +27,15 @@ public class HeliumClient implements ClientModInitializer {
     private static boolean hasIris = false;
     private static boolean hasImmediatelyFast = false;
 
+    private static boolean fastMathFailed = false;
+    private static boolean memoryOptsFailed = false;
+    private static boolean glStateCacheFailed = false;
+    private static boolean threadOptsFailed = false;
+    private static boolean networkOptsFailed = false;
+    private static boolean startupOptsFailed = false;
+    private static boolean nativeMemoryFailed = false;
+    private static boolean renderPipelineFailed = false;
+
     @Override
     public void onInitializeClient() {
         long start = System.nanoTime();
@@ -38,33 +49,49 @@ public class HeliumClient implements ClientModInitializer {
 
         detectCompatibleMods();
 
-        if (config.fastMath) {
-            FastMath.init();
-        }
+        initFeatureSafely("FastMath", () -> {
+            if (config.fastMath) FastMath.init();
+        }, () -> fastMathFailed = true);
 
-        if (config.memoryOptimizations) {
-            ObjectPool.init(512);
-            BufferPool.init(64);
-        }
+        initFeatureSafely("MemoryOptimizations", () -> {
+            if (config.memoryOptimizations) {
+                ObjectPool.init(512);
+                BufferPool.init(64);
+            }
+        }, () -> memoryOptsFailed = true);
 
-        if (config.glStateCache && !hasImmediatelyFast) {
-            GLStateCache.init();
-        } else if (hasImmediatelyFast) {
-            LOGGER.info("gl state cache disabled - ImmediatelyFast handles this");
-        }
+        initFeatureSafely("GLStateCache", () -> {
+            if (config.glStateCache && !hasImmediatelyFast) {
+                GLStateCache.init();
+            } else if (hasImmediatelyFast) {
+                LOGGER.info("gl state cache disabled - ImmediatelyFast handles this");
+            }
+        }, () -> glStateCacheFailed = true);
 
-        if (config.threadOptimizations) {
-            ThreadPriorityManager.init();
-            EventPoller.init(1000);
-        }
+        initFeatureSafely("ThreadOptimizations", () -> {
+            if (config.threadOptimizations) {
+                ThreadPriorityManager.init();
+                EventPoller.init(1000);
+            }
+        }, () -> threadOptsFailed = true);
 
-        if (config.networkOptimizations) {
-            BackgroundResourceProcessor.init();
-        }
+        initFeatureSafely("NetworkOptimizations", () -> {
+            if (config.networkOptimizations) {
+                BackgroundResourceProcessor.init();
+            }
+        }, () -> networkOptsFailed = true);
 
-        if (config.fastStartup) {
-            FastStartup.init();
-        }
+        initFeatureSafely("FastStartup", () -> {
+            if (config.fastStartup) FastStartup.init();
+        }, () -> startupOptsFailed = true);
+
+        initFeatureSafely("NativeMemory", () -> {
+            if (config.nativeMemory) NativeMemoryManager.init(config.nativeMemoryPoolMb);
+        }, () -> nativeMemoryFailed = true);
+
+        initFeatureSafely("RenderPipeline", () -> {
+            if (config.renderPipelining) RenderPipeline.init();
+        }, () -> renderPipelineFailed = true);
 
         long elapsed = (System.nanoTime() - start) / 1_000_000;
         LOGGER.info("initialized in {}ms", elapsed);
@@ -88,4 +115,22 @@ public class HeliumClient implements ClientModInitializer {
     public static HeliumConfig getConfig() {
         return config;
     }
+
+    private void initFeatureSafely(String name, Runnable init, Runnable onFailure) {
+        try {
+            init.run();
+        } catch (Throwable t) {
+            LOGGER.error("{} failed to initialize, feature disabled", name, t);
+            onFailure.run();
+        }
+    }
+
+    public static boolean isFastMathAvailable() { return !fastMathFailed; }
+    public static boolean isMemoryOptsAvailable() { return !memoryOptsFailed; }
+    public static boolean isGlStateCacheAvailable() { return !glStateCacheFailed; }
+    public static boolean isThreadOptsAvailable() { return !threadOptsFailed; }
+    public static boolean isNetworkOptsAvailable() { return !networkOptsFailed; }
+    public static boolean isStartupOptsAvailable() { return !startupOptsFailed; }
+    public static boolean isNativeMemoryAvailable() { return !nativeMemoryFailed; }
+    public static boolean isRenderPipelineAvailable() { return !renderPipelineFailed; }
 }

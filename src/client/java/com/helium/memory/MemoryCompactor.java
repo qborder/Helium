@@ -16,6 +16,8 @@ public final class MemoryCompactor {
 
     private MemoryCompactor() {}
 
+    private static final int MAX_STRING_POOL_SIZE = 16384;
+
     public static String deduplicateString(String value) {
         if (value == null) return null;
         WeakReference<String> ref = STRING_INTERN_POOL.get(value);
@@ -23,7 +25,9 @@ public final class MemoryCompactor {
             String existing = ref.get();
             if (existing != null) return existing;
         }
-        STRING_INTERN_POOL.put(value, new WeakReference<>(value));
+        if (STRING_INTERN_POOL.size() < MAX_STRING_POOL_SIZE) {
+            STRING_INTERN_POOL.put(value, new WeakReference<>(value));
+        }
         return value;
     }
 

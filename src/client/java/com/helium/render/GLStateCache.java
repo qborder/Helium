@@ -2,23 +2,23 @@ package com.helium.render;
 
 public final class GLStateCache {
 
-    private static int lastBoundTexture = -1;
-    private static int lastBoundProgram = -1;
-    private static int lastBoundVao = -1;
-    private static int lastBoundVbo = -1;
+    private static volatile int lastBoundTexture = -1;
+    private static volatile int lastBoundProgram = -1;
+    private static volatile int lastBoundVao = -1;
+    private static volatile int lastBoundVbo = -1;
 
-    private static boolean blendEnabled = false;
-    private static boolean depthTestEnabled = false;
-    private static boolean cullFaceEnabled = false;
+    private static volatile boolean blendEnabled = false;
+    private static volatile boolean depthTestEnabled = false;
+    private static volatile boolean cullFaceEnabled = false;
 
-    private static int blendSrcRgb = -1;
-    private static int blendDstRgb = -1;
-    private static int blendSrcAlpha = -1;
-    private static int blendDstAlpha = -1;
+    private static volatile int blendSrcRgb = -1;
+    private static volatile int blendDstRgb = -1;
+    private static volatile int blendSrcAlpha = -1;
+    private static volatile int blendDstAlpha = -1;
 
-    private static int depthFunc = -1;
+    private static volatile int depthFunc = -1;
 
-    private static boolean initialized = false;
+    private static volatile boolean initialized = false;
 
     private GLStateCache() {}
 

@@ -2,30 +2,34 @@ package com.helium.memory;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayDeque;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class BufferPool {
 
     private static final int[] BUCKET_SIZES = {256, 1024, 4096, 16384, 65536, 262144};
     @SuppressWarnings("unchecked")
-    private static final ArrayDeque<ByteBuffer>[] BUCKETS = new ArrayDeque[BUCKET_SIZES.length];
+    private static final ConcurrentLinkedDeque<ByteBuffer>[] BUCKETS = new ConcurrentLinkedDeque[BUCKET_SIZES.length];
+    private static final AtomicInteger[] BUCKET_COUNTS = new AtomicInteger[BUCKET_SIZES.length];
 
-    private static int maxPerBucket = 64;
+    private static volatile int maxPerBucket = 64;
 
     private BufferPool() {}
 
     public static void init(int poolSize) {
         maxPerBucket = poolSize;
         for (int i = 0; i < BUCKETS.length; i++) {
-            BUCKETS[i] = new ArrayDeque<>(maxPerBucket);
+            BUCKETS[i] = new ConcurrentLinkedDeque<>();
+            BUCKET_COUNTS[i] = new AtomicInteger(0);
         }
     }
 
     public static ByteBuffer borrow(int minCapacity) {
         int bucketIndex = findBucket(minCapacity);
-        if (bucketIndex >= 0 && BUCKETS[bucketIndex] != null) {
+        if (bucketIndex >= 0 && BUCKETS[bucketIndex] != null && BUCKET_COUNTS[bucketIndex] != null) {
             ByteBuffer buf = BUCKETS[bucketIndex].pollFirst();
             if (buf != null) {
+                BUCKET_COUNTS[bucketIndex].decrementAndGet();
                 buf.clear();
                 return buf;
             }
@@ -40,10 +44,11 @@ public final class BufferPool {
 
         int capacity = buffer.capacity();
         int bucketIndex = findExactBucket(capacity);
-        if (bucketIndex >= 0 && BUCKETS[bucketIndex] != null) {
-            if (BUCKETS[bucketIndex].size() < maxPerBucket) {
+        if (bucketIndex >= 0 && BUCKETS[bucketIndex] != null && BUCKET_COUNTS[bucketIndex] != null) {
+            if (BUCKET_COUNTS[bucketIndex].get() < maxPerBucket) {
                 buffer.clear();
                 BUCKETS[bucketIndex].offerFirst(buffer);
+                BUCKET_COUNTS[bucketIndex].incrementAndGet();
             }
         }
     }

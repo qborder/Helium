@@ -10,6 +10,7 @@
     "render.GlStateManagerLegacyMixin",
     "render.EntityCullingMixin",
     "render.BlockEntityCullingMixin",
+    "render.InGameHudMixin",
     "particle.ParticleManagerMixin",
     "tick.ClientWorldMixin",
     "network.ClientConnectionMixin",

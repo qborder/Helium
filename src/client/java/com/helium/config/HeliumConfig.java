@@ -30,10 +30,24 @@ public class HeliumConfig {
     public int blockEntityCullDistance = 48;
     public boolean particleCulling = true;
     public int particleCullDistance = 32;
+    public boolean particleLimiting = true;
+    public int maxParticles = 1000;
+    public boolean particlePriority = true;
+    public boolean particleBatching = true;
     public boolean animationThrottling = true;
 
     public boolean fastServerPing = true;
     public boolean preserveScrollOnRefresh = true;
+
+    public boolean fpsOverlay = true;
+    public String overlayPosition = "TOP_LEFT";
+    public int overlayTransparency = 80;
+    public String overlayBackgroundColor = "#000000";
+    public String overlayTextColor = "#FFFFFF";
+
+    public boolean nativeMemory = true;
+    public int nativeMemoryPoolMb = 64;
+    public boolean renderPipelining = false;
 
     public static HeliumConfig load() {
         if (Files.exists(CONFIG_PATH)) {
@@ -61,5 +75,67 @@ public class HeliumConfig {
         } catch (IOException e) {
             HeliumClient.LOGGER.warn("failed to save config", e);
         }
+    }
+
+    public boolean exportToFile(Path path) {
+        try {
+            Files.createDirectories(path.getParent());
+            Files.writeString(path, GSON.toJson(this));
+            HeliumClient.LOGGER.info("config exported to {}", path);
+            return true;
+        } catch (IOException e) {
+            HeliumClient.LOGGER.warn("failed to export config to {}", path, e);
+            return false;
+        }
+    }
+
+    public static HeliumConfig importFromFile(Path path) {
+        if (!Files.exists(path)) {
+            HeliumClient.LOGGER.warn("import file does not exist: {}", path);
+            return null;
+        }
+        try {
+            String json = Files.readString(path);
+            HeliumConfig imported = GSON.fromJson(json, HeliumConfig.class);
+            if (imported != null) {
+                HeliumClient.LOGGER.info("config imported from {}", path);
+                return imported;
+            }
+        } catch (IOException e) {
+            HeliumClient.LOGGER.warn("failed to import config from {}", path, e);
+        }
+        return null;
+    }
+
+    public void copyFrom(HeliumConfig other) {
+        if (other == null) return;
+        this.modEnabled = other.modEnabled;
+        this.fastMath = other.fastMath;
+        this.glStateCache = other.glStateCache;
+        this.memoryOptimizations = other.memoryOptimizations;
+        this.threadOptimizations = other.threadOptimizations;
+        this.networkOptimizations = other.networkOptimizations;
+        this.fastStartup = other.fastStartup;
+        this.entityCulling = other.entityCulling;
+        this.entityCullDistance = other.entityCullDistance;
+        this.blockEntityCulling = other.blockEntityCulling;
+        this.blockEntityCullDistance = other.blockEntityCullDistance;
+        this.particleCulling = other.particleCulling;
+        this.particleCullDistance = other.particleCullDistance;
+        this.particleLimiting = other.particleLimiting;
+        this.maxParticles = other.maxParticles;
+        this.particlePriority = other.particlePriority;
+        this.particleBatching = other.particleBatching;
+        this.animationThrottling = other.animationThrottling;
+        this.fastServerPing = other.fastServerPing;
+        this.preserveScrollOnRefresh = other.preserveScrollOnRefresh;
+        this.fpsOverlay = other.fpsOverlay;
+        this.overlayPosition = other.overlayPosition;
+        this.overlayTransparency = other.overlayTransparency;
+        this.overlayBackgroundColor = other.overlayBackgroundColor;
+        this.overlayTextColor = other.overlayTextColor;
+        this.nativeMemory = other.nativeMemory;
+        this.nativeMemoryPoolMb = other.nativeMemoryPoolMb;
+        this.renderPipelining = other.renderPipelining;
     }
 }

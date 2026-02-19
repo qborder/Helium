@@ -1,50 +1,76 @@
 package com.helium.tick;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public final class ClientTickCache {
 
-    private static final ConcurrentHashMap<Long, Integer> biomeColorCache = new ConcurrentHashMap<>(4096);
-    private static final ConcurrentHashMap<Long, Integer> lightLevelCache = new ConcurrentHashMap<>(4096);
+    private static final int MAX_CACHE_SIZE = 16384;
 
-    private static long lastClearTick = 0;
-    private static final int CACHE_LIFETIME_TICKS = 100;
+    private static final Map<Long, Integer> biomeColorCache = new LinkedHashMap<>(1024, 0.75f, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<Long, Integer> eldest) {
+            return size() > MAX_CACHE_SIZE;
+        }
+    };
+
+    private static final Map<Long, Integer> lightLevelCache = new LinkedHashMap<>(1024, 0.75f, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<Long, Integer> eldest) {
+            return size() > MAX_CACHE_SIZE;
+        }
+    };
+
+    private static final Object biomeLock = new Object();
+    private static final Object lightLock = new Object();
 
     private ClientTickCache() {}
 
     public static int getCachedBiomeColor(long posKey, int fallback) {
-        Integer cached = biomeColorCache.get(posKey);
-        return cached != null ? cached : fallback;
+        synchronized (biomeLock) {
+            Integer cached = biomeColorCache.get(posKey);
+            return cached != null ? cached : fallback;
+        }
     }
 
     public static void cacheBiomeColor(long posKey, int color) {
-        if (biomeColorCache.size() < 16384) {
+        synchronized (biomeLock) {
             biomeColorCache.put(posKey, color);
         }
     }
 
     public static int getCachedLightLevel(long posKey, int fallback) {
-        Integer cached = lightLevelCache.get(posKey);
-        return cached != null ? cached : fallback;
+        synchronized (lightLock) {
+            Integer cached = lightLevelCache.get(posKey);
+            return cached != null ? cached : fallback;
+        }
     }
 
     public static void cacheLightLevel(long posKey, int level) {
-        if (lightLevelCache.size() < 16384) {
+        synchronized (lightLock) {
             lightLevelCache.put(posKey, level);
         }
     }
 
     public static void tick(long currentTick) {
-        if (currentTick - lastClearTick >= CACHE_LIFETIME_TICKS) {
-            biomeColorCache.clear();
-            lightLevelCache.clear();
-            lastClearTick = currentTick;
-        }
     }
 
     public static void invalidateAll() {
-        biomeColorCache.clear();
-        lightLevelCache.clear();
+        synchronized (biomeLock) {
+            biomeColorCache.clear();
+        }
+        synchronized (lightLock) {
+            lightLevelCache.clear();
+        }
+    }
+
+    public static void invalidatePosition(long posKey) {
+        synchronized (biomeLock) {
+            biomeColorCache.remove(posKey);
+        }
+        synchronized (lightLock) {
+            lightLevelCache.remove(posKey);
+        }
     }
 
     public static long packPos(int x, int y, int z) {

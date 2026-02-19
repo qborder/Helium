@@ -5,6 +5,7 @@ import com.helium.config.HeliumConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,6 +21,8 @@ public abstract class EntityCullingMixin<T extends Entity> {
 
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
+
+        if (entity instanceof PlayerEntity) return;
 
         double dist = client.player.squaredDistanceTo(entity.getX(), entity.getY(), entity.getZ());
         double maxDist = config.entityCullDistance * config.entityCullDistance;

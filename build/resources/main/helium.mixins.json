@@ -6,6 +6,7 @@
   "plugin": "com.helium.mixin.HeliumMixinPlugin",
   "client": [
     "math.MathHelperMixin",
+    "math.MathHelperDoubleMixin",
     "render.GlStateManagerMixin",
     "render.GlStateManagerLegacyMixin",
     "render.EntityCullingMixin",

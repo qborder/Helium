@@ -12,14 +12,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MathHelperMixin {
 
     @Inject(method = "sin", at = @At("HEAD"), cancellable = true)
-    private static void helium$fastSin(double value, CallbackInfoReturnable<Float> cir) {
+    private static void helium$fastSin(float value, CallbackInfoReturnable<Float> cir) {
         if (FastMath.isInitialized() && HeliumClient.getConfig().fastMath) {
             cir.setReturnValue(FastMath.sin(value));
         }
     }
 
     @Inject(method = "cos", at = @At("HEAD"), cancellable = true)
-    private static void helium$fastCos(double value, CallbackInfoReturnable<Float> cir) {
+    private static void helium$fastCos(float value, CallbackInfoReturnable<Float> cir) {
         if (FastMath.isInitialized() && HeliumClient.getConfig().fastMath) {
             cir.setReturnValue(FastMath.cos(value));
         }

@@ -9,7 +9,7 @@ lightweight client-side performance mod for Minecraft
 [![Build](https://img.shields.io/github/actions/workflow/status/qborder/Helium/build.yml?logo=github&label=build)](https://github.com/qborder/Helium/actions)
 [![License](https://img.shields.io/github/license/qborder/Helium?cacheSeconds=36000)](https://github.com/qborder/Helium/blob/HEAD/LICENSE)
 
-**[Download on Modrinth](https://modrinth.com/mod/helium)** · **[Report Issues](https://github.com/qborder/Helium/issues)**
+**[Download on Modrinth](https://modrinth.com/mod/heliummc)** · **[Report Issues](https://github.com/qborder/Helium/issues)**
 
 </div>
 
@@ -95,4 +95,4 @@ fair warning: the mixin naming convention uses `helium$` prefix for all injected
 
 ## License
 
-[MIT](LICENSE) — do whatever you want with it.
+[MIT](LICENSE) do whatever you want with it.

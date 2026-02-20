@@ -25,5 +25,5 @@ MODRINTH_README.md
 run/
 logs/
 *.log
-*.lock
-*.bin
+CHANGELOG.md
+SUGGESTIONS.md

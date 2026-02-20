@@ -83,4 +83,91 @@ public final class FastMath {
     public static boolean isInitialized() {
         return initialized;
     }
+
+    public static void batchSin(float[] input, float[] output) {
+        if (!initialized || input == null || output == null) return;
+        int len = Math.min(input.length, output.length);
+        for (int i = 0; i < len; i++) {
+            int index = (int) (input[i] * precisionFactor) % precision;
+            if (index < 0) index += precision;
+            output[i] = sinTable[index];
+        }
+    }
+
+    public static void batchCos(float[] input, float[] output) {
+        if (!initialized || input == null || output == null) return;
+        int len = Math.min(input.length, output.length);
+        for (int i = 0; i < len; i++) {
+            int index = (int) (input[i] * precisionFactor) % precision;
+            if (index < 0) index += precision;
+            output[i] = cosTable[index];
+        }
+    }
+
+    public static void batchSinCos(float[] angles, float[] sinOut, float[] cosOut) {
+        if (!initialized || angles == null || sinOut == null || cosOut == null) return;
+        int len = Math.min(angles.length, Math.min(sinOut.length, cosOut.length));
+        for (int i = 0; i < len; i++) {
+            int index = (int) (angles[i] * precisionFactor) % precision;
+            if (index < 0) index += precision;
+            sinOut[i] = sinTable[index];
+            cosOut[i] = cosTable[index];
+        }
+    }
+
+    public static void batchTransformPositions(float[] positions, float[] matrix4x4, float[] output) {
+        if (positions == null || matrix4x4 == null || output == null) return;
+        if (matrix4x4.length < 16) return;
+
+        int vertexCount = positions.length / 3;
+        for (int i = 0; i < vertexCount; i++) {
+            int srcIdx = i * 3;
+            int dstIdx = i * 3;
+
+            float x = positions[srcIdx];
+            float y = positions[srcIdx + 1];
+            float z = positions[srcIdx + 2];
+
+            output[dstIdx] = matrix4x4[0] * x + matrix4x4[4] * y + matrix4x4[8] * z + matrix4x4[12];
+            output[dstIdx + 1] = matrix4x4[1] * x + matrix4x4[5] * y + matrix4x4[9] * z + matrix4x4[13];
+            output[dstIdx + 2] = matrix4x4[2] * x + matrix4x4[6] * y + matrix4x4[10] * z + matrix4x4[14];
+        }
+    }
+
+    public static void batchNormalize(float[] vectors, float[] output) {
+        if (vectors == null || output == null) return;
+        int vectorCount = vectors.length / 3;
+
+        for (int i = 0; i < vectorCount; i++) {
+            int idx = i * 3;
+            float x = vectors[idx];
+            float y = vectors[idx + 1];
+            float z = vectors[idx + 2];
+
+            float invLen = (float) inverseSqrt(x * x + y * y + z * z);
+            output[idx] = x * invLen;
+            output[idx + 1] = y * invLen;
+            output[idx + 2] = z * invLen;
+        }
+    }
+
+    public static void batchDot(float[] a, float[] b, float[] output) {
+        if (a == null || b == null || output == null) return;
+        int vectorCount = Math.min(a.length, b.length) / 3;
+
+        for (int i = 0; i < vectorCount; i++) {
+            int idx = i * 3;
+            output[i] = a[idx] * b[idx] + a[idx + 1] * b[idx + 1] + a[idx + 2] * b[idx + 2];
+        }
+    }
+
+    public static void batchLerp(float[] a, float[] b, float t, float[] output) {
+        if (a == null || b == null || output == null) return;
+        int len = Math.min(a.length, Math.min(b.length, output.length));
+        float oneMinusT = 1.0f - t;
+
+        for (int i = 0; i < len; i++) {
+            output[i] = a[i] * oneMinusT + b[i] * t;
+        }
+    }
 }

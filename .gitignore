@@ -27,3 +27,4 @@ logs/
 *.log
 CHANGELOG.md
 SUGGESTIONS.md
+*.uniqueId0

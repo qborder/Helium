@@ -46,12 +46,16 @@ public class HeliumMixinPlugin implements IMixinConfigPlugin {
                 if (major > 1) return true;
                 if (major == 1 && minor > 21) return true;
                 if (major == 1 && minor == 21 && parts.length > 2) {
-                    int patch = Integer.parseInt(parts[2].replaceAll("[^0-9]", ""));
+                    String patchStr = parts[2].replaceAll("[^0-9]", "");
+                    if (patchStr.isEmpty()) {
+                        return false; // No valid patch number, assume older version
+                    }
+                    int patch = Integer.parseInt(patchStr);
                     return patch >= 2;
                 }
             } catch (NumberFormatException e) {
-                // If parsing fails, assume it's a newer version and use double
-                return true;
+                // If parsing fails, assume it's an older version and use float for safety
+                return false;
             }
             
             return false;

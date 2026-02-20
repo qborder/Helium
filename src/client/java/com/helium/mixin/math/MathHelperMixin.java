@@ -11,28 +11,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MathHelper.class)
 public abstract class MathHelperMixin {
 
-    @Inject(method = "sin", at = @At("HEAD"), cancellable = true)
-    private static void helium$fastSin(float value, CallbackInfoReturnable<Float> cir) {
+    @Inject(method = "sin(D)D", at = @At("HEAD"), cancellable = true, require = 0)
+    private static void helium$fastSin(double value, CallbackInfoReturnable<Double> cir) {
         if (FastMath.isInitialized() && HeliumClient.getConfig().fastMath) {
-            cir.setReturnValue(FastMath.sin(value));
+            cir.setReturnValue((double) FastMath.sin(value));
         }
     }
 
-    @Inject(method = "cos", at = @At("HEAD"), cancellable = true)
-    private static void helium$fastCos(float value, CallbackInfoReturnable<Float> cir) {
+    @Inject(method = "cos(D)D", at = @At("HEAD"), cancellable = true, require = 0)
+    private static void helium$fastCos(double value, CallbackInfoReturnable<Double> cir) {
         if (FastMath.isInitialized() && HeliumClient.getConfig().fastMath) {
-            cir.setReturnValue(FastMath.cos(value));
+            cir.setReturnValue((double) FastMath.cos(value));
         }
     }
 
-    @Inject(method = "atan2", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "atan2(DD)D", at = @At("HEAD"), cancellable = true, require = 0)
     private static void helium$fastAtan2(double y, double x, CallbackInfoReturnable<Double> cir) {
         if (FastMath.isInitialized() && HeliumClient.getConfig().fastMath) {
             cir.setReturnValue(FastMath.atan2(y, x));
         }
     }
 
-    @Inject(method = "fastInverseSqrt", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "fastInverseSqrt(D)D", at = @At("HEAD"), cancellable = true, require = 0)
     private static void helium$fastInvSqrt(double value, CallbackInfoReturnable<Double> cir) {
         if (FastMath.isInitialized() && HeliumClient.getConfig().fastMath) {
             cir.setReturnValue(FastMath.inverseSqrt(value));

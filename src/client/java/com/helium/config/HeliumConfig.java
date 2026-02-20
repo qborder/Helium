@@ -40,8 +40,12 @@ public class HeliumConfig {
     public boolean preserveScrollOnRefresh = true;
 
     public boolean fpsOverlay = true;
+    public boolean overlayShowFps = true;
+    public boolean overlayShowFpsMinMaxAvg = false;
+    public boolean overlayShowMemory = false;
+    public boolean overlayShowParticles = false;
     public String overlayPosition = "TOP_LEFT";
-    public int overlayTransparency = 80;
+    public int overlayTransparency = 60;
     public String overlayBackgroundColor = "#000000";
     public String overlayTextColor = "#FFFFFF";
 
@@ -130,6 +134,10 @@ public class HeliumConfig {
         this.fastServerPing = other.fastServerPing;
         this.preserveScrollOnRefresh = other.preserveScrollOnRefresh;
         this.fpsOverlay = other.fpsOverlay;
+        this.overlayShowFps = other.overlayShowFps;
+        this.overlayShowFpsMinMaxAvg = other.overlayShowFpsMinMaxAvg;
+        this.overlayShowMemory = other.overlayShowMemory;
+        this.overlayShowParticles = other.overlayShowParticles;
         this.overlayPosition = other.overlayPosition;
         this.overlayTransparency = other.overlayTransparency;
         this.overlayBackgroundColor = other.overlayBackgroundColor;

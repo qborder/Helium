@@ -5,6 +5,8 @@ public final class FpsStats {
     private volatile int currentFps = 0;
     private volatile int minFps = Integer.MAX_VALUE;
     private volatile int maxFps = 0;
+    private volatile long fpsSum = 0;
+    private volatile int fpsCount = 0;
     private volatile long lastResetTime = System.currentTimeMillis();
 
     private static final long RESET_INTERVAL_MS = 5000;
@@ -15,12 +17,16 @@ public final class FpsStats {
         if (fps > 0) {
             if (fps < minFps) minFps = fps;
             if (fps > maxFps) maxFps = fps;
+            fpsSum += fps;
+            fpsCount++;
         }
 
         long now = System.currentTimeMillis();
         if (now - lastResetTime >= RESET_INTERVAL_MS) {
             minFps = fps;
             maxFps = fps;
+            fpsSum = fps;
+            fpsCount = 1;
             lastResetTime = now;
         }
     }
@@ -37,10 +43,16 @@ public final class FpsStats {
         return maxFps;
     }
 
+    public int getAvgFps() {
+        return fpsCount > 0 ? (int) (fpsSum / fpsCount) : 0;
+    }
+
     public void reset() {
         currentFps = 0;
         minFps = Integer.MAX_VALUE;
         maxFps = 0;
+        fpsSum = 0;
+        fpsCount = 0;
         lastResetTime = System.currentTimeMillis();
     }
 }

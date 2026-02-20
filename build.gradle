@@ -48,7 +48,7 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    modCompileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}"
+    modImplementation include("dev.isxander:yet-another-config-lib:${project.yacl_version}")
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
     modCompileOnly "net.caffeinemc:sodium-fabric-api:${project.sodium_api_version}"
 }

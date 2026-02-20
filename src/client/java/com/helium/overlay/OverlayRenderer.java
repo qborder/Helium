@@ -58,21 +58,32 @@ public final class OverlayRenderer {
     }
 
     private static String[] buildOverlayLines(MinecraftClient client, HeliumConfig config) {
-        Runtime rt = Runtime.getRuntime();
-        long usedMb = (rt.totalMemory() - rt.freeMemory()) / 1024 / 1024;
-        long maxMb = rt.maxMemory() / 1024 / 1024;
+        java.util.List<String> lines = new java.util.ArrayList<>();
 
-        String fpsLine = String.format("%d FPS", fpsStats.getCurrentFps());
-        String minMaxLine = String.format("↓%d ↑%d", fpsStats.getMinFps(), fpsStats.getMaxFps());
-        String ramLine = String.format("%dMB / %dMB", usedMb, maxMb);
-
-        if (config.particleLimiting && ParticleLimiter.isInitialized()) {
-            String particleLine = String.format("Particles: %d/%d", 
-                ParticleLimiter.getCurrentCount(), ParticleLimiter.getMaxParticles());
-            return new String[] { fpsLine, minMaxLine, ramLine, particleLine };
+        if (config.overlayShowFps) {
+            lines.add(String.format("%d FPS", fpsStats.getCurrentFps()));
         }
 
-        return new String[] { fpsLine, minMaxLine, ramLine };
+        if (config.overlayShowFpsMinMaxAvg) {
+            lines.add(String.format("↓%d ↑%d ~%d", fpsStats.getMinFps(), fpsStats.getMaxFps(), fpsStats.getAvgFps()));
+        }
+
+        if (config.overlayShowMemory) {
+            Runtime rt = Runtime.getRuntime();
+            long usedMb = (rt.totalMemory() - rt.freeMemory()) / 1024 / 1024;
+            long maxMb = rt.maxMemory() / 1024 / 1024;
+            lines.add(String.format("%dMB / %dMB", usedMb, maxMb));
+        }
+
+        if (config.overlayShowParticles && config.particleLimiting && ParticleLimiter.isInitialized()) {
+            lines.add(String.format("Particles: %d/%d", ParticleLimiter.getCurrentCount(), ParticleLimiter.getMaxParticles()));
+        }
+
+        if (lines.isEmpty()) {
+            lines.add("Helium");
+        }
+
+        return lines.toArray(new String[0]);
     }
 
     private static OverlayPosition parsePosition(String posStr) {

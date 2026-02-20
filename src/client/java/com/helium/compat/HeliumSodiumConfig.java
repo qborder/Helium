@@ -92,6 +92,49 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
 
         renderPage.addOptionGroup(cullingGroup);
 
+        OptionGroupBuilder particleGroup = builder.createOptionGroup();
+        particleGroup.setName(Text.literal("Particle Optimization"));
+
+        BooleanOptionBuilder particleLimit = builder.createBooleanOption(Identifier.of(NAMESPACE, "particle_limiting"));
+        particleLimit.setName(Text.literal("Particle Limiting"));
+        particleLimit.setTooltip(Text.literal("Limit total particle count to prevent lag spikes in particle-heavy scenes."));
+        particleLimit.setImpact(OptionImpact.HIGH);
+        particleLimit.setDefaultValue(true);
+        particleLimit.setStorageHandler(storage);
+        particleLimit.setBinding(v -> config.particleLimiting = v, () -> config.particleLimiting);
+        particleGroup.addOption(particleLimit);
+
+        IntegerOptionBuilder maxParticles = builder.createIntegerOption(Identifier.of(NAMESPACE, "max_particles"));
+        maxParticles.setName(Text.literal("Max Particles"));
+        maxParticles.setTooltip(Text.literal("Maximum number of particles to render at once. Lower = more FPS in explosions."));
+        maxParticles.setImpact(OptionImpact.HIGH);
+        maxParticles.setDefaultValue(1000);
+        maxParticles.setRange(100, 5000, 100);
+        maxParticles.setValueFormatter(v -> Text.literal(String.valueOf(v)));
+        maxParticles.setStorageHandler(storage);
+        maxParticles.setBinding(v -> config.maxParticles = v, () -> config.maxParticles);
+        particleGroup.addOption(maxParticles);
+
+        BooleanOptionBuilder particlePriorityOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "particle_priority"));
+        particlePriorityOpt.setName(Text.literal("Particle Priority"));
+        particlePriorityOpt.setTooltip(Text.literal("When limiting, keep important particles (damage, crits) over ambient ones."));
+        particlePriorityOpt.setImpact(OptionImpact.LOW);
+        particlePriorityOpt.setDefaultValue(true);
+        particlePriorityOpt.setStorageHandler(storage);
+        particlePriorityOpt.setBinding(v -> config.particlePriority = v, () -> config.particlePriority);
+        particleGroup.addOption(particlePriorityOpt);
+
+        BooleanOptionBuilder particleBatch = builder.createBooleanOption(Identifier.of(NAMESPACE, "particle_batching"));
+        particleBatch.setName(Text.literal("Particle Batching"));
+        particleBatch.setTooltip(Text.literal("Batch similar particles for more efficient rendering."));
+        particleBatch.setImpact(OptionImpact.LOW);
+        particleBatch.setDefaultValue(true);
+        particleBatch.setStorageHandler(storage);
+        particleBatch.setBinding(v -> config.particleBatching = v, () -> config.particleBatching);
+        particleGroup.addOption(particleBatch);
+
+        renderPage.addOptionGroup(particleGroup);
+
         OptionGroupBuilder renderOptGroup = builder.createOptionGroup();
         renderOptGroup.setName(Text.literal("Render Pipeline"));
 
@@ -197,5 +240,113 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
 
         mpPage.addOptionGroup(serverGroup);
         mod.addPage(mpPage);
+
+        OptionPageBuilder overlayPage = builder.createOptionPage();
+        overlayPage.setName(Text.literal("Overlay"));
+
+        OptionGroupBuilder overlayGroup = builder.createOptionGroup();
+        overlayGroup.setName(Text.literal("FPS Overlay"));
+
+        BooleanOptionBuilder fpsOverlayOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "fps_overlay"));
+        fpsOverlayOpt.setName(Text.literal("Enable Overlay"));
+        fpsOverlayOpt.setTooltip(Text.literal("Master toggle for the on-screen overlay."));
+        fpsOverlayOpt.setImpact(OptionImpact.LOW);
+        fpsOverlayOpt.setDefaultValue(true);
+        fpsOverlayOpt.setStorageHandler(storage);
+        fpsOverlayOpt.setBinding(v -> config.fpsOverlay = v, () -> config.fpsOverlay);
+        overlayGroup.addOption(fpsOverlayOpt);
+
+        IntegerOptionBuilder overlayTransOpt = builder.createIntegerOption(Identifier.of(NAMESPACE, "overlay_transparency"));
+        overlayTransOpt.setName(Text.literal("Overlay Transparency"));
+        overlayTransOpt.setTooltip(Text.literal("Background transparency of the overlay. 0 = fully transparent, 100 = opaque."));
+        overlayTransOpt.setImpact(OptionImpact.LOW);
+        overlayTransOpt.setDefaultValue(60);
+        overlayTransOpt.setRange(0, 100, 10);
+        overlayTransOpt.setValueFormatter(v -> Text.literal(v + "%"));
+        overlayTransOpt.setStorageHandler(storage);
+        overlayTransOpt.setBinding(v -> config.overlayTransparency = v, () -> config.overlayTransparency);
+        overlayGroup.addOption(overlayTransOpt);
+
+        overlayPage.addOptionGroup(overlayGroup);
+
+        OptionGroupBuilder overlayContentGroup = builder.createOptionGroup();
+        overlayContentGroup.setName(Text.literal("Overlay Content"));
+
+        BooleanOptionBuilder showFpsOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "overlay_show_fps"));
+        showFpsOpt.setName(Text.literal("Show FPS"));
+        showFpsOpt.setTooltip(Text.literal("Display current frames per second."));
+        showFpsOpt.setImpact(OptionImpact.LOW);
+        showFpsOpt.setDefaultValue(true);
+        showFpsOpt.setStorageHandler(storage);
+        showFpsOpt.setBinding(v -> config.overlayShowFps = v, () -> config.overlayShowFps);
+        overlayContentGroup.addOption(showFpsOpt);
+
+        BooleanOptionBuilder showFpsMinMaxAvgOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "overlay_show_fps_stats"));
+        showFpsMinMaxAvgOpt.setName(Text.literal("Show FPS Min/Max/Avg"));
+        showFpsMinMaxAvgOpt.setTooltip(Text.literal("Display minimum, maximum, and average FPS statistics."));
+        showFpsMinMaxAvgOpt.setImpact(OptionImpact.LOW);
+        showFpsMinMaxAvgOpt.setDefaultValue(false);
+        showFpsMinMaxAvgOpt.setStorageHandler(storage);
+        showFpsMinMaxAvgOpt.setBinding(v -> config.overlayShowFpsMinMaxAvg = v, () -> config.overlayShowFpsMinMaxAvg);
+        overlayContentGroup.addOption(showFpsMinMaxAvgOpt);
+
+        BooleanOptionBuilder showMemoryOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "overlay_show_memory"));
+        showMemoryOpt.setName(Text.literal("Show Memory"));
+        showMemoryOpt.setTooltip(Text.literal("Display memory usage information."));
+        showMemoryOpt.setImpact(OptionImpact.LOW);
+        showMemoryOpt.setDefaultValue(false);
+        showMemoryOpt.setStorageHandler(storage);
+        showMemoryOpt.setBinding(v -> config.overlayShowMemory = v, () -> config.overlayShowMemory);
+        overlayContentGroup.addOption(showMemoryOpt);
+
+        BooleanOptionBuilder showParticlesOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "overlay_show_particles"));
+        showParticlesOpt.setName(Text.literal("Show Particle Count"));
+        showParticlesOpt.setTooltip(Text.literal("Display current particle count."));
+        showParticlesOpt.setImpact(OptionImpact.LOW);
+        showParticlesOpt.setDefaultValue(false);
+        showParticlesOpt.setStorageHandler(storage);
+        showParticlesOpt.setBinding(v -> config.overlayShowParticles = v, () -> config.overlayShowParticles);
+        overlayContentGroup.addOption(showParticlesOpt);
+
+        overlayPage.addOptionGroup(overlayContentGroup);
+        mod.addPage(overlayPage);
+
+        OptionPageBuilder advancedPage = builder.createOptionPage();
+        advancedPage.setName(Text.literal("Advanced"));
+
+        OptionGroupBuilder advancedGroup = builder.createOptionGroup();
+        advancedGroup.setName(Text.literal("Experimental"));
+
+        BooleanOptionBuilder nativeMemOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "native_memory"));
+        nativeMemOpt.setName(Text.literal("Native Memory"));
+        nativeMemOpt.setTooltip(Text.literal("Use off-heap memory for large buffers. Reduces GC pressure but uses more system RAM."));
+        nativeMemOpt.setImpact(OptionImpact.MEDIUM);
+        nativeMemOpt.setDefaultValue(true);
+        nativeMemOpt.setStorageHandler(storage);
+        nativeMemOpt.setBinding(v -> config.nativeMemory = v, () -> config.nativeMemory);
+        advancedGroup.addOption(nativeMemOpt);
+
+        IntegerOptionBuilder nativeMemPoolOpt = builder.createIntegerOption(Identifier.of(NAMESPACE, "native_memory_pool_mb"));
+        nativeMemPoolOpt.setName(Text.literal("Native Memory Pool Size"));
+        nativeMemPoolOpt.setTooltip(Text.literal("Maximum MB of off-heap memory to allocate. Higher = more cache, more RAM usage."));
+        nativeMemPoolOpt.setImpact(OptionImpact.MEDIUM);
+        nativeMemPoolOpt.setDefaultValue(64);
+        nativeMemPoolOpt.setRange(16, 256, 16);
+        nativeMemPoolOpt.setValueFormatter(v -> Text.literal(v + " MB"));
+        nativeMemPoolOpt.setStorageHandler(storage);
+        nativeMemPoolOpt.setBinding(v -> config.nativeMemoryPoolMb = v, () -> config.nativeMemoryPoolMb);
+        advancedGroup.addOption(nativeMemPoolOpt);
+
+        BooleanOptionBuilder renderPipeOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "render_pipelining"));
+        renderPipeOpt.setName(Text.literal("Render Pipelining"));
+        renderPipeOpt.setTooltip(Text.literal("Experimental async culling. May improve FPS on multi-core systems. Can cause visual glitches."));
+        renderPipeOpt.setImpact(OptionImpact.HIGH);
+        renderPipeOpt.setDefaultValue(false);
+        renderPipeOpt.setStorageHandler(storage);
+        renderPipeOpt.setBinding(v -> config.renderPipelining = v, () -> config.renderPipelining);
+        advancedGroup.addOption(renderPipeOpt);
+
+        advancedPage.addOptionGroup(advancedGroup);
+        mod.addPage(advancedPage);
     }
 }

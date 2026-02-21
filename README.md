@@ -4,7 +4,7 @@
 
 lightweight client-side performance mod for Minecraft
 
-[![Modrinth](https://img.shields.io/modrinth/dt/helium?color=00AF5C&logo=modrinth&label=modrinth)](https://modrinth.com/mod/helium)
+[![Modrinth](https://img.shields.io/modrinth/dt/heliummc?color=00AF5C&logo=modrinth&label=modrinth)](https://modrinth.com/mod/heliummc)
 [![GitHub](https://img.shields.io/github/stars/qborder/Helium?style=flat&logo=github&label=stars)](https://github.com/qborder/Helium)
 [![Build](https://img.shields.io/github/actions/workflow/status/qborder/Helium/build.yml?logo=github&label=build)](https://github.com/qborder/Helium/actions)
 [![License](https://img.shields.io/github/license/qborder/Helium?cacheSeconds=36000)](https://github.com/qborder/Helium/blob/HEAD/LICENSE)
@@ -15,7 +15,7 @@ lightweight client-side performance mod for Minecraft
 
 ---
 
-> this is the **development repository** for Helium. if you're just looking to install the mod, grab it from [Modrinth](https://modrinth.com/mod/helium). the page there has all the feature descriptions and pretty screenshots and stuff.
+> this is the **development repository** for Helium. if you're just looking to install the mod, grab it from [Modrinth](https://modrinth.com/mod/heliummc). the page there has all the feature descriptions and pretty screenshots and stuff.
 
 ---
 
@@ -78,7 +78,7 @@ src/
 |---|---|---|
 | [Fabric API](https://modrinth.com/mod/fabric-api) | Required | you know why |
 | [Sodium](https://modrinth.com/mod/sodium) | Required | config UI lives inside sodium's settings |
-| [YACL](https://modrinth.com/mod/yacl) | Optional | powers the ModMenu config screen |
+| [YACL](https://modrinth.com/mod/yacl) | Embedded | powers the ModMenu config screen |
 | [ModMenu](https://modrinth.com/mod/modmenu) | Optional | adds the mod toggle in the mod list |
 
 ---

@@ -4,7 +4,9 @@ import com.helium.HeliumClient;
 import com.helium.config.HeliumConfig;
 import com.helium.particle.ParticleLimiter;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.Text;
 
 public final class OverlayRenderer {
 
@@ -52,7 +54,7 @@ public final class OverlayRenderer {
         int textX = boxX + PADDING;
         int textY = boxY + PADDING;
         for (String line : lines) {
-            context.drawText(client.textRenderer, line, textX, textY, textColor, false);
+            context.drawText(client.textRenderer, Text.literal(line), textX, textY, textColor, false);
             textY += LINE_HEIGHT;
         }
     }

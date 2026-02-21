@@ -15,10 +15,22 @@ public final class OverlayRenderer {
     private static final int SHADOW_OFFSET = 1;
 
     private static final FpsStats fpsStats = new FpsStats();
+    private static volatile boolean renderFailed = false;
 
     private OverlayRenderer() {}
 
     public static void render(DrawContext context, MinecraftClient client) {
+        if (renderFailed) return;
+
+        try {
+            renderInternal(context, client);
+        } catch (Throwable t) {
+            renderFailed = true;
+            HeliumClient.LOGGER.warn("overlay disabled on this mc version ({})", t.getClass().getSimpleName());
+        }
+    }
+
+    private static void renderInternal(DrawContext context, MinecraftClient client) {
         HeliumConfig config = HeliumClient.getConfig();
         if (config == null || !config.modEnabled || !config.fpsOverlay) return;
         if (client.player == null) return;

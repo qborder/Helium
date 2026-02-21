@@ -12,9 +12,13 @@ import net.minecraft.util.math.BlockPos;
 
 public final class HeliumBlockEntityCulling {
 
-    private static boolean registered = false;
+    private static volatile boolean registered = false;
 
     private HeliumBlockEntityCulling() {}
+
+    public static boolean isRegistered() {
+        return registered;
+    }
 
     @SuppressWarnings("unchecked")
     public static void register() {

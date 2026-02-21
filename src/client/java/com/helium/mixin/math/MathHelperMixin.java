@@ -12,16 +12,30 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MathHelperMixin {
 
     @Inject(method = "sin(D)D", at = @At("HEAD"), cancellable = true, require = 0)
-    private static void helium$fastSin(double value, CallbackInfoReturnable<Double> cir) {
+    private static void helium$fastSinDouble(double value, CallbackInfoReturnable<Double> cir) {
         if (FastMath.isInitialized() && HeliumClient.getConfig().fastMath) {
             cir.setReturnValue((double) FastMath.sin(value));
         }
     }
 
+    @Inject(method = "sin(F)F", at = @At("HEAD"), cancellable = true, require = 0)
+    private static void helium$fastSinFloat(float value, CallbackInfoReturnable<Float> cir) {
+        if (FastMath.isInitialized() && HeliumClient.getConfig().fastMath) {
+            cir.setReturnValue(FastMath.sin(value));
+        }
+    }
+
     @Inject(method = "cos(D)D", at = @At("HEAD"), cancellable = true, require = 0)
-    private static void helium$fastCos(double value, CallbackInfoReturnable<Double> cir) {
+    private static void helium$fastCosDouble(double value, CallbackInfoReturnable<Double> cir) {
         if (FastMath.isInitialized() && HeliumClient.getConfig().fastMath) {
             cir.setReturnValue((double) FastMath.cos(value));
+        }
+    }
+
+    @Inject(method = "cos(F)F", at = @At("HEAD"), cancellable = true, require = 0)
+    private static void helium$fastCosFloat(float value, CallbackInfoReturnable<Float> cir) {
+        if (FastMath.isInitialized() && HeliumClient.getConfig().fastMath) {
+            cir.setReturnValue(FastMath.cos(value));
         }
     }
 

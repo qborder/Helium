@@ -9,6 +9,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -40,6 +41,21 @@ public abstract class ParticleManagerMixin {
 
     @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At("HEAD"), cancellable = true)
     private void helium$cullDistantParticles(Particle particle, CallbackInfo ci) {
+        try {
+            helium$cullDistantParticlesInternal(particle, ci);
+        } catch (Throwable t) {
+            if (!helium$particleCullFailed) {
+                helium$particleCullFailed = true;
+                HeliumClient.LOGGER.warn("particle culling disabled on this mc version ({})", t.getClass().getSimpleName());
+            }
+        }
+    }
+
+    @Unique
+    private static boolean helium$particleCullFailed = false;
+
+    @Unique
+    private void helium$cullDistantParticlesInternal(Particle particle, CallbackInfo ci) {
         HeliumConfig config = HeliumClient.getConfig();
         if (config == null || !config.modEnabled) return;
 

@@ -6,6 +6,7 @@ import com.helium.memory.BufferPool;
 import com.helium.memory.NativeMemoryManager;
 import com.helium.memory.ObjectPool;
 import com.helium.render.GLStateCache;
+import com.helium.render.HeliumBlockEntityCulling;
 import com.helium.render.RenderPipeline;
 import com.helium.resource.BackgroundResourceProcessor;
 import com.helium.startup.FastStartup;
@@ -92,6 +93,12 @@ public class HeliumClient implements ClientModInitializer {
         initFeatureSafely("RenderPipeline", () -> {
             if (config.renderPipelining) RenderPipeline.init();
         }, () -> renderPipelineFailed = true);
+
+        initFeatureSafely("BlockEntityCulling", () -> {
+            if (config.blockEntityCulling && !HeliumBlockEntityCulling.isRegistered()) {
+                HeliumBlockEntityCulling.register();
+            }
+        }, () -> LOGGER.warn("block entity culling fallback failed, will rely on mixin"));
 
         long elapsed = (System.nanoTime() - start) / 1_000_000;
         LOGGER.info("initialized in {}ms", elapsed);

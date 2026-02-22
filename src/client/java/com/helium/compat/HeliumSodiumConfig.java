@@ -166,6 +166,31 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         renderOptGroup.addOption(glCache);
 
         renderPage.addOptionGroup(renderOptGroup);
+
+        OptionGroupBuilder cachingGroup = builder.createOptionGroup();
+        cachingGroup.setName(Text.literal("Caching"));
+
+        BooleanOptionBuilder modelCacheOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "model_cache"));
+        modelCacheOpt.setName(Text.literal("Model Cache"));
+        modelCacheOpt.setTooltip(Text.literal("Cache baked block models in memory with LRU eviction. Reduces repeated model lookups."));
+        modelCacheOpt.setImpact(OptionImpact.MEDIUM);
+        modelCacheOpt.setDefaultValue(true);
+        modelCacheOpt.setStorageHandler(storage);
+        modelCacheOpt.setBinding(v -> config.modelCache = v, () -> config.modelCache);
+        cachingGroup.addOption(modelCacheOpt);
+
+        IntegerOptionBuilder modelCacheSizeOpt = builder.createIntegerOption(Identifier.of(NAMESPACE, "model_cache_max_mb"));
+        modelCacheSizeOpt.setName(Text.literal("Model Cache Size"));
+        modelCacheSizeOpt.setTooltip(Text.literal("Maximum memory for cached block models. Higher = fewer cache misses, more RAM."));
+        modelCacheSizeOpt.setImpact(OptionImpact.MEDIUM);
+        modelCacheSizeOpt.setDefaultValue(64);
+        modelCacheSizeOpt.setRange(16, 256, 16);
+        modelCacheSizeOpt.setValueFormatter(v -> Text.literal(v + " MB"));
+        modelCacheSizeOpt.setStorageHandler(storage);
+        modelCacheSizeOpt.setBinding(v -> config.modelCacheMaxMb = v, () -> config.modelCacheMaxMb);
+        cachingGroup.addOption(modelCacheSizeOpt);
+
+        renderPage.addOptionGroup(cachingGroup);
         mod.addPage(renderPage);
 
         OptionPageBuilder generalPage = builder.createOptionPage();
@@ -200,6 +225,46 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         startupOpt.setStorageHandler(storage);
         startupOpt.setBinding(v -> config.fastStartup = v, () -> config.fastStartup);
         engineGroup.addOption(startupOpt);
+
+        BooleanOptionBuilder reducedAllocOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "reduced_allocations"));
+        reducedAllocOpt.setName(Text.literal("Reduced Allocations"));
+        reducedAllocOpt.setTooltip(Text.literal("Pool Vec3d, Matrix4f, and other hot objects to reduce garbage collection pressure."));
+        reducedAllocOpt.setImpact(OptionImpact.LOW);
+        reducedAllocOpt.setDefaultValue(true);
+        reducedAllocOpt.setStorageHandler(storage);
+        reducedAllocOpt.setBinding(v -> config.reducedAllocations = v, () -> config.reducedAllocations);
+        engineGroup.addOption(reducedAllocOpt);
+
+        BooleanOptionBuilder idleOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "auto_pause_on_idle"));
+        idleOpt.setName(Text.literal("Auto-Pause on Idle"));
+        idleOpt.setTooltip(Text.literal("Drop to low FPS after no mouse/keyboard activity. Saves power and reduces heat."));
+        idleOpt.setImpact(OptionImpact.LOW);
+        idleOpt.setDefaultValue(false);
+        idleOpt.setStorageHandler(storage);
+        idleOpt.setBinding(v -> config.autoPauseOnIdle = v, () -> config.autoPauseOnIdle);
+        engineGroup.addOption(idleOpt);
+
+        IntegerOptionBuilder idleTimeoutOpt = builder.createIntegerOption(Identifier.of(NAMESPACE, "idle_timeout_seconds"));
+        idleTimeoutOpt.setName(Text.literal("Idle Timeout"));
+        idleTimeoutOpt.setTooltip(Text.literal("Seconds of no activity before entering idle mode."));
+        idleTimeoutOpt.setImpact(OptionImpact.LOW);
+        idleTimeoutOpt.setDefaultValue(60);
+        idleTimeoutOpt.setRange(10, 300, 10);
+        idleTimeoutOpt.setValueFormatter(v -> Text.literal(v + "s"));
+        idleTimeoutOpt.setStorageHandler(storage);
+        idleTimeoutOpt.setBinding(v -> config.idleTimeoutSeconds = v, () -> config.idleTimeoutSeconds);
+        engineGroup.addOption(idleTimeoutOpt);
+
+        IntegerOptionBuilder idleFpsOpt = builder.createIntegerOption(Identifier.of(NAMESPACE, "idle_fps_limit"));
+        idleFpsOpt.setName(Text.literal("Idle FPS Limit"));
+        idleFpsOpt.setTooltip(Text.literal("FPS cap when idle. Lower = less power usage."));
+        idleFpsOpt.setImpact(OptionImpact.LOW);
+        idleFpsOpt.setDefaultValue(5);
+        idleFpsOpt.setRange(1, 30, 1);
+        idleFpsOpt.setValueFormatter(v -> Text.literal(v + " FPS"));
+        idleFpsOpt.setStorageHandler(storage);
+        idleFpsOpt.setBinding(v -> config.idleFpsLimit = v, () -> config.idleFpsLimit);
+        engineGroup.addOption(idleFpsOpt);
 
         generalPage.addOptionGroup(engineGroup);
 
@@ -346,7 +411,93 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         renderPipeOpt.setBinding(v -> config.renderPipelining = v, () -> config.renderPipelining);
         advancedGroup.addOption(renderPipeOpt);
 
+        BooleanOptionBuilder simdOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "simd_math"));
+        simdOpt.setName(Text.literal("SIMD Math"));
+        simdOpt.setTooltip(Text.literal("Use Java Vector API for batch math operations. Requires JDK with incubator modules."));
+        simdOpt.setImpact(OptionImpact.MEDIUM);
+        simdOpt.setDefaultValue(false);
+        simdOpt.setStorageHandler(storage);
+        simdOpt.setBinding(v -> config.simdMath = v, () -> config.simdMath);
+        advancedGroup.addOption(simdOpt);
+
+        BooleanOptionBuilder asyncLightOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "async_light_updates"));
+        asyncLightOpt.setName(Text.literal("Async Light Updates"));
+        asyncLightOpt.setTooltip(Text.literal("Process light updates on background threads. May cause brief lighting flicker."));
+        asyncLightOpt.setImpact(OptionImpact.MEDIUM);
+        asyncLightOpt.setDefaultValue(false);
+        asyncLightOpt.setStorageHandler(storage);
+        asyncLightOpt.setBinding(v -> config.asyncLightUpdates = v, () -> config.asyncLightUpdates);
+        advancedGroup.addOption(asyncLightOpt);
+
+        BooleanOptionBuilder packetBatchOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "packet_batching"));
+        packetBatchOpt.setName(Text.literal("Packet Batching"));
+        packetBatchOpt.setTooltip(Text.literal("Batch outgoing network packets to reduce syscall overhead. Off by default."));
+        packetBatchOpt.setImpact(OptionImpact.LOW);
+        packetBatchOpt.setDefaultValue(false);
+        packetBatchOpt.setStorageHandler(storage);
+        packetBatchOpt.setBinding(v -> config.packetBatching = v, () -> config.packetBatching);
+        advancedGroup.addOption(packetBatchOpt);
+
+        BooleanOptionBuilder deferredOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "deferred_rendering"));
+        deferredOpt.setName(Text.literal("Deferred Rendering"));
+        deferredOpt.setTooltip(Text.literal("Experimental G-buffer setup for deferred lighting. May conflict with shaders."));
+        deferredOpt.setImpact(OptionImpact.HIGH);
+        deferredOpt.setDefaultValue(false);
+        deferredOpt.setStorageHandler(storage);
+        deferredOpt.setBinding(v -> config.deferredRendering = v, () -> config.deferredRendering);
+        advancedGroup.addOption(deferredOpt);
+
+        BooleanOptionBuilder temporalOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "temporal_reprojection"));
+        temporalOpt.setName(Text.literal("Temporal Reprojection"));
+        temporalOpt.setTooltip(Text.literal("Reuse rendered data from previous frames. Reduces render cost but may cause ghosting."));
+        temporalOpt.setImpact(OptionImpact.HIGH);
+        temporalOpt.setDefaultValue(false);
+        temporalOpt.setStorageHandler(storage);
+        temporalOpt.setBinding(v -> config.temporalReprojection = v, () -> config.temporalReprojection);
+        advancedGroup.addOption(temporalOpt);
+
         advancedPage.addOptionGroup(advancedGroup);
+
+        OptionGroupBuilder gpuGroup = builder.createOptionGroup();
+        gpuGroup.setName(Text.literal("GPU-Specific"));
+
+        BooleanOptionBuilder nvidiaOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "nvidia_optimizations"));
+        nvidiaOpt.setName(Text.literal("NVIDIA Optimizations"));
+        nvidiaOpt.setTooltip(Text.literal("Enable parallel shader compile and driver hints. Auto-detected, only active on NVIDIA GPUs."));
+        nvidiaOpt.setImpact(OptionImpact.MEDIUM);
+        nvidiaOpt.setDefaultValue(true);
+        nvidiaOpt.setStorageHandler(storage);
+        nvidiaOpt.setBinding(v -> config.nvidiaOptimizations = v, () -> config.nvidiaOptimizations);
+        gpuGroup.addOption(nvidiaOpt);
+
+        BooleanOptionBuilder amdOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "amd_optimizations"));
+        amdOpt.setName(Text.literal("AMD Optimizations"));
+        amdOpt.setTooltip(Text.literal("256-byte buffer alignment and pinned memory hints. Auto-detected, only active on AMD GPUs."));
+        amdOpt.setImpact(OptionImpact.MEDIUM);
+        amdOpt.setDefaultValue(true);
+        amdOpt.setStorageHandler(storage);
+        amdOpt.setBinding(v -> config.amdOptimizations = v, () -> config.amdOptimizations);
+        gpuGroup.addOption(amdOpt);
+
+        BooleanOptionBuilder intelOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "intel_optimizations"));
+        intelOpt.setName(Text.literal("Intel Optimizations"));
+        intelOpt.setTooltip(Text.literal("Extra aggressive GL state caching for Intel iGPUs. Auto-detected, only active on Intel GPUs."));
+        intelOpt.setImpact(OptionImpact.MEDIUM);
+        intelOpt.setDefaultValue(true);
+        intelOpt.setStorageHandler(storage);
+        intelOpt.setBinding(v -> config.intelOptimizations = v, () -> config.intelOptimizations);
+        gpuGroup.addOption(intelOpt);
+
+        BooleanOptionBuilder adaptiveSyncOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "adaptive_sync"));
+        adaptiveSyncOpt.setName(Text.literal("Adaptive Sync Detection"));
+        adaptiveSyncOpt.setTooltip(Text.literal("Detect G-Sync/FreeSync and adjust frame pacing to reduce input latency."));
+        adaptiveSyncOpt.setImpact(OptionImpact.LOW);
+        adaptiveSyncOpt.setDefaultValue(true);
+        adaptiveSyncOpt.setStorageHandler(storage);
+        adaptiveSyncOpt.setBinding(v -> config.adaptiveSync = v, () -> config.adaptiveSync);
+        gpuGroup.addOption(adaptiveSyncOpt);
+
+        advancedPage.addOptionGroup(gpuGroup);
         mod.addPage(advancedPage);
     }
 }

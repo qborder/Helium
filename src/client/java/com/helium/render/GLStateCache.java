@@ -19,8 +19,17 @@ public final class GLStateCache {
     private static volatile int depthFunc = -1;
 
     private static volatile boolean initialized = false;
+    private static volatile boolean aggressiveMode = false;
 
     private GLStateCache() {}
+
+    public static void setAggressiveMode(boolean enabled) {
+        aggressiveMode = enabled;
+    }
+
+    public static boolean isAggressiveMode() {
+        return aggressiveMode;
+    }
 
     public static void init() {
         reset();

@@ -16,7 +16,8 @@
     "network.ClientConnectionMixin",
     "multiplayer.ServerListWidgetMixin",
     "multiplayer.MultiplayerScreenMixin",
-    "multiplayer.MultiplayerScreenAccessor"
+    "multiplayer.MultiplayerScreenAccessor",
+    "idle.GameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 0

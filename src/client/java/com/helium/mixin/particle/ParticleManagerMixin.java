@@ -8,25 +8,17 @@ import com.helium.threading.ParticleWorkerPool;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.particle.ParticleTextureSheet;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Queue;
-
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin {
 
-    @Shadow
-    @Final
-    private Map<ParticleTextureSheet, Queue<Particle>> particles;
+    @Unique
+    private int helium$particleAddCount = 0;
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void helium$initParticlePool(CallbackInfo ci) {
@@ -50,18 +42,10 @@ public abstract class ParticleManagerMixin {
         }
 
         if (config.particleLimiting && ParticleLimiter.isInitialized()) {
-            int totalParticles = helium$countParticles();
-            ParticleLimiter.setParticleCount(totalParticles);
+            ParticleLimiter.setParticleCount(helium$particleAddCount);
         }
-    }
 
-    @Unique
-    private int helium$countParticles() {
-        int count = 0;
-        for (Queue<Particle> queue : particles.values()) {
-            count += queue.size();
-        }
-        return count;
+        helium$particleAddCount = Math.max(0, helium$particleAddCount - 20);
     }
 
     @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At("HEAD"), cancellable = true)
@@ -105,6 +89,8 @@ public abstract class ParticleManagerMixin {
                 return;
             }
         }
+
+        helium$particleAddCount++;
 
         if (config.particleBatching && ParticleBatcher.isInitialized()) {
             ParticleBatcher.recordParticleType(particle.getClass().getSimpleName());

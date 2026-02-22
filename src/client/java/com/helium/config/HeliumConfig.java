@@ -53,6 +53,22 @@ public class HeliumConfig {
     public int nativeMemoryPoolMb = 64;
     public boolean renderPipelining = false;
 
+    public boolean modelCache = true;
+    public int modelCacheMaxMb = 64;
+    public boolean reducedAllocations = true;
+    public boolean simdMath = false;
+    public boolean asyncLightUpdates = false;
+    public boolean packetBatching = false;
+    public boolean autoPauseOnIdle = false;
+    public int idleTimeoutSeconds = 60;
+    public int idleFpsLimit = 5;
+    public boolean nvidiaOptimizations = true;
+    public boolean amdOptimizations = true;
+    public boolean intelOptimizations = true;
+    public boolean adaptiveSync = true;
+    public boolean deferredRendering = false;
+    public boolean temporalReprojection = false;
+
     public static HeliumConfig load() {
         if (Files.exists(CONFIG_PATH)) {
             try {
@@ -145,5 +161,20 @@ public class HeliumConfig {
         this.nativeMemory = other.nativeMemory;
         this.nativeMemoryPoolMb = other.nativeMemoryPoolMb;
         this.renderPipelining = other.renderPipelining;
+        this.modelCache = other.modelCache;
+        this.modelCacheMaxMb = other.modelCacheMaxMb;
+        this.reducedAllocations = other.reducedAllocations;
+        this.simdMath = other.simdMath;
+        this.asyncLightUpdates = other.asyncLightUpdates;
+        this.packetBatching = other.packetBatching;
+        this.autoPauseOnIdle = other.autoPauseOnIdle;
+        this.idleTimeoutSeconds = other.idleTimeoutSeconds;
+        this.idleFpsLimit = other.idleFpsLimit;
+        this.nvidiaOptimizations = other.nvidiaOptimizations;
+        this.amdOptimizations = other.amdOptimizations;
+        this.intelOptimizations = other.intelOptimizations;
+        this.adaptiveSync = other.adaptiveSync;
+        this.deferredRendering = other.deferredRendering;
+        this.temporalReprojection = other.temporalReprojection;
     }
 }

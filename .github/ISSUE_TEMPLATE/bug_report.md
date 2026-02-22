@@ -32,11 +32,11 @@ paste crash log here
 </details>
 
 ## Your setup
-- Minecraft version: 
+- Minecraft version: (eg. 1.21.11)
 - Helium version: 
-- Other mods installed: 
-- Launcher (Prism, MultiMC, etc): 
-- OS (Windows, Linux, macOS): 
+- Other mods installed: (eg. Lithium, Sodium)
+- Launcher (Modrinth, Prism, MultiMC, etc): 
+- OS (Windows, Linux, macOS, etc): 
 
 ## Anything else?
 Any other info that might help. Does it happen every time? Only with certain settings?

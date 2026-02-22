@@ -1,20 +1,23 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: Feature Request
+about: Got an idea? Drop it here
 title: ''
 labels: enhancement
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## What do you want?
+Describe the feature. What would it do?
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+## Why?
+What problem does this solve? Why would this be useful?
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+## How should it work?
+If you have ideas on how it should be implemented or behave, share them here.
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+## Alternatives
+Tried any workarounds? Know of other mods that do something similar?
+
+## Anything else?
+Screenshots, mockups, links, whatever helps explain your idea.

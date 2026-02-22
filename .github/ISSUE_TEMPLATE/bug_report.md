@@ -1,38 +1,42 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Bug Report
+about: Something broke? Let me know
 title: ''
 labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## What happened?
+Tell me what went wrong. Crash? Visual glitch? Weird behavior?
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## How to reproduce
+Steps to make it happen again:
+1. 
+2. 
+3. 
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## What should have happened?
+What were you expecting instead?
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Crash log / Screenshots
+If you got a crash, paste the log here. Screenshots help too.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+<details>
+<summary>Crash log (click to expand)</summary>
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+```
+paste crash log here
+```
 
-**Additional context**
-Add any other context about the problem here.
+</details>
+
+## Your setup
+- Minecraft version: 
+- Helium version: 
+- Other mods installed: 
+- Launcher (Prism, MultiMC, etc): 
+- OS (Windows, Linux, macOS): 
+
+## Anything else?
+Any other info that might help. Does it happen every time? Only with certain settings?

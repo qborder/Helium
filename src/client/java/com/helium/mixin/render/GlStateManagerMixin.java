@@ -10,6 +10,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(targets = "com.mojang.blaze3d.opengl.GlStateManager", remap = false)
 public abstract class GlStateManagerMixin {
 
+    @Inject(method = "_activeTexture", at = @At("HEAD"), remap = false)
+    private static void helium$trackActiveTexture(int texture, CallbackInfo ci) {
+        if (GLStateCache.isInitialized() && HeliumClient.getConfig().glStateCache) {
+            GLStateCache.setActiveTexture(texture);
+        }
+    }
+
     @Inject(method = "_bindTexture", at = @At("HEAD"), cancellable = true, remap = false)
     private static void helium$cacheBindTexture(int texture, CallbackInfo ci) {
         if (GLStateCache.isInitialized() && HeliumClient.getConfig().glStateCache) {

@@ -17,6 +17,7 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
     public void registerConfigLate(ConfigBuilder builder) {
         HeliumConfig config = HeliumClient.getConfig();
         if (config == null) return;
+        if (HeliumClient.isAndroid()) return;
 
         StorageEventHandler storage = config::save;
 

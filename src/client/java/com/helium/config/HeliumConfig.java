@@ -69,6 +69,8 @@ public class HeliumConfig {
     public boolean deferredRendering = false;
     public boolean temporalReprojection = false;
 
+    public boolean androidWarningShown = false;
+
     public static HeliumConfig load() {
         if (Files.exists(CONFIG_PATH)) {
             try {
@@ -176,5 +178,6 @@ public class HeliumConfig {
         this.adaptiveSync = other.adaptiveSync;
         this.deferredRendering = other.deferredRendering;
         this.temporalReprojection = other.temporalReprojection;
+        this.androidWarningShown = other.androidWarningShown;
     }
 }

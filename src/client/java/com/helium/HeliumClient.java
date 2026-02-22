@@ -21,6 +21,7 @@ import com.helium.render.HeliumBlockEntityCulling;
 import com.helium.render.ModelCache;
 import com.helium.render.RenderPipeline;
 import com.helium.render.TemporalReprojection;
+import com.helium.compat.HeliumIncompatibleScreen;
 import com.helium.resource.BackgroundResourceProcessor;
 import com.helium.startup.FastStartup;
 import com.helium.threading.EventPoller;
@@ -29,8 +30,11 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.TitleScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 public class HeliumClient implements ClientModInitializer {
 
@@ -63,12 +67,30 @@ public class HeliumClient implements ClientModInitializer {
     private static boolean deferredRenderFailed = false;
     private static boolean temporalReprojectionFailed = false;
     private static boolean gpuInitDeferred = true;
+    private static boolean isAndroid = false;
 
     @Override
     public void onInitializeClient() {
         long start = System.nanoTime();
 
         config = HeliumConfig.load();
+
+        isAndroid = detectAndroid();
+        if (isAndroid) {
+            LOGGER.warn("android detected - helium is not compatible with android's opengl es");
+            config.modEnabled = false;
+
+            if (!config.androidWarningShown) {
+                ClientTickEvents.END_CLIENT_TICK.register(client -> {
+                    if (client.currentScreen instanceof TitleScreen && !config.androidWarningShown) {
+                        client.setScreen(new HeliumIncompatibleScreen(client.currentScreen));
+                    }
+                });
+            }
+
+            config.save();
+            return;
+        }
 
         if (!config.modEnabled) {
             LOGGER.info("helium is disabled via config");
@@ -240,4 +262,18 @@ public class HeliumClient implements ClientModInitializer {
     public static boolean isAdaptiveSyncAvailable() { return !adaptiveSyncFailed; }
     public static boolean isDeferredRenderAvailable() { return !deferredRenderFailed; }
     public static boolean isTemporalReprojectionAvailable() { return !temporalReprojectionFailed; }
+    public static boolean isAndroid() { return isAndroid; }
+
+    private static boolean detectAndroid() {
+        if (new File("/system/build.prop").exists()) return true;
+        if (new File("/system/app").isDirectory()) return true;
+
+        String osArch = System.getProperty("os.arch", "").toLowerCase();
+        String osName = System.getProperty("os.name", "").toLowerCase();
+        if (osName.contains("linux") && osArch.contains("aarch64")) {
+            if (new File("/data/data").isDirectory()) return true;
+        }
+
+        return false;
+    }
 }

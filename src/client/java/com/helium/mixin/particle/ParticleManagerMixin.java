@@ -8,14 +8,25 @@ import com.helium.threading.ParticleWorkerPool;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.particle.ParticleTextureSheet;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Queue;
+
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin {
+
+    @Shadow
+    @Final
+    private Map<ParticleTextureSheet, Queue<Particle>> particles;
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void helium$initParticlePool(CallbackInfo ci) {
@@ -37,6 +48,20 @@ public abstract class ParticleManagerMixin {
         if (ParticleBatcher.isInitialized()) {
             ParticleBatcher.tick();
         }
+
+        if (config.particleLimiting && ParticleLimiter.isInitialized()) {
+            int totalParticles = helium$countParticles();
+            ParticleLimiter.setParticleCount(totalParticles);
+        }
+    }
+
+    @Unique
+    private int helium$countParticles() {
+        int count = 0;
+        for (Queue<Particle> queue : particles.values()) {
+            count += queue.size();
+        }
+        return count;
     }
 
     @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At("HEAD"), cancellable = true)
@@ -79,7 +104,6 @@ public abstract class ParticleManagerMixin {
                 ci.cancel();
                 return;
             }
-            ParticleLimiter.onParticleAdded();
         }
 
         if (config.particleBatching && ParticleBatcher.isInitialized()) {

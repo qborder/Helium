@@ -3,6 +3,7 @@ package com.helium.mixin.render;
 import com.helium.HeliumClient;
 import com.helium.config.HeliumConfig;
 import com.helium.render.RenderPipeline;
+import com.helium.util.VersionCompat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
@@ -13,41 +14,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.lang.reflect.Method;
-
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererPipelineMixin {
 
     @Unique
     private static boolean helium$failed = false;
-
-    @Unique
-    private static Method helium$cameraPositionMethod = null;
-
-    @Unique
-    private static boolean helium$methodResolved = false;
-
-    @Unique
-    private static Vec3d helium$getCameraPosition(Camera camera) {
-        if (!helium$methodResolved) {
-            helium$methodResolved = true;
-            try {
-                helium$cameraPositionMethod = Camera.class.getMethod("getCameraPos");
-            } catch (NoSuchMethodException e) {
-                try {
-                    helium$cameraPositionMethod = Camera.class.getMethod("getPos");
-                } catch (NoSuchMethodException e2) {
-                    HeliumClient.LOGGER.warn("could not find camera position method");
-                }
-            }
-        }
-        if (helium$cameraPositionMethod != null) {
-            try {
-                return (Vec3d) helium$cameraPositionMethod.invoke(camera);
-            } catch (Throwable ignored) {}
-        }
-        return Vec3d.ZERO;
-    }
 
     @Inject(method = "render", at = @At("HEAD"), require = 0)
     private void helium$pipelineSwapAndSubmit(CallbackInfo ci) {
@@ -61,7 +32,7 @@ public abstract class WorldRendererPipelineMixin {
             if (client.player == null || client.world == null) return;
 
             Camera camera = client.gameRenderer.getCamera();
-            Vec3d pos = helium$getCameraPosition(camera);
+            Vec3d pos = VersionCompat.getCameraPosition(camera);
             double cx = pos.x;
             double cy = pos.y;
             double cz = pos.z;

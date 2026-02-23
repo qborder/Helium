@@ -9,7 +9,7 @@ public final class FpsStats {
     private volatile int fpsCount = 0;
     private volatile long lastResetTime = System.currentTimeMillis();
 
-    private static final long RESET_INTERVAL_MS = 5000;
+    private static final long RESET_INTERVAL_MS = 500;
 
     public void updateFps(int fps) {
         this.currentFps = fps;

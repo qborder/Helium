@@ -302,7 +302,7 @@ public class HeliumClient implements ClientModInitializer {
     private static KeyBinding createKeyBinding(String id, InputUtil.Type type, int code, String category) {
         try {
             java.lang.reflect.Method createMethod = KeyBinding.Category.class.getMethod("create", net.minecraft.util.Identifier.class);
-            Object categoryObj = createMethod.invoke(null, net.minecraft.util.Identifier.of(MOD_ID, "keys"));
+            Object categoryObj = createMethod.invoke(null, com.helium.util.VersionCompat.createIdentifier(MOD_ID, "keys"));
             return new KeyBinding(id, type, code, (KeyBinding.Category) categoryObj);
         } catch (Throwable e1) {
             try {

@@ -99,8 +99,6 @@
   "helium.option.async_light_updates.tooltip": "조명 업데이트를 백그라운드 스레드에서 처리합니다. 짧은 조명 깜박임이 발생할 수 있습니다.",
   "helium.option.packet_batching": "패킷 일괄 처리",
   "helium.option.packet_batching.tooltip": "나가는 네트워크 패킷을 묶어 시스템 호출 오버헤드를 줄입니다. 기본적으로 꺼져 있습니다.",
-  "helium.option.deferred_rendering": "디퍼드 렌더링",
-  "helium.option.deferred_rendering.tooltip": "실험적 G-버퍼 설정. 셰이더와 충돌할 수 있습니다.",
   "helium.option.temporal_reprojection": "시간적 재투영",
   "helium.option.temporal_reprojection.tooltip": "이전 프레임의 렌더 데이터를 재사용합니다. 렌더링 비용이 줄지만 고스팅이 발생할 수 있습니다.",
 
@@ -131,5 +129,20 @@
   "helium.suffix.mb": "%d MB",
   "helium.suffix.seconds": "%d초",
   "helium.suffix.fps": "%d FPS",
-  "helium.suffix.percent": "%d%%"
+  "helium.suffix.percent": "%d%%",
+
+  "helium.option.fullbright": "Fullbright",
+  "helium.option.fullbright.tooltip": "Remove all darkness. Press G to toggle quickly.",
+  "helium.option.show_coordinates": "Show Coordinates",
+  "helium.option.show_coordinates.tooltip": "Display your X, Y, Z position in the overlay.",
+  "helium.option.show_biome": "Show Biome",
+  "helium.option.show_biome.tooltip": "Display the current biome name in the overlay.",
+  "helium.key.category": "Helium",
+  "helium.key.fullbright": "Toggle Fullbright",
+  "helium.config.category.tools": "Tools",
+  "helium.config.category.tools.tooltip": "Export and import your Helium configuration.",
+  "helium.config.export": "Export Config",
+  "helium.config.export.description": "Save current settings to helium-export.json.",
+  "helium.config.import": "Import Config",
+  "helium.config.import.description": "Load settings from helium-export.json."
 }

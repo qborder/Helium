@@ -1,6 +1,7 @@
 package com.helium.mixin.tick;
 
 import com.helium.HeliumClient;
+import com.helium.lighting.AsyncLightEngine;
 import com.helium.memory.MemoryCompactor;
 import com.helium.tick.ClientTickCache;
 import net.minecraft.client.world.ClientWorld;
@@ -23,6 +24,9 @@ public abstract class ClientWorldMixin {
         ClientTickCache.tick(time);
         if (HeliumClient.getConfig().memoryOptimizations) {
             MemoryCompactor.tick(time);
+        }
+        if (HeliumClient.getConfig().asyncLightUpdates && AsyncLightEngine.isInitialized()) {
+            AsyncLightEngine.applyCompleted();
         }
     }
 }

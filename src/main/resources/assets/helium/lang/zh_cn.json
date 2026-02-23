@@ -99,8 +99,6 @@
   "helium.option.async_light_updates.tooltip": "在后台线程中处理光照更新。可能导致短暂的光照闪烁。",
   "helium.option.packet_batching": "数据包批处理",
   "helium.option.packet_batching.tooltip": "将发出的网络数据包合并以减少系统调用开销。默认关闭。",
-  "helium.option.deferred_rendering": "延迟渲染",
-  "helium.option.deferred_rendering.tooltip": "实验性G缓冲区设置用于延迟光照。可能与着色器冲突。",
   "helium.option.temporal_reprojection": "时间重投影",
   "helium.option.temporal_reprojection.tooltip": "复用前一帧的渲染数据。减少渲染开销但可能产生残影。",
 
@@ -131,5 +129,20 @@
   "helium.suffix.mb": "%d MB",
   "helium.suffix.seconds": "%d秒",
   "helium.suffix.fps": "%d FPS",
-  "helium.suffix.percent": "%d%%"
+  "helium.suffix.percent": "%d%%",
+
+  "helium.option.fullbright": "Fullbright",
+  "helium.option.fullbright.tooltip": "Remove all darkness. Press G to toggle quickly.",
+  "helium.option.show_coordinates": "Show Coordinates",
+  "helium.option.show_coordinates.tooltip": "Display your X, Y, Z position in the overlay.",
+  "helium.option.show_biome": "Show Biome",
+  "helium.option.show_biome.tooltip": "Display the current biome name in the overlay.",
+  "helium.key.category": "Helium",
+  "helium.key.fullbright": "Toggle Fullbright",
+  "helium.config.category.tools": "Tools",
+  "helium.config.category.tools.tooltip": "Export and import your Helium configuration.",
+  "helium.config.export": "Export Config",
+  "helium.config.export.description": "Save current settings to helium-export.json.",
+  "helium.config.import": "Import Config",
+  "helium.config.import.description": "Load settings from helium-export.json."
 }

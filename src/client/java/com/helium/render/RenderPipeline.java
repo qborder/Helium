@@ -15,6 +15,10 @@ public final class RenderPipeline {
     private static final AtomicReference<CullingResult> pendingCullingResult = new AtomicReference<>(null);
     private static final AtomicReference<CullingResult> currentCullingResult = new AtomicReference<>(null);
 
+    private static volatile double cameraX, cameraY, cameraZ;
+    private static volatile float cameraYaw, cameraPitch;
+    private static volatile int renderDistance;
+
     private RenderPipeline() {}
 
     public static void init() {
@@ -60,6 +64,24 @@ public final class RenderPipeline {
 
     public static CullingResult getCurrentCullingResult() {
         return currentCullingResult.get();
+    }
+
+    public static void setCameraData(double x, double y, double z, float yaw, float pitch, int renderDist) {
+        cameraX = x;
+        cameraY = y;
+        cameraZ = z;
+        cameraYaw = yaw;
+        cameraPitch = pitch;
+        renderDistance = renderDist;
+    }
+
+    public static boolean isEntityVisible(int entityId) {
+        CullingResult result = currentCullingResult.get();
+        if (result == null || result.visibleEntityIds == null) return true;
+        for (int id : result.visibleEntityIds) {
+            if (id == entityId) return true;
+        }
+        return false;
     }
 
     public static void shutdown() {

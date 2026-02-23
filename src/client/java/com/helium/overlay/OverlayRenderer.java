@@ -93,6 +93,29 @@ public final class OverlayRenderer {
             lines.add(String.format("Particles: %d/%d", ParticleLimiter.getCurrentCount(), ParticleLimiter.getMaxParticles()));
         }
 
+        if (config.overlayShowCoordinates && client.player != null) {
+            lines.add(String.format("X: %.0f Y: %.0f Z: %.0f",
+                    client.player.getX(), client.player.getY(), client.player.getZ()));
+        }
+
+        if (config.overlayShowBiome && client.player != null && client.world != null) {
+            try {
+                var biomeEntry = client.world.getBiome(client.player.getBlockPos());
+                var biomeKey = biomeEntry.getKey();
+                if (biomeKey.isPresent()) {
+                    String biomeName = biomeKey.get().getValue().getPath();
+                    biomeName = biomeName.replace('_', ' ');
+                    StringBuilder formatted = new StringBuilder();
+                    boolean capitalize = true;
+                    for (char c : biomeName.toCharArray()) {
+                        formatted.append(capitalize ? Character.toUpperCase(c) : c);
+                        capitalize = (c == ' ');
+                    }
+                    lines.add(formatted.toString());
+                }
+            } catch (Throwable ignored) {}
+        }
+
         if (lines.isEmpty()) {
             lines.add("Helium");
         }

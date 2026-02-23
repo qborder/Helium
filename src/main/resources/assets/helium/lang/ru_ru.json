@@ -99,8 +99,6 @@
   "helium.option.async_light_updates.tooltip": "Обработка обновлений освещения в фоновых потоках. Возможно кратковременное мерцание.",
   "helium.option.packet_batching": "Группировка пакетов",
   "helium.option.packet_batching.tooltip": "Группировка исходящих сетевых пакетов для снижения накладных расходов. По умолчанию выключено.",
-  "helium.option.deferred_rendering": "Отложенная отрисовка",
-  "helium.option.deferred_rendering.tooltip": "Экспериментальный G-буфер для отложённого освещения. Может конфликтовать с шейдерами.",
   "helium.option.temporal_reprojection": "Временна́я репроекция",
   "helium.option.temporal_reprojection.tooltip": "Повторное использование данных отрисовки из предыдущих кадров. Снижает затраты, но возможен гостинг.",
 
@@ -131,5 +129,20 @@
   "helium.suffix.mb": "%d МБ",
   "helium.suffix.seconds": "%dс",
   "helium.suffix.fps": "%d FPS",
-  "helium.suffix.percent": "%d%%"
+  "helium.suffix.percent": "%d%%",
+
+  "helium.option.fullbright": "Fullbright",
+  "helium.option.fullbright.tooltip": "Remove all darkness. Press G to toggle quickly.",
+  "helium.option.show_coordinates": "Show Coordinates",
+  "helium.option.show_coordinates.tooltip": "Display your X, Y, Z position in the overlay.",
+  "helium.option.show_biome": "Show Biome",
+  "helium.option.show_biome.tooltip": "Display the current biome name in the overlay.",
+  "helium.key.category": "Helium",
+  "helium.key.fullbright": "Toggle Fullbright",
+  "helium.config.category.tools": "Tools",
+  "helium.config.category.tools.tooltip": "Export and import your Helium configuration.",
+  "helium.config.export": "Export Config",
+  "helium.config.export.description": "Save current settings to helium-export.json.",
+  "helium.config.import": "Import Config",
+  "helium.config.import.description": "Load settings from helium-export.json."
 }

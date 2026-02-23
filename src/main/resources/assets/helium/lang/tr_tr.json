@@ -99,8 +99,6 @@
   "helium.option.async_light_updates.tooltip": "Işık güncellemelerini arka plan iş parçacıklarında işle. Kısa ışık titremesi oluşabilir.",
   "helium.option.packet_batching": "Paket Gruplama",
   "helium.option.packet_batching.tooltip": "Giden ağ paketlerini grupla. Varsayılan olarak kapalı.",
-  "helium.option.deferred_rendering": "Ertelenmiş Çizim",
-  "helium.option.deferred_rendering.tooltip": "Ertelenmiş aydınlatma için deneysel G-tampon kurulumu. Gölgelendiricilerle çakışabilir.",
   "helium.option.temporal_reprojection": "Zamansal Yeniden Projeksiyon",
   "helium.option.temporal_reprojection.tooltip": "Önceki karelerden çizim verilerini yeniden kullan. Çizim maliyetini azaltır ama hayalet görüntüler oluşabilir.",
 
@@ -131,5 +129,20 @@
   "helium.suffix.mb": "%d MB",
   "helium.suffix.seconds": "%ds",
   "helium.suffix.fps": "%d FPS",
-  "helium.suffix.percent": "%d%%"
+  "helium.suffix.percent": "%d%%",
+
+  "helium.option.fullbright": "Fullbright",
+  "helium.option.fullbright.tooltip": "Remove all darkness. Press G to toggle quickly.",
+  "helium.option.show_coordinates": "Show Coordinates",
+  "helium.option.show_coordinates.tooltip": "Display your X, Y, Z position in the overlay.",
+  "helium.option.show_biome": "Show Biome",
+  "helium.option.show_biome.tooltip": "Display the current biome name in the overlay.",
+  "helium.key.category": "Helium",
+  "helium.key.fullbright": "Toggle Fullbright",
+  "helium.config.category.tools": "Tools",
+  "helium.config.category.tools.tooltip": "Export and import your Helium configuration.",
+  "helium.config.export": "Export Config",
+  "helium.config.export.description": "Save current settings to helium-export.json.",
+  "helium.config.import": "Import Config",
+  "helium.config.import.description": "Load settings from helium-export.json."
 }

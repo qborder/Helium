@@ -101,8 +101,6 @@
   "helium.option.async_light_updates.tooltip": "Process light updates on background threads. May cause brief lighting flicker.",
   "helium.option.packet_batching": "Packet Batching",
   "helium.option.packet_batching.tooltip": "Batch outgoing network packets to reduce syscall overhead. Off by default.",
-  "helium.option.deferred_rendering": "Deferred Rendering",
-  "helium.option.deferred_rendering.tooltip": "Experimental G-buffer setup for deferred lighting. May conflict with shaders.",
   "helium.option.temporal_reprojection": "Temporal Reprojection",
   "helium.option.temporal_reprojection.tooltip": "Reuse rendered data from previous frames. Reduces render cost but may cause ghosting.",
 
@@ -128,6 +126,24 @@
   "helium.android.disabled": "The mod will be disabled automatically.",
   "helium.android.safe": "You can safely keep it installed.",
   "helium.android.button": "I Understand",
+
+  "helium.option.fullbright": "Fullbright",
+  "helium.option.fullbright.tooltip": "Remove all darkness. Press G to toggle quickly. Purely visual, no gameplay advantage on servers.",
+
+  "helium.option.show_coordinates": "Show Coordinates",
+  "helium.option.show_coordinates.tooltip": "Display your X, Y, Z position in the overlay.",
+  "helium.option.show_biome": "Show Biome",
+  "helium.option.show_biome.tooltip": "Display the current biome name in the overlay.",
+
+  "helium.key.category": "Helium",
+  "helium.key.fullbright": "Toggle Fullbright",
+
+  "helium.config.category.tools": "Tools",
+  "helium.config.category.tools.tooltip": "Export and import your Helium configuration.",
+  "helium.config.export": "Export Config",
+  "helium.config.export.description": "Save your current settings to helium-export.json in the config folder.",
+  "helium.config.import": "Import Config",
+  "helium.config.import.description": "Load settings from helium-export.json in the config folder. Overwrites current settings.",
 
   "helium.suffix.blocks": "%d blocks",
   "helium.suffix.mb": "%d MB",

@@ -101,8 +101,6 @@
   "helium.option.async_light_updates.tooltip": "معالجة تحديثات الإضاءة في خيوط خلفية. قد يسبب وميض بسيط.",
   "helium.option.packet_batching": "تجميع الحزم",
   "helium.option.packet_batching.tooltip": "تجميع حزم الشبكة الصادرة لتقليل الحمل. معطل افتراضياً.",
-  "helium.option.deferred_rendering": "عرض مؤجل",
-  "helium.option.deferred_rendering.tooltip": "إعداد G-buffer تجريبي للإضاءة المؤجلة. قد يتعارض مع الشيدرز.",
   "helium.option.temporal_reprojection": "إعادة إسقاط زمنية",
   "helium.option.temporal_reprojection.tooltip": "إعادة استخدام بيانات العرض من الإطارات السابقة. يقلل تكلفة العرض لكن قد يسبب ظلال.",
 
@@ -133,5 +131,20 @@
   "helium.suffix.mb": "%d ميغابايت",
   "helium.suffix.seconds": "%d ث",
   "helium.suffix.fps": "%d إطار",
-  "helium.suffix.percent": "%d%%"
+  "helium.suffix.percent": "%d%%",
+
+  "helium.option.fullbright": "Fullbright",
+  "helium.option.fullbright.tooltip": "Remove all darkness. Press G to toggle quickly.",
+  "helium.option.show_coordinates": "Show Coordinates",
+  "helium.option.show_coordinates.tooltip": "Display your X, Y, Z position in the overlay.",
+  "helium.option.show_biome": "Show Biome",
+  "helium.option.show_biome.tooltip": "Display the current biome name in the overlay.",
+  "helium.key.category": "Helium",
+  "helium.key.fullbright": "Toggle Fullbright",
+  "helium.config.category.tools": "Tools",
+  "helium.config.category.tools.tooltip": "Export and import your Helium configuration.",
+  "helium.config.export": "Export Config",
+  "helium.config.export.description": "Save current settings to helium-export.json.",
+  "helium.config.import": "Import Config",
+  "helium.config.import.description": "Load settings from helium-export.json."
 }

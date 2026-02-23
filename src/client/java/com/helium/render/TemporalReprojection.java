@@ -79,6 +79,13 @@ public final class TemporalReprojection {
         return reprojectionConfidence >= MIN_CONFIDENCE;
     }
 
+    public static boolean shouldSkipEntity(double distSq) {
+        if (!initialized || previousFrameId < 0) return false;
+        if (reprojectionConfidence < MIN_CONFIDENCE) return false;
+        if (distSq < 48.0 * 48.0) return false;
+        return (currentFrameId & 1L) == 0L;
+    }
+
     public static Matrix4f getReprojectionMatrix() {
         return reprojectionMatrix;
     }

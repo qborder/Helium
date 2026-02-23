@@ -99,8 +99,6 @@
   "helium.option.async_light_updates.tooltip": "ライト更新をバックグラウンドスレッドで処理します。短い照明のちらつきが発生する場合があります。",
   "helium.option.packet_batching": "パケットバッチ処理",
   "helium.option.packet_batching.tooltip": "送信パケットをまとめてシステムコールのオーバーヘッドを削減します。デフォルトでオフ。",
-  "helium.option.deferred_rendering": "ディファードレンダリング",
-  "helium.option.deferred_rendering.tooltip": "実験的なGバッファセットアップ。シェーダーと競合する場合があります。",
   "helium.option.temporal_reprojection": "テンポラル再投影",
   "helium.option.temporal_reprojection.tooltip": "前のフレームの描画データを再利用します。描画コストが減りますがゴースティングが発生する場合があります。",
 
@@ -131,5 +129,20 @@
   "helium.suffix.mb": "%d MB",
   "helium.suffix.seconds": "%d秒",
   "helium.suffix.fps": "%d FPS",
-  "helium.suffix.percent": "%d%%"
+  "helium.suffix.percent": "%d%%",
+
+  "helium.option.fullbright": "Fullbright",
+  "helium.option.fullbright.tooltip": "Remove all darkness. Press G to toggle quickly.",
+  "helium.option.show_coordinates": "Show Coordinates",
+  "helium.option.show_coordinates.tooltip": "Display your X, Y, Z position in the overlay.",
+  "helium.option.show_biome": "Show Biome",
+  "helium.option.show_biome.tooltip": "Display the current biome name in the overlay.",
+  "helium.key.category": "Helium",
+  "helium.key.fullbright": "Toggle Fullbright",
+  "helium.config.category.tools": "Tools",
+  "helium.config.category.tools.tooltip": "Export and import your Helium configuration.",
+  "helium.config.export": "Export Config",
+  "helium.config.export.description": "Save current settings to helium-export.json.",
+  "helium.config.import": "Import Config",
+  "helium.config.import.description": "Load settings from helium-export.json."
 }

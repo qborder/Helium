@@ -269,6 +269,18 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
 
         generalPage.addOptionGroup(engineGroup);
 
+        BooleanOptionBuilder fullbrightOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "fullbright"));
+        fullbrightOpt.setName(Text.translatable("helium.option.fullbright"));
+        fullbrightOpt.setTooltip(Text.translatable("helium.option.fullbright.tooltip"));
+        fullbrightOpt.setImpact(OptionImpact.LOW);
+        fullbrightOpt.setDefaultValue(false);
+        fullbrightOpt.setStorageHandler(storage);
+        fullbrightOpt.setBinding(v -> {
+            config.fullbright = v;
+            com.helium.feature.FullbrightManager.setEnabled(v);
+        }, () -> config.fullbright);
+        engineGroup.addOption(fullbrightOpt);
+
         BooleanOptionBuilder netOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "network_optimizations"));
         netOpt.setName(Text.translatable("helium.option.network_optimizations"));
         netOpt.setTooltip(Text.translatable("helium.option.network_optimizations.tooltip"));
@@ -374,6 +386,24 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         showParticlesOpt.setBinding(v -> config.overlayShowParticles = v, () -> config.overlayShowParticles);
         overlayContentGroup.addOption(showParticlesOpt);
 
+        BooleanOptionBuilder showCoordsOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "overlay_show_coordinates"));
+        showCoordsOpt.setName(Text.translatable("helium.option.show_coordinates"));
+        showCoordsOpt.setTooltip(Text.translatable("helium.option.show_coordinates.tooltip"));
+        showCoordsOpt.setImpact(OptionImpact.LOW);
+        showCoordsOpt.setDefaultValue(false);
+        showCoordsOpt.setStorageHandler(storage);
+        showCoordsOpt.setBinding(v -> config.overlayShowCoordinates = v, () -> config.overlayShowCoordinates);
+        overlayContentGroup.addOption(showCoordsOpt);
+
+        BooleanOptionBuilder showBiomeOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "overlay_show_biome"));
+        showBiomeOpt.setName(Text.translatable("helium.option.show_biome"));
+        showBiomeOpt.setTooltip(Text.translatable("helium.option.show_biome.tooltip"));
+        showBiomeOpt.setImpact(OptionImpact.LOW);
+        showBiomeOpt.setDefaultValue(false);
+        showBiomeOpt.setStorageHandler(storage);
+        showBiomeOpt.setBinding(v -> config.overlayShowBiome = v, () -> config.overlayShowBiome);
+        overlayContentGroup.addOption(showBiomeOpt);
+
         overlayPage.addOptionGroup(overlayContentGroup);
         mod.addPage(overlayPage);
 
@@ -438,15 +468,6 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         packetBatchOpt.setStorageHandler(storage);
         packetBatchOpt.setBinding(v -> config.packetBatching = v, () -> config.packetBatching);
         advancedGroup.addOption(packetBatchOpt);
-
-        BooleanOptionBuilder deferredOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "deferred_rendering"));
-        deferredOpt.setName(Text.translatable("helium.option.deferred_rendering"));
-        deferredOpt.setTooltip(Text.translatable("helium.option.deferred_rendering.tooltip"));
-        deferredOpt.setImpact(OptionImpact.HIGH);
-        deferredOpt.setDefaultValue(false);
-        deferredOpt.setStorageHandler(storage);
-        deferredOpt.setBinding(v -> config.deferredRendering = v, () -> config.deferredRendering);
-        advancedGroup.addOption(deferredOpt);
 
         BooleanOptionBuilder temporalOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "temporal_reprojection"));
         temporalOpt.setName(Text.translatable("helium.option.temporal_reprojection"));

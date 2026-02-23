@@ -16,6 +16,9 @@ public final class AsyncLightEngine {
 
     private static final int MAX_QUEUED = 1024;
     private static final int MAX_APPLY_PER_TICK = 64;
+    private static final AtomicInteger batchesThisFrame = new AtomicInteger(0);
+    private static final AtomicInteger deferredCount = new AtomicInteger(0);
+    private static volatile int maxBatchesPerFrame = 32;
 
     private AsyncLightEngine() {}
 
@@ -40,6 +43,22 @@ public final class AsyncLightEngine {
         return initialized.get();
     }
 
+    public static void onLightUpdateBatch() {
+        if (!initialized.get()) return;
+        batchesThisFrame.incrementAndGet();
+    }
+
+    public static boolean isThrottling() {
+        return initialized.get() && batchesThisFrame.get() > maxBatchesPerFrame;
+    }
+
+    public static void resetFrameCounters() {
+        int batches = batchesThisFrame.getAndSet(0);
+        if (batches > maxBatchesPerFrame) {
+            deferredCount.addAndGet(batches - maxBatchesPerFrame);
+        }
+    }
+
     public static boolean submitUpdate(long posKey, int lightLevel, boolean isSky) {
         if (!initialized.get() || queuedCount.get() >= MAX_QUEUED) return false;
 
@@ -62,13 +81,25 @@ public final class AsyncLightEngine {
     public static int applyCompleted() {
         if (!initialized.get()) return 0;
 
+        resetFrameCounters();
+
         int applied = 0;
         LightUpdate update;
         while (applied < MAX_APPLY_PER_TICK && (update = completedUpdates.poll()) != null) {
             queuedCount.decrementAndGet();
             applied++;
         }
+
+        if (deferredCount.get() > 0) {
+            int appliedFinal = applied;
+            deferredCount.updateAndGet(c -> Math.max(0, c - appliedFinal));
+        }
+
         return applied;
+    }
+
+    public static int getDeferredCount() {
+        return deferredCount.get();
     }
 
     public static int getQueuedCount() {

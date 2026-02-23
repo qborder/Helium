@@ -44,6 +44,8 @@ public class HeliumConfig {
     public boolean overlayShowFpsMinMaxAvg = false;
     public boolean overlayShowMemory = false;
     public boolean overlayShowParticles = false;
+    public boolean overlayShowCoordinates = false;
+    public boolean overlayShowBiome = false;
     public String overlayPosition = "TOP_LEFT";
     public int overlayTransparency = 60;
     public String overlayBackgroundColor = "#000000";
@@ -66,8 +68,8 @@ public class HeliumConfig {
     public boolean amdOptimizations = true;
     public boolean intelOptimizations = true;
     public boolean adaptiveSync = true;
-    public boolean deferredRendering = false;
     public boolean temporalReprojection = false;
+    public boolean fullbright = false;
 
     public boolean androidWarningShown = false;
 
@@ -176,8 +178,10 @@ public class HeliumConfig {
         this.amdOptimizations = other.amdOptimizations;
         this.intelOptimizations = other.intelOptimizations;
         this.adaptiveSync = other.adaptiveSync;
-        this.deferredRendering = other.deferredRendering;
         this.temporalReprojection = other.temporalReprojection;
+        this.fullbright = other.fullbright;
+        this.overlayShowCoordinates = other.overlayShowCoordinates;
+        this.overlayShowBiome = other.overlayShowBiome;
         this.androidWarningShown = other.androidWarningShown;
     }
 }

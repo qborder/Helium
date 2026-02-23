@@ -15,22 +15,26 @@ import com.helium.memory.BufferPool;
 import com.helium.memory.NativeMemoryManager;
 import com.helium.memory.ObjectPool;
 import com.helium.network.PacketBatcher;
-import com.helium.render.DeferredRenderPrep;
 import com.helium.render.GLStateCache;
 import com.helium.render.HeliumBlockEntityCulling;
 import com.helium.render.ModelCache;
 import com.helium.render.RenderPipeline;
 import com.helium.render.TemporalReprojection;
 import com.helium.compat.HeliumIncompatibleScreen;
+import com.helium.feature.FullbrightManager;
 import com.helium.resource.BackgroundResourceProcessor;
 import com.helium.startup.FastStartup;
 import com.helium.threading.EventPoller;
 import com.helium.threading.ThreadPriorityManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +46,7 @@ public class HeliumClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     private static HeliumConfig config;
+    private static KeyBinding fullbrightKey;
 
     private static boolean hasLithium = false;
     private static boolean hasIris = false;
@@ -64,7 +69,6 @@ public class HeliumClient implements ClientModInitializer {
     private static boolean gpuDetectorFailed = false;
     private static boolean gpuOptsFailed = false;
     private static boolean adaptiveSyncFailed = false;
-    private static boolean deferredRenderFailed = false;
     private static boolean temporalReprojectionFailed = false;
     private static boolean gpuInitDeferred = true;
     private static boolean isAndroid = false;
@@ -177,6 +181,25 @@ public class HeliumClient implements ClientModInitializer {
             if (config.temporalReprojection) TemporalReprojection.init();
         }, () -> temporalReprojectionFailed = true);
 
+        fullbrightKey = KeyBindingHelper.registerKeyBinding(createKeyBinding(
+                "helium.key.fullbright",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_G,
+                "helium.key.category"
+        ));
+
+        if (config.fullbright) {
+            FullbrightManager.enable();
+        }
+
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (fullbrightKey.wasPressed()) {
+                FullbrightManager.toggle();
+                config.fullbright = FullbrightManager.isEnabled();
+                config.save();
+            }
+        });
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (gpuInitDeferred && client.getWindow() != null) {
                 gpuInitDeferred = false;
@@ -260,7 +283,6 @@ public class HeliumClient implements ClientModInitializer {
     public static boolean isGpuDetectorAvailable() { return !gpuDetectorFailed; }
     public static boolean isGpuOptsAvailable() { return !gpuOptsFailed; }
     public static boolean isAdaptiveSyncAvailable() { return !adaptiveSyncFailed; }
-    public static boolean isDeferredRenderAvailable() { return !deferredRenderFailed; }
     public static boolean isTemporalReprojectionAvailable() { return !temporalReprojectionFailed; }
     public static boolean isAndroid() { return isAndroid; }
 
@@ -275,5 +297,21 @@ public class HeliumClient implements ClientModInitializer {
         }
 
         return false;
+    }
+
+    private static KeyBinding createKeyBinding(String id, InputUtil.Type type, int code, String category) {
+        try {
+            java.lang.reflect.Method createMethod = KeyBinding.Category.class.getMethod("create", net.minecraft.util.Identifier.class);
+            Object categoryObj = createMethod.invoke(null, net.minecraft.util.Identifier.of(MOD_ID, "keys"));
+            return new KeyBinding(id, type, code, (KeyBinding.Category) categoryObj);
+        } catch (Throwable e1) {
+            try {
+                java.lang.reflect.Constructor<?> ctor = KeyBinding.class.getConstructor(String.class, InputUtil.Type.class, int.class, String.class);
+                return (KeyBinding) ctor.newInstance(id, type, code, category);
+            } catch (Throwable e2) {
+                LOGGER.warn("failed to create keybinding, using fallback");
+                return new KeyBinding(id, code, KeyBinding.Category.MISC);
+            }
+        }
     }
 }

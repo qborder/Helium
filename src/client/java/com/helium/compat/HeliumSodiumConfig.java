@@ -26,14 +26,14 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         mod.setIcon(Identifier.of(NAMESPACE, "textures/icon-only.png"));
 
         OptionPageBuilder renderPage = builder.createOptionPage();
-        renderPage.setName(Text.literal("Rendering"));
+        renderPage.setName(Text.translatable("helium.page.rendering"));
 
         OptionGroupBuilder cullingGroup = builder.createOptionGroup();
-        cullingGroup.setName(Text.literal("Distance Culling"));
+        cullingGroup.setName(Text.translatable("helium.group.distance_culling"));
 
         BooleanOptionBuilder entityCull = builder.createBooleanOption(Identifier.of(NAMESPACE, "entity_culling"));
-        entityCull.setName(Text.literal("Entity Distance Culling"));
-        entityCull.setTooltip(Text.literal("Skip rendering entities beyond a set distance. Boosts FPS in crowded areas."));
+        entityCull.setName(Text.translatable("helium.option.entity_culling"));
+        entityCull.setTooltip(Text.translatable("helium.option.entity_culling.tooltip"));
         entityCull.setImpact(OptionImpact.MEDIUM);
         entityCull.setDefaultValue(true);
         entityCull.setStorageHandler(storage);
@@ -41,19 +41,19 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         cullingGroup.addOption(entityCull);
 
         IntegerOptionBuilder entityDist = builder.createIntegerOption(Identifier.of(NAMESPACE, "entity_cull_distance"));
-        entityDist.setName(Text.literal("Entity Cull Distance"));
-        entityDist.setTooltip(Text.literal("Max distance (blocks) to render entities. Lower = more FPS."));
+        entityDist.setName(Text.translatable("helium.option.entity_cull_distance"));
+        entityDist.setTooltip(Text.translatable("helium.option.entity_cull_distance.tooltip"));
         entityDist.setImpact(OptionImpact.MEDIUM);
         entityDist.setDefaultValue(64);
         entityDist.setRange(16, 128, 8);
-        entityDist.setValueFormatter(v -> Text.literal(v + " blocks"));
+        entityDist.setValueFormatter(v -> Text.translatable("helium.suffix.blocks", v));
         entityDist.setStorageHandler(storage);
         entityDist.setBinding(v -> config.entityCullDistance = v, () -> config.entityCullDistance);
         cullingGroup.addOption(entityDist);
 
         BooleanOptionBuilder blockEntityCull = builder.createBooleanOption(Identifier.of(NAMESPACE, "block_entity_culling"));
-        blockEntityCull.setName(Text.literal("Block Entity Distance Culling"));
-        blockEntityCull.setTooltip(Text.literal("Skip rendering distant block entities (chests, signs, etc). Big FPS boost."));
+        blockEntityCull.setName(Text.translatable("helium.option.block_entity_culling"));
+        blockEntityCull.setTooltip(Text.translatable("helium.option.block_entity_culling.tooltip"));
         blockEntityCull.setImpact(OptionImpact.HIGH);
         blockEntityCull.setDefaultValue(true);
         blockEntityCull.setStorageHandler(storage);
@@ -61,19 +61,19 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         cullingGroup.addOption(blockEntityCull);
 
         IntegerOptionBuilder blockEntityDist = builder.createIntegerOption(Identifier.of(NAMESPACE, "block_entity_cull_distance"));
-        blockEntityDist.setName(Text.literal("Block Entity Cull Distance"));
-        blockEntityDist.setTooltip(Text.literal("Max distance (blocks) to render block entities. Lower = more FPS."));
+        blockEntityDist.setName(Text.translatable("helium.option.block_entity_cull_distance"));
+        blockEntityDist.setTooltip(Text.translatable("helium.option.block_entity_cull_distance.tooltip"));
         blockEntityDist.setImpact(OptionImpact.HIGH);
         blockEntityDist.setDefaultValue(48);
         blockEntityDist.setRange(16, 96, 8);
-        blockEntityDist.setValueFormatter(v -> Text.literal(v + " blocks"));
+        blockEntityDist.setValueFormatter(v -> Text.translatable("helium.suffix.blocks", v));
         blockEntityDist.setStorageHandler(storage);
         blockEntityDist.setBinding(v -> config.blockEntityCullDistance = v, () -> config.blockEntityCullDistance);
         cullingGroup.addOption(blockEntityDist);
 
         BooleanOptionBuilder particleCull = builder.createBooleanOption(Identifier.of(NAMESPACE, "particle_culling"));
-        particleCull.setName(Text.literal("Particle Distance Culling"));
-        particleCull.setTooltip(Text.literal("Skip distant particles. Improves FPS in particle-heavy scenes."));
+        particleCull.setName(Text.translatable("helium.option.particle_culling"));
+        particleCull.setTooltip(Text.translatable("helium.option.particle_culling.tooltip"));
         particleCull.setImpact(OptionImpact.MEDIUM);
         particleCull.setDefaultValue(true);
         particleCull.setStorageHandler(storage);
@@ -81,12 +81,12 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         cullingGroup.addOption(particleCull);
 
         IntegerOptionBuilder particleDist = builder.createIntegerOption(Identifier.of(NAMESPACE, "particle_cull_distance"));
-        particleDist.setName(Text.literal("Particle Cull Distance"));
-        particleDist.setTooltip(Text.literal("Max distance (blocks) to render particles. Lower = more FPS."));
+        particleDist.setName(Text.translatable("helium.option.particle_cull_distance"));
+        particleDist.setTooltip(Text.translatable("helium.option.particle_cull_distance.tooltip"));
         particleDist.setImpact(OptionImpact.MEDIUM);
         particleDist.setDefaultValue(32);
         particleDist.setRange(8, 64, 4);
-        particleDist.setValueFormatter(v -> Text.literal(v + " blocks"));
+        particleDist.setValueFormatter(v -> Text.translatable("helium.suffix.blocks", v));
         particleDist.setStorageHandler(storage);
         particleDist.setBinding(v -> config.particleCullDistance = v, () -> config.particleCullDistance);
         cullingGroup.addOption(particleDist);
@@ -94,11 +94,11 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         renderPage.addOptionGroup(cullingGroup);
 
         OptionGroupBuilder particleGroup = builder.createOptionGroup();
-        particleGroup.setName(Text.literal("Particle Optimization"));
+        particleGroup.setName(Text.translatable("helium.group.particle_optimization"));
 
         BooleanOptionBuilder particleLimit = builder.createBooleanOption(Identifier.of(NAMESPACE, "particle_limiting"));
-        particleLimit.setName(Text.literal("Particle Limiting"));
-        particleLimit.setTooltip(Text.literal("Limit total particle count to prevent lag spikes in particle-heavy scenes."));
+        particleLimit.setName(Text.translatable("helium.option.particle_limiting"));
+        particleLimit.setTooltip(Text.translatable("helium.option.particle_limiting.tooltip"));
         particleLimit.setImpact(OptionImpact.HIGH);
         particleLimit.setDefaultValue(true);
         particleLimit.setStorageHandler(storage);
@@ -106,8 +106,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         particleGroup.addOption(particleLimit);
 
         IntegerOptionBuilder maxParticles = builder.createIntegerOption(Identifier.of(NAMESPACE, "max_particles"));
-        maxParticles.setName(Text.literal("Max Particles"));
-        maxParticles.setTooltip(Text.literal("Maximum number of particles to render at once. Lower = more FPS in explosions."));
+        maxParticles.setName(Text.translatable("helium.option.max_particles"));
+        maxParticles.setTooltip(Text.translatable("helium.option.max_particles.tooltip"));
         maxParticles.setImpact(OptionImpact.HIGH);
         maxParticles.setDefaultValue(1000);
         maxParticles.setRange(100, 5000, 100);
@@ -117,8 +117,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         particleGroup.addOption(maxParticles);
 
         BooleanOptionBuilder particlePriorityOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "particle_priority"));
-        particlePriorityOpt.setName(Text.literal("Particle Priority"));
-        particlePriorityOpt.setTooltip(Text.literal("When limiting, keep important particles (damage, crits) over ambient ones."));
+        particlePriorityOpt.setName(Text.translatable("helium.option.particle_priority"));
+        particlePriorityOpt.setTooltip(Text.translatable("helium.option.particle_priority.tooltip"));
         particlePriorityOpt.setImpact(OptionImpact.LOW);
         particlePriorityOpt.setDefaultValue(true);
         particlePriorityOpt.setStorageHandler(storage);
@@ -126,8 +126,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         particleGroup.addOption(particlePriorityOpt);
 
         BooleanOptionBuilder particleBatch = builder.createBooleanOption(Identifier.of(NAMESPACE, "particle_batching"));
-        particleBatch.setName(Text.literal("Particle Batching"));
-        particleBatch.setTooltip(Text.literal("Batch similar particles for more efficient rendering."));
+        particleBatch.setName(Text.translatable("helium.option.particle_batching"));
+        particleBatch.setTooltip(Text.translatable("helium.option.particle_batching.tooltip"));
         particleBatch.setImpact(OptionImpact.LOW);
         particleBatch.setDefaultValue(true);
         particleBatch.setStorageHandler(storage);
@@ -137,11 +137,11 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         renderPage.addOptionGroup(particleGroup);
 
         OptionGroupBuilder renderOptGroup = builder.createOptionGroup();
-        renderOptGroup.setName(Text.literal("Render Pipeline"));
+        renderOptGroup.setName(Text.translatable("helium.group.render_pipeline"));
 
         BooleanOptionBuilder animThrottle = builder.createBooleanOption(Identifier.of(NAMESPACE, "animation_throttling"));
-        animThrottle.setName(Text.literal("Animation Throttling"));
-        animThrottle.setTooltip(Text.literal("Reduce texture animation updates for off-screen or distant blocks. Saves GPU time."));
+        animThrottle.setName(Text.translatable("helium.option.animation_throttling"));
+        animThrottle.setTooltip(Text.translatable("helium.option.animation_throttling.tooltip"));
         animThrottle.setImpact(OptionImpact.LOW);
         animThrottle.setDefaultValue(true);
         animThrottle.setStorageHandler(storage);
@@ -149,8 +149,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         renderOptGroup.addOption(animThrottle);
 
         BooleanOptionBuilder fastMathOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "fast_math"));
-        fastMathOpt.setName(Text.literal("Fast Math"));
-        fastMathOpt.setTooltip(Text.literal("Replace sin/cos/atan2 with faster approximations. Tiny accuracy loss, noticeable FPS gain."));
+        fastMathOpt.setName(Text.translatable("helium.option.fast_math"));
+        fastMathOpt.setTooltip(Text.translatable("helium.option.fast_math.tooltip"));
         fastMathOpt.setImpact(OptionImpact.LOW);
         fastMathOpt.setDefaultValue(true);
         fastMathOpt.setStorageHandler(storage);
@@ -158,8 +158,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         renderOptGroup.addOption(fastMathOpt);
 
         BooleanOptionBuilder glCache = builder.createBooleanOption(Identifier.of(NAMESPACE, "gl_state_cache"));
-        glCache.setName(Text.literal("GL State Cache"));
-        glCache.setTooltip(Text.literal("Cache OpenGL state to skip redundant calls. Auto-disabled with ImmediatelyFast."));
+        glCache.setName(Text.translatable("helium.option.gl_state_cache"));
+        glCache.setTooltip(Text.translatable("helium.option.gl_state_cache.tooltip"));
         glCache.setImpact(OptionImpact.LOW);
         glCache.setDefaultValue(true);
         glCache.setStorageHandler(storage);
@@ -169,11 +169,11 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         renderPage.addOptionGroup(renderOptGroup);
 
         OptionGroupBuilder cachingGroup = builder.createOptionGroup();
-        cachingGroup.setName(Text.literal("Caching"));
+        cachingGroup.setName(Text.translatable("helium.group.caching"));
 
         BooleanOptionBuilder modelCacheOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "model_cache"));
-        modelCacheOpt.setName(Text.literal("Model Cache"));
-        modelCacheOpt.setTooltip(Text.literal("Cache baked block models in memory with LRU eviction. Reduces repeated model lookups."));
+        modelCacheOpt.setName(Text.translatable("helium.option.model_cache"));
+        modelCacheOpt.setTooltip(Text.translatable("helium.option.model_cache.tooltip"));
         modelCacheOpt.setImpact(OptionImpact.MEDIUM);
         modelCacheOpt.setDefaultValue(true);
         modelCacheOpt.setStorageHandler(storage);
@@ -181,12 +181,12 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         cachingGroup.addOption(modelCacheOpt);
 
         IntegerOptionBuilder modelCacheSizeOpt = builder.createIntegerOption(Identifier.of(NAMESPACE, "model_cache_max_mb"));
-        modelCacheSizeOpt.setName(Text.literal("Model Cache Size"));
-        modelCacheSizeOpt.setTooltip(Text.literal("Maximum memory for cached block models. Higher = fewer cache misses, more RAM."));
+        modelCacheSizeOpt.setName(Text.translatable("helium.option.model_cache_size"));
+        modelCacheSizeOpt.setTooltip(Text.translatable("helium.option.model_cache_size.tooltip"));
         modelCacheSizeOpt.setImpact(OptionImpact.MEDIUM);
         modelCacheSizeOpt.setDefaultValue(64);
         modelCacheSizeOpt.setRange(16, 256, 16);
-        modelCacheSizeOpt.setValueFormatter(v -> Text.literal(v + " MB"));
+        modelCacheSizeOpt.setValueFormatter(v -> Text.translatable("helium.suffix.mb", v));
         modelCacheSizeOpt.setStorageHandler(storage);
         modelCacheSizeOpt.setBinding(v -> config.modelCacheMaxMb = v, () -> config.modelCacheMaxMb);
         cachingGroup.addOption(modelCacheSizeOpt);
@@ -195,14 +195,14 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         mod.addPage(renderPage);
 
         OptionPageBuilder generalPage = builder.createOptionPage();
-        generalPage.setName(Text.literal("General"));
+        generalPage.setName(Text.translatable("helium.page.general"));
 
         OptionGroupBuilder engineGroup = builder.createOptionGroup();
-        engineGroup.setName(Text.literal("Engine"));
+        engineGroup.setName(Text.translatable("helium.group.engine"));
 
         BooleanOptionBuilder memOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "memory_optimizations"));
-        memOpt.setName(Text.literal("Memory Optimizations"));
-        memOpt.setTooltip(Text.literal("Reduce garbage collection pauses by reusing objects and buffers."));
+        memOpt.setName(Text.translatable("helium.option.memory_optimizations"));
+        memOpt.setTooltip(Text.translatable("helium.option.memory_optimizations.tooltip"));
         memOpt.setImpact(OptionImpact.LOW);
         memOpt.setDefaultValue(true);
         memOpt.setStorageHandler(storage);
@@ -210,8 +210,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         engineGroup.addOption(memOpt);
 
         BooleanOptionBuilder threadOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "thread_optimizations"));
-        threadOpt.setName(Text.literal("Thread Optimizations"));
-        threadOpt.setTooltip(Text.literal("Prioritize render thread and optimize event polling for smoother frames."));
+        threadOpt.setName(Text.translatable("helium.option.thread_optimizations"));
+        threadOpt.setTooltip(Text.translatable("helium.option.thread_optimizations.tooltip"));
         threadOpt.setImpact(OptionImpact.LOW);
         threadOpt.setDefaultValue(true);
         threadOpt.setStorageHandler(storage);
@@ -219,8 +219,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         engineGroup.addOption(threadOpt);
 
         BooleanOptionBuilder startupOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "fast_startup"));
-        startupOpt.setName(Text.literal("Fast Startup"));
-        startupOpt.setTooltip(Text.literal("Parallel class loading for faster game launch. No effect after startup."));
+        startupOpt.setName(Text.translatable("helium.option.fast_startup"));
+        startupOpt.setTooltip(Text.translatable("helium.option.fast_startup.tooltip"));
         startupOpt.setImpact(OptionImpact.LOW);
         startupOpt.setDefaultValue(true);
         startupOpt.setStorageHandler(storage);
@@ -228,8 +228,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         engineGroup.addOption(startupOpt);
 
         BooleanOptionBuilder reducedAllocOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "reduced_allocations"));
-        reducedAllocOpt.setName(Text.literal("Reduced Allocations"));
-        reducedAllocOpt.setTooltip(Text.literal("Pool Vec3d, Matrix4f, and other hot objects to reduce garbage collection pressure."));
+        reducedAllocOpt.setName(Text.translatable("helium.option.reduced_allocations"));
+        reducedAllocOpt.setTooltip(Text.translatable("helium.option.reduced_allocations.tooltip"));
         reducedAllocOpt.setImpact(OptionImpact.LOW);
         reducedAllocOpt.setDefaultValue(true);
         reducedAllocOpt.setStorageHandler(storage);
@@ -237,8 +237,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         engineGroup.addOption(reducedAllocOpt);
 
         BooleanOptionBuilder idleOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "auto_pause_on_idle"));
-        idleOpt.setName(Text.literal("Auto-Pause on Idle"));
-        idleOpt.setTooltip(Text.literal("Drop to low FPS after no mouse/keyboard activity. Saves power and reduces heat."));
+        idleOpt.setName(Text.translatable("helium.option.auto_pause_on_idle"));
+        idleOpt.setTooltip(Text.translatable("helium.option.auto_pause_on_idle.tooltip"));
         idleOpt.setImpact(OptionImpact.LOW);
         idleOpt.setDefaultValue(false);
         idleOpt.setStorageHandler(storage);
@@ -246,23 +246,23 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         engineGroup.addOption(idleOpt);
 
         IntegerOptionBuilder idleTimeoutOpt = builder.createIntegerOption(Identifier.of(NAMESPACE, "idle_timeout_seconds"));
-        idleTimeoutOpt.setName(Text.literal("Idle Timeout"));
-        idleTimeoutOpt.setTooltip(Text.literal("Seconds of no activity before entering idle mode."));
+        idleTimeoutOpt.setName(Text.translatable("helium.option.idle_timeout"));
+        idleTimeoutOpt.setTooltip(Text.translatable("helium.option.idle_timeout.tooltip"));
         idleTimeoutOpt.setImpact(OptionImpact.LOW);
         idleTimeoutOpt.setDefaultValue(60);
         idleTimeoutOpt.setRange(10, 300, 10);
-        idleTimeoutOpt.setValueFormatter(v -> Text.literal(v + "s"));
+        idleTimeoutOpt.setValueFormatter(v -> Text.translatable("helium.suffix.seconds", v));
         idleTimeoutOpt.setStorageHandler(storage);
         idleTimeoutOpt.setBinding(v -> config.idleTimeoutSeconds = v, () -> config.idleTimeoutSeconds);
         engineGroup.addOption(idleTimeoutOpt);
 
         IntegerOptionBuilder idleFpsOpt = builder.createIntegerOption(Identifier.of(NAMESPACE, "idle_fps_limit"));
-        idleFpsOpt.setName(Text.literal("Idle FPS Limit"));
-        idleFpsOpt.setTooltip(Text.literal("FPS cap when idle. Lower = less power usage."));
+        idleFpsOpt.setName(Text.translatable("helium.option.idle_fps_limit"));
+        idleFpsOpt.setTooltip(Text.translatable("helium.option.idle_fps_limit.tooltip"));
         idleFpsOpt.setImpact(OptionImpact.LOW);
         idleFpsOpt.setDefaultValue(5);
         idleFpsOpt.setRange(1, 30, 1);
-        idleFpsOpt.setValueFormatter(v -> Text.literal(v + " FPS"));
+        idleFpsOpt.setValueFormatter(v -> Text.translatable("helium.suffix.fps", v));
         idleFpsOpt.setStorageHandler(storage);
         idleFpsOpt.setBinding(v -> config.idleFpsLimit = v, () -> config.idleFpsLimit);
         engineGroup.addOption(idleFpsOpt);
@@ -270,8 +270,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         generalPage.addOptionGroup(engineGroup);
 
         BooleanOptionBuilder netOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "network_optimizations"));
-        netOpt.setName(Text.literal("Network Optimizations"));
-        netOpt.setTooltip(Text.literal("Background resource processing for smoother network handling."));
+        netOpt.setName(Text.translatable("helium.option.network_optimizations"));
+        netOpt.setTooltip(Text.translatable("helium.option.network_optimizations.tooltip"));
         netOpt.setImpact(OptionImpact.LOW);
         netOpt.setDefaultValue(true);
         netOpt.setStorageHandler(storage);
@@ -281,14 +281,14 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         mod.addPage(generalPage);
 
         OptionPageBuilder mpPage = builder.createOptionPage();
-        mpPage.setName(Text.literal("Multiplayer"));
+        mpPage.setName(Text.translatable("helium.page.multiplayer"));
 
         OptionGroupBuilder serverGroup = builder.createOptionGroup();
-        serverGroup.setName(Text.literal("Server List"));
+        serverGroup.setName(Text.translatable("helium.group.server_list"));
 
         BooleanOptionBuilder fastPing = builder.createBooleanOption(Identifier.of(NAMESPACE, "fast_server_ping"));
-        fastPing.setName(Text.literal("Fast Server Pinging"));
-        fastPing.setTooltip(Text.literal("Ping all servers simultaneously instead of one by one. Much faster server list loading."));
+        fastPing.setName(Text.translatable("helium.option.fast_server_ping"));
+        fastPing.setTooltip(Text.translatable("helium.option.fast_server_ping.tooltip"));
         fastPing.setImpact(OptionImpact.LOW);
         fastPing.setDefaultValue(true);
         fastPing.setStorageHandler(storage);
@@ -296,8 +296,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         serverGroup.addOption(fastPing);
 
         BooleanOptionBuilder scrollKeep = builder.createBooleanOption(Identifier.of(NAMESPACE, "preserve_scroll_on_refresh"));
-        scrollKeep.setName(Text.literal("Keep Scroll on Refresh"));
-        scrollKeep.setTooltip(Text.literal("Don't reset the server list scroll position when you press refresh."));
+        scrollKeep.setName(Text.translatable("helium.option.preserve_scroll"));
+        scrollKeep.setTooltip(Text.translatable("helium.option.preserve_scroll.tooltip"));
         scrollKeep.setImpact(OptionImpact.LOW);
         scrollKeep.setDefaultValue(true);
         scrollKeep.setStorageHandler(storage);
@@ -308,14 +308,14 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         mod.addPage(mpPage);
 
         OptionPageBuilder overlayPage = builder.createOptionPage();
-        overlayPage.setName(Text.literal("Overlay"));
+        overlayPage.setName(Text.translatable("helium.page.overlay"));
 
         OptionGroupBuilder overlayGroup = builder.createOptionGroup();
-        overlayGroup.setName(Text.literal("FPS Overlay"));
+        overlayGroup.setName(Text.translatable("helium.group.fps_overlay"));
 
         BooleanOptionBuilder fpsOverlayOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "fps_overlay"));
-        fpsOverlayOpt.setName(Text.literal("Enable Overlay"));
-        fpsOverlayOpt.setTooltip(Text.literal("Master toggle for the on-screen overlay."));
+        fpsOverlayOpt.setName(Text.translatable("helium.option.fps_overlay"));
+        fpsOverlayOpt.setTooltip(Text.translatable("helium.option.fps_overlay.tooltip"));
         fpsOverlayOpt.setImpact(OptionImpact.LOW);
         fpsOverlayOpt.setDefaultValue(true);
         fpsOverlayOpt.setStorageHandler(storage);
@@ -323,12 +323,12 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         overlayGroup.addOption(fpsOverlayOpt);
 
         IntegerOptionBuilder overlayTransOpt = builder.createIntegerOption(Identifier.of(NAMESPACE, "overlay_transparency"));
-        overlayTransOpt.setName(Text.literal("Overlay Transparency"));
-        overlayTransOpt.setTooltip(Text.literal("Background transparency of the overlay. 0 = fully transparent, 100 = opaque."));
+        overlayTransOpt.setName(Text.translatable("helium.option.overlay_transparency"));
+        overlayTransOpt.setTooltip(Text.translatable("helium.option.overlay_transparency.tooltip"));
         overlayTransOpt.setImpact(OptionImpact.LOW);
         overlayTransOpt.setDefaultValue(60);
         overlayTransOpt.setRange(0, 100, 10);
-        overlayTransOpt.setValueFormatter(v -> Text.literal(v + "%"));
+        overlayTransOpt.setValueFormatter(v -> Text.translatable("helium.suffix.percent", v));
         overlayTransOpt.setStorageHandler(storage);
         overlayTransOpt.setBinding(v -> config.overlayTransparency = v, () -> config.overlayTransparency);
         overlayGroup.addOption(overlayTransOpt);
@@ -336,11 +336,11 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         overlayPage.addOptionGroup(overlayGroup);
 
         OptionGroupBuilder overlayContentGroup = builder.createOptionGroup();
-        overlayContentGroup.setName(Text.literal("Overlay Content"));
+        overlayContentGroup.setName(Text.translatable("helium.group.overlay_content"));
 
         BooleanOptionBuilder showFpsOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "overlay_show_fps"));
-        showFpsOpt.setName(Text.literal("Show FPS"));
-        showFpsOpt.setTooltip(Text.literal("Display current frames per second."));
+        showFpsOpt.setName(Text.translatable("helium.option.show_fps"));
+        showFpsOpt.setTooltip(Text.translatable("helium.option.show_fps.tooltip"));
         showFpsOpt.setImpact(OptionImpact.LOW);
         showFpsOpt.setDefaultValue(true);
         showFpsOpt.setStorageHandler(storage);
@@ -348,8 +348,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         overlayContentGroup.addOption(showFpsOpt);
 
         BooleanOptionBuilder showFpsMinMaxAvgOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "overlay_show_fps_stats"));
-        showFpsMinMaxAvgOpt.setName(Text.literal("Show FPS Min/Max/Avg"));
-        showFpsMinMaxAvgOpt.setTooltip(Text.literal("Display minimum, maximum, and average FPS statistics."));
+        showFpsMinMaxAvgOpt.setName(Text.translatable("helium.option.show_fps_stats"));
+        showFpsMinMaxAvgOpt.setTooltip(Text.translatable("helium.option.show_fps_stats.tooltip"));
         showFpsMinMaxAvgOpt.setImpact(OptionImpact.LOW);
         showFpsMinMaxAvgOpt.setDefaultValue(false);
         showFpsMinMaxAvgOpt.setStorageHandler(storage);
@@ -357,8 +357,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         overlayContentGroup.addOption(showFpsMinMaxAvgOpt);
 
         BooleanOptionBuilder showMemoryOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "overlay_show_memory"));
-        showMemoryOpt.setName(Text.literal("Show Memory"));
-        showMemoryOpt.setTooltip(Text.literal("Display memory usage information."));
+        showMemoryOpt.setName(Text.translatable("helium.option.show_memory"));
+        showMemoryOpt.setTooltip(Text.translatable("helium.option.show_memory.tooltip"));
         showMemoryOpt.setImpact(OptionImpact.LOW);
         showMemoryOpt.setDefaultValue(false);
         showMemoryOpt.setStorageHandler(storage);
@@ -366,8 +366,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         overlayContentGroup.addOption(showMemoryOpt);
 
         BooleanOptionBuilder showParticlesOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "overlay_show_particles"));
-        showParticlesOpt.setName(Text.literal("Show Particle Count"));
-        showParticlesOpt.setTooltip(Text.literal("Display current particle count."));
+        showParticlesOpt.setName(Text.translatable("helium.option.show_particles"));
+        showParticlesOpt.setTooltip(Text.translatable("helium.option.show_particles.tooltip"));
         showParticlesOpt.setImpact(OptionImpact.LOW);
         showParticlesOpt.setDefaultValue(false);
         showParticlesOpt.setStorageHandler(storage);
@@ -378,14 +378,14 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         mod.addPage(overlayPage);
 
         OptionPageBuilder advancedPage = builder.createOptionPage();
-        advancedPage.setName(Text.literal("Advanced"));
+        advancedPage.setName(Text.translatable("helium.page.advanced"));
 
         OptionGroupBuilder advancedGroup = builder.createOptionGroup();
-        advancedGroup.setName(Text.literal("Experimental"));
+        advancedGroup.setName(Text.translatable("helium.group.experimental"));
 
         BooleanOptionBuilder nativeMemOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "native_memory"));
-        nativeMemOpt.setName(Text.literal("Native Memory"));
-        nativeMemOpt.setTooltip(Text.literal("Use off-heap memory for large buffers. Reduces GC pressure but uses more system RAM."));
+        nativeMemOpt.setName(Text.translatable("helium.option.native_memory"));
+        nativeMemOpt.setTooltip(Text.translatable("helium.option.native_memory.tooltip"));
         nativeMemOpt.setImpact(OptionImpact.MEDIUM);
         nativeMemOpt.setDefaultValue(true);
         nativeMemOpt.setStorageHandler(storage);
@@ -393,19 +393,19 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         advancedGroup.addOption(nativeMemOpt);
 
         IntegerOptionBuilder nativeMemPoolOpt = builder.createIntegerOption(Identifier.of(NAMESPACE, "native_memory_pool_mb"));
-        nativeMemPoolOpt.setName(Text.literal("Native Memory Pool Size"));
-        nativeMemPoolOpt.setTooltip(Text.literal("Maximum MB of off-heap memory to allocate. Higher = more cache, more RAM usage."));
+        nativeMemPoolOpt.setName(Text.translatable("helium.option.native_memory_pool_size"));
+        nativeMemPoolOpt.setTooltip(Text.translatable("helium.option.native_memory_pool_size.tooltip"));
         nativeMemPoolOpt.setImpact(OptionImpact.MEDIUM);
         nativeMemPoolOpt.setDefaultValue(64);
         nativeMemPoolOpt.setRange(16, 256, 16);
-        nativeMemPoolOpt.setValueFormatter(v -> Text.literal(v + " MB"));
+        nativeMemPoolOpt.setValueFormatter(v -> Text.translatable("helium.suffix.mb", v));
         nativeMemPoolOpt.setStorageHandler(storage);
         nativeMemPoolOpt.setBinding(v -> config.nativeMemoryPoolMb = v, () -> config.nativeMemoryPoolMb);
         advancedGroup.addOption(nativeMemPoolOpt);
 
         BooleanOptionBuilder renderPipeOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "render_pipelining"));
-        renderPipeOpt.setName(Text.literal("Render Pipelining"));
-        renderPipeOpt.setTooltip(Text.literal("Experimental async culling. May improve FPS on multi-core systems. Can cause visual glitches."));
+        renderPipeOpt.setName(Text.translatable("helium.option.render_pipelining"));
+        renderPipeOpt.setTooltip(Text.translatable("helium.option.render_pipelining.tooltip"));
         renderPipeOpt.setImpact(OptionImpact.HIGH);
         renderPipeOpt.setDefaultValue(false);
         renderPipeOpt.setStorageHandler(storage);
@@ -413,8 +413,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         advancedGroup.addOption(renderPipeOpt);
 
         BooleanOptionBuilder simdOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "simd_math"));
-        simdOpt.setName(Text.literal("SIMD Math"));
-        simdOpt.setTooltip(Text.literal("Use Java Vector API for batch math operations. Requires JDK with incubator modules."));
+        simdOpt.setName(Text.translatable("helium.option.simd_math"));
+        simdOpt.setTooltip(Text.translatable("helium.option.simd_math.tooltip"));
         simdOpt.setImpact(OptionImpact.MEDIUM);
         simdOpt.setDefaultValue(false);
         simdOpt.setStorageHandler(storage);
@@ -422,8 +422,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         advancedGroup.addOption(simdOpt);
 
         BooleanOptionBuilder asyncLightOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "async_light_updates"));
-        asyncLightOpt.setName(Text.literal("Async Light Updates"));
-        asyncLightOpt.setTooltip(Text.literal("Process light updates on background threads. May cause brief lighting flicker."));
+        asyncLightOpt.setName(Text.translatable("helium.option.async_light_updates"));
+        asyncLightOpt.setTooltip(Text.translatable("helium.option.async_light_updates.tooltip"));
         asyncLightOpt.setImpact(OptionImpact.MEDIUM);
         asyncLightOpt.setDefaultValue(false);
         asyncLightOpt.setStorageHandler(storage);
@@ -431,8 +431,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         advancedGroup.addOption(asyncLightOpt);
 
         BooleanOptionBuilder packetBatchOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "packet_batching"));
-        packetBatchOpt.setName(Text.literal("Packet Batching"));
-        packetBatchOpt.setTooltip(Text.literal("Batch outgoing network packets to reduce syscall overhead. Off by default."));
+        packetBatchOpt.setName(Text.translatable("helium.option.packet_batching"));
+        packetBatchOpt.setTooltip(Text.translatable("helium.option.packet_batching.tooltip"));
         packetBatchOpt.setImpact(OptionImpact.LOW);
         packetBatchOpt.setDefaultValue(false);
         packetBatchOpt.setStorageHandler(storage);
@@ -440,8 +440,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         advancedGroup.addOption(packetBatchOpt);
 
         BooleanOptionBuilder deferredOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "deferred_rendering"));
-        deferredOpt.setName(Text.literal("Deferred Rendering"));
-        deferredOpt.setTooltip(Text.literal("Experimental G-buffer setup for deferred lighting. May conflict with shaders."));
+        deferredOpt.setName(Text.translatable("helium.option.deferred_rendering"));
+        deferredOpt.setTooltip(Text.translatable("helium.option.deferred_rendering.tooltip"));
         deferredOpt.setImpact(OptionImpact.HIGH);
         deferredOpt.setDefaultValue(false);
         deferredOpt.setStorageHandler(storage);
@@ -449,8 +449,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         advancedGroup.addOption(deferredOpt);
 
         BooleanOptionBuilder temporalOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "temporal_reprojection"));
-        temporalOpt.setName(Text.literal("Temporal Reprojection"));
-        temporalOpt.setTooltip(Text.literal("Reuse rendered data from previous frames. Reduces render cost but may cause ghosting."));
+        temporalOpt.setName(Text.translatable("helium.option.temporal_reprojection"));
+        temporalOpt.setTooltip(Text.translatable("helium.option.temporal_reprojection.tooltip"));
         temporalOpt.setImpact(OptionImpact.HIGH);
         temporalOpt.setDefaultValue(false);
         temporalOpt.setStorageHandler(storage);
@@ -460,11 +460,11 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         advancedPage.addOptionGroup(advancedGroup);
 
         OptionGroupBuilder gpuGroup = builder.createOptionGroup();
-        gpuGroup.setName(Text.literal("GPU-Specific"));
+        gpuGroup.setName(Text.translatable("helium.group.gpu_specific"));
 
         BooleanOptionBuilder nvidiaOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "nvidia_optimizations"));
-        nvidiaOpt.setName(Text.literal("NVIDIA Optimizations"));
-        nvidiaOpt.setTooltip(Text.literal("Enable parallel shader compile and driver hints. Auto-detected, only active on NVIDIA GPUs."));
+        nvidiaOpt.setName(Text.translatable("helium.option.nvidia_optimizations"));
+        nvidiaOpt.setTooltip(Text.translatable("helium.option.nvidia_optimizations.tooltip"));
         nvidiaOpt.setImpact(OptionImpact.MEDIUM);
         nvidiaOpt.setDefaultValue(true);
         nvidiaOpt.setStorageHandler(storage);
@@ -472,8 +472,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         gpuGroup.addOption(nvidiaOpt);
 
         BooleanOptionBuilder amdOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "amd_optimizations"));
-        amdOpt.setName(Text.literal("AMD Optimizations"));
-        amdOpt.setTooltip(Text.literal("256-byte buffer alignment and pinned memory hints. Auto-detected, only active on AMD GPUs."));
+        amdOpt.setName(Text.translatable("helium.option.amd_optimizations"));
+        amdOpt.setTooltip(Text.translatable("helium.option.amd_optimizations.tooltip"));
         amdOpt.setImpact(OptionImpact.MEDIUM);
         amdOpt.setDefaultValue(true);
         amdOpt.setStorageHandler(storage);
@@ -481,8 +481,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         gpuGroup.addOption(amdOpt);
 
         BooleanOptionBuilder intelOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "intel_optimizations"));
-        intelOpt.setName(Text.literal("Intel Optimizations"));
-        intelOpt.setTooltip(Text.literal("Extra aggressive GL state caching for Intel iGPUs. Auto-detected, only active on Intel GPUs."));
+        intelOpt.setName(Text.translatable("helium.option.intel_optimizations"));
+        intelOpt.setTooltip(Text.translatable("helium.option.intel_optimizations.tooltip"));
         intelOpt.setImpact(OptionImpact.MEDIUM);
         intelOpt.setDefaultValue(true);
         intelOpt.setStorageHandler(storage);
@@ -490,8 +490,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         gpuGroup.addOption(intelOpt);
 
         BooleanOptionBuilder adaptiveSyncOpt = builder.createBooleanOption(Identifier.of(NAMESPACE, "adaptive_sync"));
-        adaptiveSyncOpt.setName(Text.literal("Adaptive Sync Detection"));
-        adaptiveSyncOpt.setTooltip(Text.literal("Detect G-Sync/FreeSync and adjust frame pacing to reduce input latency."));
+        adaptiveSyncOpt.setName(Text.translatable("helium.option.adaptive_sync"));
+        adaptiveSyncOpt.setTooltip(Text.translatable("helium.option.adaptive_sync.tooltip"));
         adaptiveSyncOpt.setImpact(OptionImpact.LOW);
         adaptiveSyncOpt.setDefaultValue(true);
         adaptiveSyncOpt.setStorageHandler(storage);

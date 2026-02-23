@@ -15,14 +15,14 @@ public final class HeliumConfigScreen {
         HeliumConfig defaults = new HeliumConfig();
 
         return YetAnotherConfigLib.createBuilder()
-                .title(Text.literal("Helium"))
+                .title(Text.translatable("helium.name"))
                 .category(ConfigCategory.createBuilder()
-                        .name(Text.literal("General"))
-                        .tooltip(Text.literal("Enable or disable the mod. Performance settings are in Sodium's video settings."))
+                        .name(Text.translatable("helium.config.category.general"))
+                        .tooltip(Text.translatable("helium.config.category.general.tooltip"))
                         .option(Option.<Boolean>createBuilder()
-                                .name(Text.literal("Enable Helium"))
+                                .name(Text.translatable("helium.config.enable"))
                                 .description(OptionDescription.of(
-                                        Text.literal("Turn Helium on or off. Requires a game restart to take effect.")))
+                                        Text.translatable("helium.config.enable.description")))
                                 .binding(defaults.modEnabled, () -> config.modEnabled, v -> config.modEnabled = v)
                                 .controller(BooleanControllerBuilder::create)
                                 .flag(OptionFlag.GAME_RESTART)

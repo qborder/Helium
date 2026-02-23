@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "helium",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "name": "Helium",
   "description": "Client-side performance optimizations for Minecraft. Faster math, less GC pressure, smarter rendering. Zero visual changes. Requires Sodium.",
   "authors": [],

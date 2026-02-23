@@ -20,7 +20,7 @@ public final class HeliumIncompatibleScreen extends Screen {
     private final Screen parent;
 
     public HeliumIncompatibleScreen(Screen parent) {
-        super(Text.literal("Helium"));
+        super(Text.translatable("helium.android.title"));
         this.parent = parent;
     }
 
@@ -32,7 +32,7 @@ public final class HeliumIncompatibleScreen extends Screen {
         int buttonY = height / 2 + 72;
 
         addDrawableChild(ButtonWidget.builder(
-                Text.literal("I Understand"),
+                Text.translatable("helium.android.button"),
                 button -> {
                     HeliumConfig config = HeliumClient.getConfig();
                     if (config != null) {
@@ -62,27 +62,27 @@ public final class HeliumIncompatibleScreen extends Screen {
 
         int y = boxY + 14;
 
-        drawCenteredString(context, "Helium", centerX, y, HELIUM_BLUE);
+        drawCenteredText(context, Text.translatable("helium.android.title"), centerX, y, HELIUM_BLUE);
         y += 22;
 
-        drawCenteredString(context, "Not compatible with", centerX, y, TEXT_WHITE);
+        drawCenteredText(context, Text.translatable("helium.android.not_compatible"), centerX, y, TEXT_WHITE);
         y += 12;
-        drawCenteredString(context, "Android", centerX, y, ANDROID_GREEN);
+        drawCenteredText(context, Text.translatable("helium.android.platform"), centerX, y, ANDROID_GREEN);
         y += 20;
 
-        drawCenteredString(context, "Helium relies on desktop OpenGL features", centerX, y, TEXT_GRAY);
+        drawCenteredText(context, Text.translatable("helium.android.reason_line1"), centerX, y, TEXT_GRAY);
         y += 11;
-        drawCenteredString(context, "that are not available on Android's OpenGL ES.", centerX, y, TEXT_GRAY);
+        drawCenteredText(context, Text.translatable("helium.android.reason_line2"), centerX, y, TEXT_GRAY);
         y += 16;
 
-        drawCenteredString(context, "The mod will be disabled automatically.", centerX, y, WARNING_RED);
+        drawCenteredText(context, Text.translatable("helium.android.disabled"), centerX, y, WARNING_RED);
         y += 11;
-        drawCenteredString(context, "You can safely keep it installed.", centerX, y, TEXT_GRAY);
+        drawCenteredText(context, Text.translatable("helium.android.safe"), centerX, y, TEXT_GRAY);
     }
 
-    private void drawCenteredString(DrawContext context, String text, int centerX, int y, int color) {
+    private void drawCenteredText(DrawContext context, Text text, int centerX, int y, int color) {
         int w = textRenderer.getWidth(text);
-        context.drawText(textRenderer, Text.literal(text), centerX - w / 2, y, color, false);
+        context.drawText(textRenderer, text, centerX - w / 2, y, color, false);
     }
 
     @Override

@@ -14,13 +14,14 @@ public final class IdleManager {
     private static final AtomicBoolean initialized = new AtomicBoolean(false);
     private static final AtomicLong lastActivityTime = new AtomicLong(0);
     private static final AtomicBoolean idle = new AtomicBoolean(false);
+    private static final AtomicLong lastTickTime = new AtomicLong(0);
 
     private static volatile int timeoutSeconds = 60;
     private static volatile int idleFpsLimit = 5;
-    private static volatile long lastRenderTime = 0;
-    private static volatile boolean hasRenderedLastFrame = false;
 
     private static GLFWCursorPosCallback previousCursorCallback;
+
+    private static final long TICK_DEDUP_MS = 5;
 
     private IdleManager() {}
 
@@ -53,7 +54,6 @@ public final class IdleManager {
         lastActivityTime.set(Util.getMeasuringTimeMs());
 
         if (idle.getAndSet(false)) {
-            hasRenderedLastFrame = false;
             HeliumClient.LOGGER.info("activity detected, resuming normal rendering");
         }
     }
@@ -61,7 +61,12 @@ public final class IdleManager {
     public static void tick() {
         if (!initialized.get()) return;
 
-        long elapsed = Util.getMeasuringTimeMs() - lastActivityTime.get();
+        long now = Util.getMeasuringTimeMs();
+        long prev = lastTickTime.get();
+        if (now - prev < TICK_DEDUP_MS) return;
+        lastTickTime.set(now);
+
+        long elapsed = now - lastActivityTime.get();
         long timeoutMs = timeoutSeconds * 1000L;
 
         if (elapsed >= timeoutMs) {
@@ -69,29 +74,6 @@ public final class IdleManager {
                 HeliumClient.LOGGER.info("no activity for {}s, entering idle mode (fps={})", timeoutSeconds, idleFpsLimit);
             }
         }
-    }
-
-    public static boolean checkForRender() {
-        if (!initialized.get() || !idle.get()) {
-            return true;
-        }
-
-        if (!hasRenderedLastFrame) {
-            hasRenderedLastFrame = true;
-            lastRenderTime = Util.getMeasuringTimeMs();
-            return true;
-        }
-
-        long currentTime = Util.getMeasuringTimeMs();
-        long frameTimeMs = 1000L / Math.max(1, idleFpsLimit);
-        long timeSinceLastRender = currentTime - lastRenderTime;
-
-        if (timeSinceLastRender >= frameTimeMs) {
-            lastRenderTime = currentTime;
-            return true;
-        }
-
-        return false;
     }
 
     public static boolean isIdle() {

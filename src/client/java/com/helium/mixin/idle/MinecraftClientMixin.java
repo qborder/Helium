@@ -14,28 +14,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftClientMixin {
 
     @Unique
-    private long helium$lastIdleSleep = 0;
+    private long helium$lastFrameTime = 0;
 
-    @Inject(method = "render", at = @At("HEAD"))
-    private void helium$tickIdleManager(boolean tick, CallbackInfo ci) {
+    @Inject(method = "render", at = @At("RETURN"))
+    private void helium$throttleIdleFps(boolean tick, CallbackInfo ci) {
         HeliumConfig config = HeliumClient.getConfig();
         if (config == null || !config.modEnabled || !config.autoPauseOnIdle) return;
-        if (!IdleManager.isInitialized()) return;
+        if (!IdleManager.isInitialized() || !IdleManager.isIdle()) {
+            helium$lastFrameTime = 0;
+            return;
+        }
 
-        IdleManager.tick();
+        long now = System.nanoTime();
+        long frameIntervalNs = 1_000_000_000L / Math.max(1, IdleManager.getIdleFpsLimit());
 
-        if (IdleManager.isIdle()) {
-            long now = System.currentTimeMillis();
-            long sleepMs = 1000L / Math.max(1, IdleManager.getIdleFpsLimit());
-            long elapsed = now - helium$lastIdleSleep;
-            if (elapsed < sleepMs) {
+        if (helium$lastFrameTime > 0) {
+            long elapsed = now - helium$lastFrameTime;
+            long remaining = frameIntervalNs - elapsed;
+            if (remaining > 1_000_000L) {
                 try {
-                    Thread.sleep(sleepMs - elapsed);
+                    Thread.sleep(remaining / 1_000_000L, (int) (remaining % 1_000_000L));
                 } catch (InterruptedException ignored) {
                     Thread.currentThread().interrupt();
                 }
             }
-            helium$lastIdleSleep = System.currentTimeMillis();
         }
+
+        helium$lastFrameTime = System.nanoTime();
     }
 }

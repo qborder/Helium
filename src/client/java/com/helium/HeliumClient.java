@@ -81,8 +81,8 @@ public class HeliumClient implements ClientModInitializer {
 
         isAndroid = detectAndroid();
         if (isAndroid) {
-            LOGGER.warn("android detected - helium is not compatible with android's opengl es");
-            config.modEnabled = false;
+            LOGGER.warn("android detected - disabling gl state cache for compatibility");
+            config.glStateCache = false;
 
             if (!config.androidWarningShown) {
                 ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -93,7 +93,6 @@ public class HeliumClient implements ClientModInitializer {
             }
 
             config.save();
-            return;
         }
 
         if (!config.modEnabled) {

@@ -2,11 +2,15 @@ package com.helium.render;
 
 import com.helium.HeliumClient;
 import com.helium.config.HeliumConfig;
+import net.minecraft.client.MinecraftClient;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWVidMode;
 
 public final class DisplaySyncOptimizer {
 
     private static volatile long lastDisplayUpdateTime = 0;
-    private static final long DEFAULT_UPDATE_INTERVAL_NS = 16_666_667L;
+    private static volatile long updateIntervalNs = 0;
+    private static volatile int cachedRefreshRate = 0;
 
     private DisplaySyncOptimizer() {}
 
@@ -16,10 +20,14 @@ public final class DisplaySyncOptimizer {
             return true;
         }
 
+        if (updateIntervalNs == 0) {
+            detectRefreshRate();
+        }
+
         long now = System.nanoTime();
         long elapsed = now - lastDisplayUpdateTime;
 
-        if (elapsed >= DEFAULT_UPDATE_INTERVAL_NS) {
+        if (elapsed >= updateIntervalNs) {
             lastDisplayUpdateTime = now;
             return true;
         }
@@ -27,7 +35,35 @@ public final class DisplaySyncOptimizer {
         return false;
     }
 
+    private static void detectRefreshRate() {
+        try {
+            MinecraftClient client = MinecraftClient.getInstance();
+            if (client != null && client.getWindow() != null) {
+                long monitor = GLFW.glfwGetWindowMonitor(client.getWindow().getHandle());
+                if (monitor == 0L) {
+                    monitor = GLFW.glfwGetPrimaryMonitor();
+                }
+                if (monitor != 0L) {
+                    GLFWVidMode vidMode = GLFW.glfwGetVideoMode(monitor);
+                    if (vidMode != null) {
+                        cachedRefreshRate = vidMode.refreshRate();
+                        updateIntervalNs = 1_000_000_000L / cachedRefreshRate;
+                        return;
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+        cachedRefreshRate = 60;
+        updateIntervalNs = 16_666_667L;
+    }
+
     public static void reset() {
         lastDisplayUpdateTime = 0;
+        updateIntervalNs = 0;
+        cachedRefreshRate = 0;
+    }
+
+    public static int getDetectedRefreshRate() {
+        return cachedRefreshRate;
     }
 }

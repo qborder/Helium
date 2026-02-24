@@ -11,7 +11,7 @@ public final class HeliumIncompatibleScreen extends Screen {
 
     private static final int ANDROID_GREEN = 0xFF3DDC84;
     private static final int HELIUM_BLUE = 0xFF5BC0EB;
-    private static final int WARNING_RED = 0xFFFF4444;
+    private static final int WARNING_YELLOW = 0xFFFFAA00;
     private static final int TEXT_WHITE = 0xFFFFFFFF;
     private static final int TEXT_GRAY = 0xFFB0B0B0;
     private static final int BOX_BG = 0xE0101010;
@@ -29,7 +29,7 @@ public final class HeliumIncompatibleScreen extends Screen {
         int buttonWidth = 200;
         int buttonHeight = 20;
         int buttonX = (width - buttonWidth) / 2;
-        int buttonY = height / 2 + 72;
+        int buttonY = height / 2 + 82;
 
         addDrawableChild(ButtonWidget.builder(
                 Text.translatable("helium.android.button"),
@@ -37,7 +37,6 @@ public final class HeliumIncompatibleScreen extends Screen {
                     HeliumConfig config = HeliumClient.getConfig();
                     if (config != null) {
                         config.androidWarningShown = true;
-                        config.modEnabled = false;
                         config.save();
                     }
                     client.setScreen(parent);
@@ -52,8 +51,8 @@ public final class HeliumIncompatibleScreen extends Screen {
         int centerX = width / 2;
         int centerY = height / 2;
 
-        int boxW = 320;
-        int boxH = 160;
+        int boxW = 340;
+        int boxH = 180;
         int boxX = centerX - boxW / 2;
         int boxY = centerY - boxH / 2;
 
@@ -65,19 +64,20 @@ public final class HeliumIncompatibleScreen extends Screen {
         drawCenteredText(context, Text.translatable("helium.android.title"), centerX, y, HELIUM_BLUE);
         y += 22;
 
-        drawCenteredText(context, Text.translatable("helium.android.not_compatible"), centerX, y, TEXT_WHITE);
-        y += 12;
-        drawCenteredText(context, Text.translatable("helium.android.platform"), centerX, y, ANDROID_GREEN);
-        y += 20;
-
-        drawCenteredText(context, Text.translatable("helium.android.reason_line1"), centerX, y, TEXT_GRAY);
-        y += 11;
-        drawCenteredText(context, Text.translatable("helium.android.reason_line2"), centerX, y, TEXT_GRAY);
+        drawCenteredText(context, Text.translatable("helium.android.warning_title"), centerX, y, WARNING_YELLOW);
         y += 16;
 
-        drawCenteredText(context, Text.translatable("helium.android.disabled"), centerX, y, WARNING_RED);
+        drawCenteredText(context, Text.translatable("helium.android.platform"), centerX, y, ANDROID_GREEN);
+        y += 18;
+
+        drawCenteredText(context, Text.translatable("helium.android.warning_line1"), centerX, y, TEXT_GRAY);
         y += 11;
-        drawCenteredText(context, Text.translatable("helium.android.safe"), centerX, y, TEXT_GRAY);
+        drawCenteredText(context, Text.translatable("helium.android.warning_line2"), centerX, y, TEXT_GRAY);
+        y += 16;
+
+        drawCenteredText(context, Text.translatable("helium.android.gl_disabled"), centerX, y, WARNING_YELLOW);
+        y += 11;
+        drawCenteredText(context, Text.translatable("helium.android.still_works"), centerX, y, TEXT_GRAY);
     }
 
     private void drawCenteredText(DrawContext context, Text text, int centerX, int y, int color) {

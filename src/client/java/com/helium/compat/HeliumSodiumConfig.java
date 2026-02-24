@@ -18,7 +18,6 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
     public void registerConfigLate(ConfigBuilder builder) {
         HeliumConfig config = HeliumClient.getConfig();
         if (config == null) return;
-        if (HeliumClient.isAndroid()) return;
 
         StorageEventHandler storage = config::save;
 
@@ -160,11 +159,18 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
 
         BooleanOptionBuilder glCache = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "gl_state_cache"));
         glCache.setName(Text.translatable("helium.option.gl_state_cache"));
-        glCache.setTooltip(Text.translatable("helium.option.gl_state_cache.tooltip"));
+        if (HeliumClient.isAndroid()) {
+            glCache.setTooltip(Text.translatable("helium.option.gl_state_cache.tooltip.android"));
+            glCache.setEnabled(false);
+            glCache.setDefaultValue(false);
+            glCache.setBinding(v -> {}, () -> false);
+        } else {
+            glCache.setTooltip(Text.translatable("helium.option.gl_state_cache.tooltip"));
+            glCache.setDefaultValue(true);
+            glCache.setBinding(v -> config.glStateCache = v, () -> config.glStateCache);
+        }
         glCache.setImpact(OptionImpact.LOW);
-        glCache.setDefaultValue(true);
         glCache.setStorageHandler(storage);
-        glCache.setBinding(v -> config.glStateCache = v, () -> config.glStateCache);
         renderOptGroup.addOption(glCache);
 
         renderPage.addOptionGroup(renderOptGroup);

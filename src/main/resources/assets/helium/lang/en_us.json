@@ -48,6 +48,7 @@
   "helium.option.fast_math.tooltip": "Replace sin/cos/atan2 with faster approximations. Tiny accuracy loss, noticeable FPS gain.",
   "helium.option.gl_state_cache": "GL State Cache",
   "helium.option.gl_state_cache.tooltip": "Cache OpenGL state to skip redundant calls. Auto-disabled with ImmediatelyFast.",
+  "helium.option.gl_state_cache.tooltip.android": "Disabled on Android. GL State Cache is not compatible with OpenGL ES.",
 
   "helium.option.model_cache": "Model Cache",
   "helium.option.model_cache.tooltip": "Cache baked block models in memory with LRU eviction. Reduces repeated model lookups.",
@@ -113,7 +114,7 @@
   "helium.option.adaptive_sync": "Adaptive Sync Detection",
   "helium.option.adaptive_sync.tooltip": "Detect G-Sync/FreeSync and adjust frame pacing to reduce input latency.",
   "helium.option.display_sync_optimization": "GPU Frame Scheduling",
-  "helium.option.display_sync_optimization.tooltip": "Optimize frame delivery to reduce GPU overhead. Significantly boosts FPS on most hardware.",
+  "helium.option.display_sync_optimization.tooltip": "Experimental: Optimize frame delivery to reduce GPU overhead. Significantly boosts FPS on most hardware, may reduce smoothness on some systems.",
 
   "helium.config.category.general": "General",
   "helium.config.category.general.tooltip": "Enable or disable the mod. Performance settings are in Sodium's video settings.",
@@ -121,13 +122,13 @@
   "helium.config.enable.description": "Turn Helium on or off. Requires a game restart to take effect.",
 
   "helium.android.title": "Helium",
-  "helium.android.not_compatible": "Not compatible with",
-  "helium.android.platform": "Android",
-  "helium.android.reason_line1": "Helium relies on desktop OpenGL features",
-  "helium.android.reason_line2": "that are not available on Android's OpenGL ES.",
-  "helium.android.disabled": "The mod will be disabled automatically.",
-  "helium.android.safe": "You can safely keep it installed.",
-  "helium.android.button": "I Understand",
+  "helium.android.warning_title": "Running on Android",
+  "helium.android.platform": "Android Detected",
+  "helium.android.warning_line1": "Some features may not work perfectly on Android.",
+  "helium.android.warning_line2": "The mod will still run, but stability is not guaranteed.",
+  "helium.android.gl_disabled": "GL State Cache has been disabled automatically.",
+  "helium.android.still_works": "All other features should work normally.",
+  "helium.android.button": "Got it!",
 
   "helium.option.fullbright": "Fullbright",
   "helium.option.fullbright.tooltip": "Remove all darkness. Press G to toggle quickly. Purely visual, no gameplay advantage on servers.",

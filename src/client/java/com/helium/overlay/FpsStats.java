@@ -3,16 +3,25 @@ package com.helium.overlay;
 public final class FpsStats {
 
     private volatile int currentFps = 0;
+    private volatile int displayFps = 0;
     private volatile int minFps = Integer.MAX_VALUE;
     private volatile int maxFps = 0;
     private volatile long fpsSum = 0;
     private volatile int fpsCount = 0;
     private volatile long lastResetTime = System.currentTimeMillis();
+    private volatile long lastDisplayUpdateTime = System.currentTimeMillis();
 
     private static final long RESET_INTERVAL_MS = 500;
+    private static final long DISPLAY_UPDATE_INTERVAL_MS = 500;
 
     public void updateFps(int fps) {
         this.currentFps = fps;
+        
+        long now = System.currentTimeMillis();
+        if (now - lastDisplayUpdateTime >= DISPLAY_UPDATE_INTERVAL_MS) {
+            this.displayFps = fps;
+            lastDisplayUpdateTime = now;
+        }
 
         if (fps > 0) {
             if (fps < minFps) minFps = fps;
@@ -21,7 +30,6 @@ public final class FpsStats {
             fpsCount++;
         }
 
-        long now = System.currentTimeMillis();
         if (now - lastResetTime >= RESET_INTERVAL_MS) {
             minFps = fps;
             maxFps = fps;
@@ -32,7 +40,7 @@ public final class FpsStats {
     }
 
     public int getCurrentFps() {
-        return currentFps;
+        return displayFps;
     }
 
     public int getMinFps() {

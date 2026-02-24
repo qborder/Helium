@@ -64,6 +64,17 @@ public final class HeliumConfigScreen {
                                 })
                                 .build())
                         .build())
+                .category(ConfigCategory.createBuilder()
+                        .name(Text.translatable("helium.config.category.developer"))
+                        .tooltip(Text.translatable("helium.config.category.developer.tooltip"))
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("helium.config.dev_mode"))
+                                .description(OptionDescription.of(
+                                        Text.translatable("helium.config.dev_mode.description")))
+                                .binding(defaults.devMode, () -> config.devMode, v -> config.devMode = v)
+                                .controller(BooleanControllerBuilder::create)
+                                .build())
+                        .build())
                 .save(config::save)
                 .build()
                 .generateScreen(parent);

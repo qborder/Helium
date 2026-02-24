@@ -68,8 +68,11 @@ public class HeliumConfig {
     public boolean amdOptimizations = true;
     public boolean intelOptimizations = true;
     public boolean adaptiveSync = true;
+    public boolean displaySyncOptimization = true;
     public boolean temporalReprojection = false;
     public boolean fullbright = false;
+
+    public boolean devMode = true;
 
     public boolean androidWarningShown = false;
 
@@ -178,10 +181,12 @@ public class HeliumConfig {
         this.amdOptimizations = other.amdOptimizations;
         this.intelOptimizations = other.intelOptimizations;
         this.adaptiveSync = other.adaptiveSync;
+        this.displaySyncOptimization = other.displaySyncOptimization;
         this.temporalReprojection = other.temporalReprojection;
         this.fullbright = other.fullbright;
         this.overlayShowCoordinates = other.overlayShowCoordinates;
         this.overlayShowBiome = other.overlayShowBiome;
+        this.devMode = other.devMode;
         this.androidWarningShown = other.androidWarningShown;
     }
 }

@@ -20,7 +20,11 @@
     "idle.GameRendererMixin",
     "lighting.LightingProviderMixin",
     "render.GameRendererTemporalMixin",
-    "render.WorldRendererPipelineMixin"
+    "render.WorldRendererPipelineMixin",
+    "performance.FrameMetricsMixin",
+    "performance.WindowDisplayMixin",
+    "compat.SodiumExtraFrameCounterMixin",
+    "compat.FPShudMetricsMixin"
   ],
   "injectors": {
     "defaultRequire": 0

@@ -520,6 +520,15 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         adaptiveSyncOpt.setBinding(v -> config.adaptiveSync = v, () -> config.adaptiveSync);
         gpuGroup.addOption(adaptiveSyncOpt);
 
+        BooleanOptionBuilder displaySyncOpt = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "display_sync_optimization"));
+        displaySyncOpt.setName(Text.translatable("helium.option.display_sync_optimization"));
+        displaySyncOpt.setTooltip(Text.translatable("helium.option.display_sync_optimization.tooltip"));
+        displaySyncOpt.setImpact(OptionImpact.VARIES);
+        displaySyncOpt.setDefaultValue(true);
+        displaySyncOpt.setStorageHandler(storage);
+        displaySyncOpt.setBinding(v -> config.displaySyncOptimization = v, () -> config.displaySyncOptimization);
+        gpuGroup.addOption(displaySyncOpt);
+
         advancedPage.addOptionGroup(gpuGroup);
         mod.addPage(advancedPage);
     }

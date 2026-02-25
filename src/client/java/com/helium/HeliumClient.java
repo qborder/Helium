@@ -203,10 +203,6 @@ public class HeliumClient implements ClientModInitializer {
             if (gpuInitDeferred && client.getWindow() != null) {
                 gpuInitDeferred = false;
                 initDeferredGpuFeatures();
-
-                if (config.autoPauseOnIdle && IdleManager.isInitialized()) {
-                    IdleManager.setWindow(client.getWindow().getHandle());
-                }
             }
         });
 

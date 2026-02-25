@@ -19,6 +19,7 @@
     "multiplayer.MultiplayerScreenAccessor",
     "multiplayer.DirectConnectScreenMixin",
     "idle.GameRendererMixin",
+    "idle.MinecraftClientMixin",
     "lighting.LightingProviderMixin",
     "render.GameRendererTemporalMixin",
     "render.WorldRendererPipelineMixin",

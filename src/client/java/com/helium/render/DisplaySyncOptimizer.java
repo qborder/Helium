@@ -25,10 +25,6 @@ public final class DisplaySyncOptimizer {
             detectRefreshRate();
         }
 
-        if (isVsyncOrFpsLimitActive()) {
-            return true;
-        }
-
         if (GpuDetector.isIntegratedOnly()) {
             return handleIntegratedGpu();
         }
@@ -41,23 +37,6 @@ public final class DisplaySyncOptimizer {
             return true;
         }
 
-        return false;
-    }
-
-    private static boolean isVsyncOrFpsLimitActive() {
-        try {
-            MinecraftClient client = MinecraftClient.getInstance();
-            if (client == null || client.options == null) return false;
-
-            if (client.options.getEnableVsync().getValue()) {
-                return true;
-            }
-
-            int fpsLimit = client.options.getMaxFps().getValue();
-            if (fpsLimit > 0 && fpsLimit <= cachedRefreshRate) {
-                return true;
-            }
-        } catch (Throwable ignored) {}
         return false;
     }
 

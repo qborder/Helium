@@ -16,7 +16,7 @@ public abstract class MinecraftClientMixin {
     @Unique
     private long helium$lastFrameTime = 0;
 
-    @Inject(method = "render", at = @At("RETURN"))
+    @Inject(method = "render", at = @At("RETURN"), require = 0)
     private void helium$throttleIdleFps(boolean tick, CallbackInfo ci) {
         HeliumConfig config = HeliumClient.getConfig();
         if (config == null || !config.modEnabled || !config.autoPauseOnIdle) return;

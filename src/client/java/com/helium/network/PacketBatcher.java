@@ -14,7 +14,7 @@ public final class PacketBatcher {
 
     private static volatile int maxBatchSize = 32;
     private static volatile int maxBatchBytes = 65536;
-    private static volatile int currentBatchBytes = 0;
+    private static final AtomicInteger currentBatchBytes = new AtomicInteger(0);
 
     private PacketBatcher() {}
 
@@ -30,13 +30,13 @@ public final class PacketBatcher {
     public static boolean addToBatch(byte[] packetData) {
         if (!initialized.get() || packetData == null) return false;
 
-        if (batchSize.get() >= maxBatchSize || currentBatchBytes + packetData.length > maxBatchBytes) {
+        if (batchSize.get() >= maxBatchSize || currentBatchBytes.get() + packetData.length > maxBatchBytes) {
             return false;
         }
 
         outgoingBatch.offer(packetData);
         batchSize.incrementAndGet();
-        currentBatchBytes += packetData.length;
+        currentBatchBytes.addAndGet(packetData.length);
         return true;
     }
 
@@ -53,7 +53,7 @@ public final class PacketBatcher {
         }
 
         batchSize.set(0);
-        currentBatchBytes = 0;
+        currentBatchBytes.set(0);
 
         return idx > 0 ? batch : null;
     }
@@ -63,13 +63,13 @@ public final class PacketBatcher {
     }
 
     public static boolean shouldFlush() {
-        return batchSize.get() >= maxBatchSize || currentBatchBytes >= maxBatchBytes;
+        return batchSize.get() >= maxBatchSize || currentBatchBytes.get() >= maxBatchBytes;
     }
 
     public static void shutdown() {
         outgoingBatch.clear();
         batchSize.set(0);
-        currentBatchBytes = 0;
+        currentBatchBytes.set(0);
         initialized.set(false);
     }
 }

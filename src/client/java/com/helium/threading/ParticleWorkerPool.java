@@ -14,7 +14,7 @@ public final class ParticleWorkerPool {
 
     private static ExecutorService executor;
     private static int threadCount;
-    private static boolean initialized = false;
+    private static volatile boolean initialized = false;
 
     private ParticleWorkerPool() {}
 

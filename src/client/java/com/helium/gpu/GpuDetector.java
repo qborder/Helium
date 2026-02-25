@@ -12,6 +12,7 @@ public final class GpuDetector {
     private static volatile GpuVendor vendor = GpuVendor.UNKNOWN;
     private static volatile String rendererString = "";
     private static volatile boolean initialized = false;
+    private static volatile boolean isIntegratedOnly = false;
 
     private GpuDetector() {}
 
@@ -31,8 +32,9 @@ public final class GpuDetector {
                 vendor = GpuVendor.INTEL;
             }
 
+            isIntegratedOnly = (vendor == GpuVendor.INTEL) && isLikelyIntegratedGpu(lower);
             initialized = true;
-            HeliumClient.LOGGER.info("gpu detected: {} ({})", vendor, rendererString);
+            HeliumClient.LOGGER.info("gpu detected: {} ({}){}" , vendor, rendererString, isIntegratedOnly ? " [integrated]" : "");
         } catch (Throwable t) {
             initialized = true;
             HeliumClient.LOGGER.warn("gpu detection failed", t);
@@ -61,5 +63,15 @@ public final class GpuDetector {
 
     public static String getRendererString() {
         return rendererString;
+    }
+
+    public static boolean isIntegratedOnly() {
+        return isIntegratedOnly;
+    }
+
+    private static boolean isLikelyIntegratedGpu(String renderer) {
+        return renderer.contains("uhd") || renderer.contains("hd graphics") || 
+               renderer.contains("iris xe") || renderer.contains("iris plus") ||
+               (renderer.contains("intel") && !renderer.contains("arc"));
     }
 }

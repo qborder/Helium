@@ -2,6 +2,7 @@ package com.helium.render;
 
 import com.helium.HeliumClient;
 import com.helium.config.HeliumConfig;
+import com.helium.gpu.GpuDetector;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -24,6 +25,10 @@ public final class DisplaySyncOptimizer {
             detectRefreshRate();
         }
 
+        if (GpuDetector.isIntegratedOnly()) {
+            return handleIntegratedGpu();
+        }
+
         long now = System.nanoTime();
         long elapsed = now - lastDisplayUpdateTime;
 
@@ -33,6 +38,28 @@ public final class DisplaySyncOptimizer {
         }
 
         return false;
+    }
+
+    private static boolean handleIntegratedGpu() {
+        long now = System.nanoTime();
+        long elapsed = now - lastDisplayUpdateTime;
+        long threshold = updateIntervalNs * 3 / 4;
+        
+        if (elapsed >= threshold) {
+            lastDisplayUpdateTime = now;
+            if (elapsed < updateIntervalNs) {
+                long sleepNs = updateIntervalNs - elapsed;
+                if (sleepNs > 500_000L && sleepNs < 5_000_000L) {
+                    try {
+                        Thread.sleep(0, (int) Math.min(sleepNs, 999_999L));
+                    } catch (InterruptedException ignored) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+            return true;
+        }
+        return true;
     }
 
     private static void detectRefreshRate() {

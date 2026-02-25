@@ -173,7 +173,7 @@ public class HeliumClient implements ClientModInitializer {
         }, () -> packetBatcherFailed = true);
 
         initFeatureSafely("IdleManager", () -> {
-            if (config.autoPauseOnIdle) IdleManager.init(config.idleTimeoutSeconds, config.idleFpsLimit);
+            IdleManager.init(config.idleTimeoutSeconds, config.idleFpsLimit);
         }, () -> idleManagerFailed = true);
 
         initFeatureSafely("TemporalReprojection", () -> {

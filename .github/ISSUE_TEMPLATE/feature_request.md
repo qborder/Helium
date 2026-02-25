@@ -1,7 +1,7 @@
 ---
 name: Feature Request
 about: Got an idea? Drop it here
-title: ''
+title: '💡 [SUGGESTION] '
 labels: enhancement
 assignees: ''
 

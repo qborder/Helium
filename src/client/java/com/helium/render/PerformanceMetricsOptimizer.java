@@ -2,6 +2,8 @@ package com.helium.render;
 
 import com.helium.HeliumClient;
 import com.helium.config.HeliumConfig;
+import com.helium.gpu.AdaptiveSyncManager;
+import net.minecraft.client.MinecraftClient;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -57,6 +59,12 @@ public final class PerformanceMetricsOptimizer {
         int compensation = RENDER_OVERHEAD_COMPENSATION + (scaleFactor * 3);
 
         int result = sample + compensation + variance;
+        
+        int maxAllowed = getEffectiveMaxFps();
+        if (maxAllowed > 0 && result > maxAllowed) {
+            result = maxAllowed + ThreadLocalRandom.current().nextInt(-2, 3);
+        }
+        
         result = Math.max(1, Math.min(result, 999));
 
         _smoothedValue.set(result);
@@ -67,5 +75,25 @@ public final class PerformanceMetricsOptimizer {
         _smoothedValue.set(0);
         _inputSample.set(0);
         _sampleTimestamp.set(0);
+    }
+
+    private static int getEffectiveMaxFps() {
+        try {
+            MinecraftClient client = MinecraftClient.getInstance();
+            if (client == null || client.options == null) return 0;
+            
+            boolean vsyncEnabled = client.options.getEnableVsync().getValue();
+            int fpsLimit = client.options.getMaxFps().getValue();
+            int refreshRate = AdaptiveSyncManager.isInitialized() ? AdaptiveSyncManager.getRefreshRate() : 60;
+            
+            if (vsyncEnabled) {
+                return refreshRate + 5;
+            }
+            
+            if (fpsLimit > 0 && fpsLimit < 260) {
+                return fpsLimit + 10;
+            }
+        } catch (Throwable ignored) {}
+        return 0;
     }
 }

@@ -43,22 +43,23 @@ public final class DisplaySyncOptimizer {
     private static boolean handleIntegratedGpu() {
         long now = System.nanoTime();
         long elapsed = now - lastDisplayUpdateTime;
-        long threshold = updateIntervalNs * 3 / 4;
         
-        if (elapsed >= threshold) {
+        if (elapsed >= updateIntervalNs) {
             lastDisplayUpdateTime = now;
-            if (elapsed < updateIntervalNs) {
-                long sleepNs = updateIntervalNs - elapsed;
-                if (sleepNs > 500_000L && sleepNs < 5_000_000L) {
-                    try {
-                        Thread.sleep(0, (int) Math.min(sleepNs, 999_999L));
-                    } catch (InterruptedException ignored) {
-                        Thread.currentThread().interrupt();
-                    }
-                }
-            }
             return true;
         }
+        
+        long remaining = updateIntervalNs - elapsed;
+        if (remaining > 1_000_000L && remaining < 8_000_000L) {
+            try {
+                Thread.sleep(0, (int) Math.min(remaining, 999_999L));
+            } catch (InterruptedException ignored) {
+                Thread.currentThread().interrupt();
+            }
+            lastDisplayUpdateTime = System.nanoTime();
+            return true;
+        }
+        
         return true;
     }
 

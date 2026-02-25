@@ -2,7 +2,6 @@ package com.helium.mixin.render;
 
 import com.helium.HeliumClient;
 import com.helium.config.HeliumConfig;
-import com.helium.render.RenderPipeline;
 import com.helium.render.TemporalReprojection;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.EntityRenderer;
@@ -56,13 +55,6 @@ public abstract class EntityCullingMixin<T extends Entity> {
                 } catch (Throwable t) {
                     helium$frustumFailed = true;
                 }
-            }
-        }
-
-        if (config.renderPipelining && RenderPipeline.isInitialized()) {
-            if (!RenderPipeline.isEntityVisible(entity.getId())) {
-                cir.setReturnValue(false);
-                return;
             }
         }
 

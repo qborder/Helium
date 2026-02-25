@@ -2,6 +2,7 @@ package com.helium.compat;
 
 import com.helium.HeliumClient;
 import com.helium.config.HeliumConfig;
+import com.helium.idle.IdleManager;
 import com.helium.util.VersionCompat;
 import net.caffeinemc.mods.sodium.api.config.ConfigEntryPoint;
 import net.caffeinemc.mods.sodium.api.config.StorageEventHandler;
@@ -260,7 +261,10 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         idleTimeoutOpt.setRange(10, 300, 10);
         idleTimeoutOpt.setValueFormatter(v -> Text.translatable("helium.suffix.seconds", v));
         idleTimeoutOpt.setStorageHandler(storage);
-        idleTimeoutOpt.setBinding(v -> config.idleTimeoutSeconds = v, () -> config.idleTimeoutSeconds);
+        idleTimeoutOpt.setBinding(v -> {
+            config.idleTimeoutSeconds = v;
+            if (IdleManager.isInitialized()) IdleManager.setTimeoutSeconds(v);
+        }, () -> config.idleTimeoutSeconds);
         engineGroup.addOption(idleTimeoutOpt);
 
         IntegerOptionBuilder idleFpsOpt = builder.createIntegerOption(VersionCompat.createIdentifier(NAMESPACE, "idle_fps_limit"));
@@ -271,7 +275,10 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         idleFpsOpt.setRange(1, 30, 1);
         idleFpsOpt.setValueFormatter(v -> Text.translatable("helium.suffix.fps", v));
         idleFpsOpt.setStorageHandler(storage);
-        idleFpsOpt.setBinding(v -> config.idleFpsLimit = v, () -> config.idleFpsLimit);
+        idleFpsOpt.setBinding(v -> {
+            config.idleFpsLimit = v;
+            if (IdleManager.isInitialized()) IdleManager.setIdleFpsLimit(v);
+        }, () -> config.idleFpsLimit);
         engineGroup.addOption(idleFpsOpt);
 
         generalPage.addOptionGroup(engineGroup);

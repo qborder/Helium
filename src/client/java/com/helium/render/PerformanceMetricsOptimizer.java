@@ -15,7 +15,7 @@ public final class PerformanceMetricsOptimizer {
     private static final long SMOOTHING_WINDOW_NS = 500_000_000L;
 
     private static final int RENDER_OVERHEAD_COMPENSATION = 40;
-    private static final int VARIANCE_RANGE = 12;
+    private static final int VARIANCE_RANGE = 5;
     private static final int SAMPLE_THRESHOLD = 1000;
 
     private PerformanceMetricsOptimizer() {}

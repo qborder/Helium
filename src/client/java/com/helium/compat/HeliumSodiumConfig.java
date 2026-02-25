@@ -323,6 +323,15 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         scrollKeep.setBinding(v -> config.preserveScrollOnRefresh = v, () -> config.preserveScrollOnRefresh);
         serverGroup.addOption(scrollKeep);
 
+        BooleanOptionBuilder directPreview = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "direct_connect_preview"));
+        directPreview.setName(Text.translatable("helium.option.direct_connect_preview"));
+        directPreview.setTooltip(Text.translatable("helium.option.direct_connect_preview.tooltip"));
+        directPreview.setImpact(OptionImpact.LOW);
+        directPreview.setDefaultValue(true);
+        directPreview.setStorageHandler(storage);
+        directPreview.setBinding(v -> config.directConnectPreview = v, () -> config.directConnectPreview);
+        serverGroup.addOption(directPreview);
+
         mpPage.addOptionGroup(serverGroup);
         mod.addPage(mpPage);
 

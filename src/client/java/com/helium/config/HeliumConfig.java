@@ -38,6 +38,7 @@ public class HeliumConfig {
 
     public boolean fastServerPing = true;
     public boolean preserveScrollOnRefresh = true;
+    public boolean directConnectPreview = true;
 
     public boolean fpsOverlay = true;
     public boolean overlayShowFps = true;
@@ -156,6 +157,7 @@ public class HeliumConfig {
         this.animationThrottling = other.animationThrottling;
         this.fastServerPing = other.fastServerPing;
         this.preserveScrollOnRefresh = other.preserveScrollOnRefresh;
+        this.directConnectPreview = other.directConnectPreview;
         this.fpsOverlay = other.fpsOverlay;
         this.overlayShowFps = other.overlayShowFps;
         this.overlayShowFpsMinMaxAvg = other.overlayShowFpsMinMaxAvg;

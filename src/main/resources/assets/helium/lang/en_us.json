@@ -76,6 +76,8 @@
   "helium.option.fast_server_ping.tooltip": "Ping all servers simultaneously instead of one by one. Much faster server list loading.",
   "helium.option.preserve_scroll": "Keep Scroll on Refresh",
   "helium.option.preserve_scroll.tooltip": "Don't reset the server list scroll position when you press refresh.",
+  "helium.option.direct_connect_preview": "Server Preview",
+  "helium.option.direct_connect_preview.tooltip": "Show server info (MOTD, players, ping, icon) when typing in the Direct Connect screen.",
 
   "helium.option.fps_overlay": "Enable Overlay",
   "helium.option.fps_overlay.tooltip": "Master toggle for the on-screen overlay.",

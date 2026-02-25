@@ -17,6 +17,7 @@
     "multiplayer.ServerListWidgetMixin",
     "multiplayer.MultiplayerScreenMixin",
     "multiplayer.MultiplayerScreenAccessor",
+    "multiplayer.DirectConnectScreenMixin",
     "idle.GameRendererMixin",
     "lighting.LightingProviderMixin",
     "render.GameRendererTemporalMixin",
@@ -24,7 +25,8 @@
     "performance.FrameMetricsMixin",
     "performance.WindowDisplayMixin",
     "compat.SodiumExtraFrameCounterMixin",
-    "compat.FPShudMetricsMixin"
+    "compat.FPShudMetricsMixin",
+    "compat.FpsDisplayHistoryMixin"
   ],
   "injectors": {
     "defaultRequire": 0

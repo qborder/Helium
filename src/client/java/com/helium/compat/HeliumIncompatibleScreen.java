@@ -81,8 +81,16 @@ public final class HeliumIncompatibleScreen extends Screen {
     }
 
     private void drawCenteredText(DrawContext context, Text text, int centerX, int y, int color) {
-        int w = textRenderer.getWidth(text);
-        context.drawText(textRenderer, text, centerX - w / 2, y, color, false);
+        int x = centerX - textRenderer.getWidth(text) / 2;
+        try {
+            context.drawTextWithShadow(textRenderer, text, x, y, color);
+        } catch (Throwable t) {
+            try {
+                context.drawText(textRenderer, text, x, y, color, true);
+            } catch (Throwable t2) {
+                textRenderer.draw(text, x, y, color, true, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(), net.minecraft.client.font.TextRenderer.TextLayerType.NORMAL, 0, 15728880);
+            }
+        }
     }
 
     @Override

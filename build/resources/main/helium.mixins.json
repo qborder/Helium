@@ -31,7 +31,9 @@
     "render.ModelPartAnimationMixin",
     "render.DirectionValuesMixin",
     "render.LevelLoadingScreenMixin",
-    "network.AllowedAddressResolverMixin"
+    "network.AllowedAddressResolverMixin",
+    "ui.ScrollableWidgetMixin",
+    "ui.EntryListWidgetMixin"
   ],
   "injectors": {
     "defaultRequire": 0

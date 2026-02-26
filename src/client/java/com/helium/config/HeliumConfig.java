@@ -36,6 +36,8 @@ public class HeliumConfig {
     public boolean particleBatching = true;
     public boolean animationThrottling = true;
 
+    public boolean smoothScrolling = true;
+
     public boolean fastServerPing = true;
     public boolean preserveScrollOnRefresh = true;
     public boolean directConnectPreview = true;

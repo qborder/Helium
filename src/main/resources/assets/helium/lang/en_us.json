@@ -4,6 +4,7 @@
   "helium.page.rendering": "Rendering",
   "helium.page.general": "General",
   "helium.page.multiplayer": "Multiplayer",
+  "helium.page.qol": "Quality of Life",
   "helium.page.overlay": "Overlay",
   "helium.page.advanced": "Advanced",
 
@@ -13,6 +14,8 @@
   "helium.group.caching": "Caching",
   "helium.group.engine": "Engine",
   "helium.group.server_list": "Server List",
+  "helium.group.universal_qol": "Universal",
+  "helium.group.multiplayer": "Multiplayer",
   "helium.group.fps_overlay": "FPS Overlay",
   "helium.group.overlay_content": "Overlay Content",
   "helium.group.experimental": "Experimental",
@@ -82,6 +85,9 @@
   "helium.option.preserve_scroll.tooltip": "Don't reset the server list scroll position when you press refresh.",
   "helium.option.direct_connect_preview": "Server Preview",
   "helium.option.direct_connect_preview.tooltip": "Show server info (MOTD, players, ping, icon) when typing in the Direct Connect screen.",
+
+  "helium.option.smooth_scrolling": "Smooth Scrolling",
+  "helium.option.smooth_scrolling.tooltip": "Enable smooth scrolling animations in lists and menus. Adds momentum and elastic bounce effects.",
 
   "helium.option.fps_overlay": "Enable Overlay",
   "helium.option.fps_overlay.tooltip": "Master toggle for the on-screen overlay.",

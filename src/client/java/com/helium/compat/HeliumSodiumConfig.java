@@ -348,11 +348,25 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
 
         mod.addPage(generalPage);
 
-        OptionPageBuilder mpPage = builder.createOptionPage();
-        mpPage.setName(Text.translatable("helium.page.multiplayer"));
+        OptionPageBuilder qolPage = builder.createOptionPage();
+        qolPage.setName(Text.translatable("helium.page.qol"));
+
+        OptionGroupBuilder universalQolGroup = builder.createOptionGroup();
+        universalQolGroup.setName(Text.translatable("helium.group.universal_qol"));
+
+        BooleanOptionBuilder smoothScrollOpt = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "smooth_scrolling"));
+        smoothScrollOpt.setName(Text.translatable("helium.option.smooth_scrolling"));
+        smoothScrollOpt.setTooltip(Text.translatable("helium.option.smooth_scrolling.tooltip"));
+        smoothScrollOpt.setImpact(OptionImpact.LOW);
+        smoothScrollOpt.setDefaultValue(true);
+        smoothScrollOpt.setStorageHandler(storage);
+        smoothScrollOpt.setBinding(v -> config.smoothScrolling = v, () -> config.smoothScrolling);
+        universalQolGroup.addOption(smoothScrollOpt);
+
+        qolPage.addOptionGroup(universalQolGroup);
 
         OptionGroupBuilder serverGroup = builder.createOptionGroup();
-        serverGroup.setName(Text.translatable("helium.group.server_list"));
+        serverGroup.setName(Text.translatable("helium.group.multiplayer"));
 
         BooleanOptionBuilder fastPing = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "fast_server_ping"));
         fastPing.setName(Text.translatable("helium.option.fast_server_ping"));
@@ -390,8 +404,8 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         directPreview.setBinding(v -> config.directConnectPreview = v, () -> config.directConnectPreview);
         serverGroup.addOption(directPreview);
 
-        mpPage.addOptionGroup(serverGroup);
-        mod.addPage(mpPage);
+        qolPage.addOptionGroup(serverGroup);
+        mod.addPage(qolPage);
 
         OptionPageBuilder overlayPage = builder.createOptionPage();
         overlayPage.setName(Text.translatable("helium.page.overlay"));

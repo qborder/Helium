@@ -27,15 +27,7 @@ public abstract class ModelPartAnimationMixin {
     @Shadow public float originZ;
 
     @Unique
-    private float helium$cachedPitch = Float.NaN;
-    @Unique
-    private float helium$cachedYaw = Float.NaN;
-    @Unique
-    private float helium$cachedRoll = Float.NaN;
-    @Unique
-    private final Quaternionf helium$cachedQuat = new Quaternionf();
-    @Unique
-    private boolean helium$quatValid = false;
+    private final Quaternionf helium$reusedQuat = new Quaternionf();
 
     @Inject(method = "applyTransform", at = @At("HEAD"), cancellable = true, require = 0)
     private void helium$fastApplyTransform(MatrixStack matrices, CallbackInfo ci) {
@@ -44,30 +36,13 @@ public abstract class ModelPartAnimationMixin {
             if (config == null || !config.modEnabled || !config.fastAnimations) return;
             if (!FastAnimationOptimizer.isInitialized()) return;
 
-            boolean hasRotation = pitch != 0f || yaw != 0f || roll != 0f;
-            boolean hasScale = xScale != 1f || yScale != 1f || zScale != 1f;
-
             matrices.translate(originX / 16.0f, originY / 16.0f, originZ / 16.0f);
 
-            if (hasRotation) {
-                if (helium$quatValid
-                        && Float.floatToRawIntBits(pitch) == Float.floatToRawIntBits(helium$cachedPitch)
-                        && Float.floatToRawIntBits(yaw) == Float.floatToRawIntBits(helium$cachedYaw)
-                        && Float.floatToRawIntBits(roll) == Float.floatToRawIntBits(helium$cachedRoll)) {
-                    matrices.multiply(helium$cachedQuat);
-                    FastAnimationOptimizer.recordCacheHit();
-                } else {
-                    helium$cachedQuat.identity().rotateZYX(roll, yaw, pitch);
-                    helium$cachedPitch = pitch;
-                    helium$cachedYaw = yaw;
-                    helium$cachedRoll = roll;
-                    helium$quatValid = true;
-                    matrices.multiply(helium$cachedQuat);
-                    FastAnimationOptimizer.recordCacheMiss();
-                }
+            if (pitch != 0f || yaw != 0f || roll != 0f) {
+                matrices.multiply(helium$reusedQuat.rotationZYX(roll, yaw, pitch));
             }
 
-            if (hasScale) {
+            if (xScale != 1f || yScale != 1f || zScale != 1f) {
                 matrices.scale(xScale, yScale, zScale);
             }
 

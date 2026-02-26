@@ -74,6 +74,8 @@
 
   "helium.option.fast_server_ping": "Fast Server Pinging",
   "helium.option.fast_server_ping.tooltip": "Ping all servers simultaneously instead of one by one. Much faster server list loading.",
+  "helium.option.fast_ip_ping": "Fast IP Ping",
+  "helium.option.fast_ip_ping.tooltip": "Skip reverse DNS lookups for servers with literal IP addresses. Saves 1-5 seconds when pinging or connecting to IP-based servers.",
   "helium.option.preserve_scroll": "Keep Scroll on Refresh",
   "helium.option.preserve_scroll.tooltip": "Don't reset the server list scroll position when you press refresh.",
   "helium.option.direct_connect_preview": "Server Preview",
@@ -125,15 +127,6 @@
   "helium.config.enable": "Enable Helium",
   "helium.config.enable.description": "Turn Helium on or off. Requires a game restart to take effect.",
 
-  "helium.android.title": "Helium",
-  "helium.android.warning_title": "Running on Android",
-  "helium.android.platform": "Android Detected",
-  "helium.android.warning_line1": "Some features may not work perfectly on Android.",
-  "helium.android.warning_line2": "The mod will still run, but stability is not guaranteed.",
-  "helium.android.gl_disabled": "GL State Cache has been disabled automatically.",
-  "helium.android.still_works": "All other features should work normally.",
-  "helium.android.button": "Got it!",
-
   "helium.option.fullbright": "Fullbright",
   "helium.option.fullbright.tooltip": "Remove all darkness. Press G to toggle quickly. Purely visual, no gameplay advantage on servers.",
 
@@ -158,7 +151,7 @@
   "helium.config.dev_mode.description": "Enable developer mode for enhanced performance metrics and testing features.",
 
   "helium.option.fast_animations": "Fast Animations",
-  "helium.option.fast_animations.tooltip": "Cache entity model rotation quaternions. Skips redundant sin/cos calculations when limb angles haven't changed.",
+  "helium.option.fast_animations.tooltip": "Reuse rotation objects for entity model animations. Reduces garbage collection pressure from frequent Quaternionf allocations.",
   "helium.option.cached_enum_values": "Cached Enum Values",
   "helium.option.cached_enum_values.tooltip": "Cache Direction.values() and other hot enum arrays to avoid thousands of array allocations per tick. Reduces GC pressure.",
   "helium.option.fast_world_loading": "Fast World Loading",

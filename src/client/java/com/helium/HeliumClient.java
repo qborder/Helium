@@ -14,6 +14,7 @@ import com.helium.memory.AllocationReducer;
 import com.helium.memory.BufferPool;
 import com.helium.memory.NativeMemoryManager;
 import com.helium.memory.ObjectPool;
+import com.helium.network.FastIpPingOptimizer;
 import com.helium.network.PacketBatcher;
 import com.helium.render.EnumValueCache;
 import com.helium.render.FastAnimationOptimizer;
@@ -23,7 +24,6 @@ import com.helium.render.HeliumBlockEntityCulling;
 import com.helium.render.ModelCache;
 import com.helium.render.RenderPipeline;
 import com.helium.render.TemporalReprojection;
-import com.helium.compat.HeliumIncompatibleScreen;
 import com.helium.feature.FullbrightManager;
 import com.helium.resource.BackgroundResourceProcessor;
 import com.helium.startup.FastStartup;
@@ -34,7 +34,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
@@ -89,15 +88,6 @@ public class HeliumClient implements ClientModInitializer {
         if (isAndroid) {
             LOGGER.warn("android detected - disabling gl state cache for compatibility");
             config.glStateCache = false;
-
-            if (!config.androidWarningShown) {
-                ClientTickEvents.END_CLIENT_TICK.register(client -> {
-                    if (client.currentScreen instanceof TitleScreen && !config.androidWarningShown) {
-                        client.setScreen(new HeliumIncompatibleScreen(client.currentScreen));
-                    }
-                });
-            }
-
             config.save();
         }
 
@@ -197,6 +187,10 @@ public class HeliumClient implements ClientModInitializer {
         initFeatureSafely("FastWorldLoading", () -> {
             if (config.fastWorldLoading) FastWorldLoadingOptimizer.init();
         }, () -> fastWorldLoadFailed = true);
+
+        initFeatureSafely("FastIpPing", () -> {
+            if (config.fastIpPing) FastIpPingOptimizer.init();
+        }, null);
 
         fullbrightKey = KeyBindingHelper.registerKeyBinding(createKeyBinding(
                 "helium.key.fullbright",

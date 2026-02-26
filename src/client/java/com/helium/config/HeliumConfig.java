@@ -75,10 +75,10 @@ public class HeliumConfig {
     public boolean fastAnimations = true;
     public boolean cachedEnumValues = true;
     public boolean fastWorldLoading = false;
+    public boolean fastIpPing = true;
 
     public boolean devMode = true;
 
-    public boolean androidWarningShown = false;
 
     public static HeliumConfig load() {
         if (Files.exists(CONFIG_PATH)) {
@@ -192,9 +192,9 @@ public class HeliumConfig {
         this.fastAnimations = other.fastAnimations;
         this.cachedEnumValues = other.cachedEnumValues;
         this.fastWorldLoading = other.fastWorldLoading;
+        this.fastIpPing = other.fastIpPing;
         this.overlayShowCoordinates = other.overlayShowCoordinates;
         this.overlayShowBiome = other.overlayShowBiome;
         this.devMode = other.devMode;
-        this.androidWarningShown = other.androidWarningShown;
     }
 }

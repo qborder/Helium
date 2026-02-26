@@ -13,12 +13,16 @@ public class HeliumMixinPlugin implements IMixinConfigPlugin {
     private boolean hasOpenGlStateManager = false;
     private boolean hasPlatformGlStateManager = false;
     private boolean hasImmediatelyFast = false;
+    private boolean hasSodiumConfigApi = false;
+    private boolean hasSodiumOptionsGui = false;
 
     @Override
     public void onLoad(String mixinPackage) {
         hasOpenGlStateManager = classExistsOnClasspath("com/mojang/blaze3d/opengl/GlStateManager.class");
         hasPlatformGlStateManager = classExistsOnClasspath("com/mojang/blaze3d/platform/GlStateManager.class");
         hasImmediatelyFast = FabricLoader.getInstance().isModLoaded("immediatelyfast");
+        hasSodiumConfigApi = classExistsOnClasspath("net/caffeinemc/mods/sodium/api/config/ConfigEntryPoint.class");
+        hasSodiumOptionsGui = classExistsOnClasspath("net/caffeinemc/mods/sodium/client/gui/SodiumOptionsGUI.class");
     }
 
     @Override
@@ -33,6 +37,9 @@ public class HeliumMixinPlugin implements IMixinConfigPlugin {
         }
         if (mixinClassName.endsWith("GlStateManagerLegacyMixin")) {
             return hasPlatformGlStateManager && !hasImmediatelyFast;
+        }
+        if (mixinClassName.endsWith("SodiumOptionsGUIFallbackMixin")) {
+            return !hasSodiumConfigApi && hasSodiumOptionsGui;
         }
         return true;
     }

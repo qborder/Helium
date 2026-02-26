@@ -17,6 +17,14 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
 
     @Override
     public void registerConfigLate(ConfigBuilder builder) {
+        try {
+            registerConfigInternal(builder);
+        } catch (Throwable t) {
+            HeliumClient.LOGGER.warn("failed to register helium config in sodium - sodium api may be incompatible", t);
+        }
+    }
+
+    private void registerConfigInternal(ConfigBuilder builder) {
         HeliumConfig config = HeliumClient.getConfig();
         if (config == null) return;
 
@@ -354,6 +362,15 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         fastPing.setStorageHandler(storage);
         fastPing.setBinding(v -> config.fastServerPing = v, () -> config.fastServerPing);
         serverGroup.addOption(fastPing);
+
+        BooleanOptionBuilder fastIpPing = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "fast_ip_ping"));
+        fastIpPing.setName(Text.translatable("helium.option.fast_ip_ping"));
+        fastIpPing.setTooltip(Text.translatable("helium.option.fast_ip_ping.tooltip"));
+        fastIpPing.setImpact(OptionImpact.LOW);
+        fastIpPing.setDefaultValue(true);
+        fastIpPing.setStorageHandler(storage);
+        fastIpPing.setBinding(v -> config.fastIpPing = v, () -> config.fastIpPing);
+        serverGroup.addOption(fastIpPing);
 
         BooleanOptionBuilder scrollKeep = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "preserve_scroll_on_refresh"));
         scrollKeep.setName(Text.translatable("helium.option.preserve_scroll"));

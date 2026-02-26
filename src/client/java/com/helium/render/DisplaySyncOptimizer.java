@@ -28,7 +28,7 @@ public final class DisplaySyncOptimizer {
                 detectRefreshRate();
             } else {
                 cachedRefreshRate = configRate;
-                updateIntervalNs = 1_000_000_000L / configRate;
+                updateIntervalNs = 1_000_000_000L / (configRate + 30);
             }
             appliedConfigRate = configRate;
         }
@@ -83,7 +83,7 @@ public final class DisplaySyncOptimizer {
                     GLFWVidMode vidMode = GLFW.glfwGetVideoMode(monitor);
                     if (vidMode != null) {
                         cachedRefreshRate = vidMode.refreshRate();
-                        updateIntervalNs = 1_000_000_000L / cachedRefreshRate;
+                        updateIntervalNs = 1_000_000_000L / (cachedRefreshRate + 30);
                         return;
                     }
                 }

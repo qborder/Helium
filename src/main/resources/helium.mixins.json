@@ -30,7 +30,9 @@
     "compat.FpsDisplayHistoryMixin",
     "render.ModelPartAnimationMixin",
     "render.DirectionValuesMixin",
-    "render.LevelLoadingScreenMixin"
+    "render.LevelLoadingScreenMixin",
+    "compat.SodiumOptionsGUIFallbackMixin",
+    "network.AllowedAddressResolverMixin"
   ],
   "injectors": {
     "defaultRequire": 0

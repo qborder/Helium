@@ -31,7 +31,6 @@
     "render.ModelPartAnimationMixin",
     "render.DirectionValuesMixin",
     "render.LevelLoadingScreenMixin",
-    "compat.SodiumOptionsGUIFallbackMixin",
     "network.AllowedAddressResolverMixin"
   ],
   "injectors": {

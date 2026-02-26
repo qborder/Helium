@@ -174,6 +174,24 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         glCache.setStorageHandler(storage);
         renderOptGroup.addOption(glCache);
 
+        BooleanOptionBuilder fastAnimOpt = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "fast_animations"));
+        fastAnimOpt.setName(Text.translatable("helium.option.fast_animations"));
+        fastAnimOpt.setTooltip(Text.translatable("helium.option.fast_animations.tooltip"));
+        fastAnimOpt.setImpact(OptionImpact.MEDIUM);
+        fastAnimOpt.setDefaultValue(true);
+        fastAnimOpt.setStorageHandler(storage);
+        fastAnimOpt.setBinding(v -> config.fastAnimations = v, () -> config.fastAnimations);
+        renderOptGroup.addOption(fastAnimOpt);
+
+        BooleanOptionBuilder enumCacheOpt = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "cached_enum_values"));
+        enumCacheOpt.setName(Text.translatable("helium.option.cached_enum_values"));
+        enumCacheOpt.setTooltip(Text.translatable("helium.option.cached_enum_values.tooltip"));
+        enumCacheOpt.setImpact(OptionImpact.MEDIUM);
+        enumCacheOpt.setDefaultValue(true);
+        enumCacheOpt.setStorageHandler(storage);
+        enumCacheOpt.setBinding(v -> config.cachedEnumValues = v, () -> config.cachedEnumValues);
+        renderOptGroup.addOption(enumCacheOpt);
+
         renderPage.addOptionGroup(renderOptGroup);
 
         OptionGroupBuilder cachingGroup = builder.createOptionGroup();
@@ -234,6 +252,22 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         startupOpt.setStorageHandler(storage);
         startupOpt.setBinding(v -> config.fastStartup = v, () -> config.fastStartup);
         engineGroup.addOption(startupOpt);
+
+        BooleanOptionBuilder fastWorldLoadOpt = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "fast_world_loading"));
+        fastWorldLoadOpt.setName(Text.translatable("helium.option.fast_world_loading"));
+        fastWorldLoadOpt.setTooltip(Text.translatable("helium.option.fast_world_loading.tooltip"));
+        fastWorldLoadOpt.setImpact(OptionImpact.LOW);
+        fastWorldLoadOpt.setDefaultValue(false);
+        fastWorldLoadOpt.setStorageHandler(storage);
+        fastWorldLoadOpt.setBinding(v -> {
+            config.fastWorldLoading = v;
+            if (v && com.helium.render.FastWorldLoadingOptimizer.isInitialized()) {
+                com.helium.render.FastWorldLoadingOptimizer.enable();
+            } else {
+                com.helium.render.FastWorldLoadingOptimizer.disable();
+            }
+        }, () -> config.fastWorldLoading);
+        engineGroup.addOption(fastWorldLoadOpt);
 
         BooleanOptionBuilder reducedAllocOpt = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "reduced_allocations"));
         reducedAllocOpt.setName(Text.translatable("helium.option.reduced_allocations"));
@@ -542,13 +576,32 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         adaptiveSyncOpt.setBinding(v -> config.adaptiveSync = v, () -> config.adaptiveSync);
         gpuGroup.addOption(adaptiveSyncOpt);
 
-        BooleanOptionBuilder displaySyncOpt = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "display_sync_optimization"));
+        IntegerOptionBuilder displaySyncOpt = builder.createIntegerOption(VersionCompat.createIdentifier(NAMESPACE, "display_sync_refresh_rate"));
         displaySyncOpt.setName(Text.translatable("helium.option.display_sync_optimization"));
         displaySyncOpt.setTooltip(Text.translatable("helium.option.display_sync_optimization.tooltip"));
         displaySyncOpt.setImpact(OptionImpact.VARIES);
-        displaySyncOpt.setDefaultValue(true);
+        displaySyncOpt.setDefaultValue(9);
+        displaySyncOpt.setRange(0, 9, 1);
+        displaySyncOpt.setValueFormatter(v -> {
+            int[] hz = {0, 60, 75, 120, 144, 165, 240, 360, 500, -1};
+            int val = hz[Math.min(v, hz.length - 1)];
+            if (val == 0) return Text.translatable("helium.option.display_sync_optimization.off");
+            if (val == -1) return Text.translatable("helium.option.display_sync_optimization.auto");
+            return Text.of(val + " Hz");
+        });
         displaySyncOpt.setStorageHandler(storage);
-        displaySyncOpt.setBinding(v -> config.displaySyncOptimization = v, () -> config.displaySyncOptimization);
+        displaySyncOpt.setBinding(v -> {
+            int[] hz = {0, 60, 75, 120, 144, 165, 240, 360, 500, -1};
+            config.displaySyncRefreshRate = hz[Math.min(v, hz.length - 1)];
+            com.helium.render.DisplaySyncOptimizer.reset();
+        }, () -> {
+            int[] hz = {0, 60, 75, 120, 144, 165, 240, 360, 500, -1};
+            int val = config.displaySyncRefreshRate;
+            for (int i = 0; i < hz.length; i++) {
+                if (hz[i] == val) return i;
+            }
+            return 9;
+        });
         gpuGroup.addOption(displaySyncOpt);
 
         advancedPage.addOptionGroup(gpuGroup);

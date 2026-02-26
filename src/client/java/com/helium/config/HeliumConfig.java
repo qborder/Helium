@@ -69,9 +69,12 @@ public class HeliumConfig {
     public boolean amdOptimizations = true;
     public boolean intelOptimizations = true;
     public boolean adaptiveSync = true;
-    public boolean displaySyncOptimization = true;
+    public int displaySyncRefreshRate = -1;
     public boolean temporalReprojection = false;
     public boolean fullbright = false;
+    public boolean fastAnimations = true;
+    public boolean cachedEnumValues = true;
+    public boolean fastWorldLoading = false;
 
     public boolean devMode = true;
 
@@ -183,9 +186,12 @@ public class HeliumConfig {
         this.amdOptimizations = other.amdOptimizations;
         this.intelOptimizations = other.intelOptimizations;
         this.adaptiveSync = other.adaptiveSync;
-        this.displaySyncOptimization = other.displaySyncOptimization;
+        this.displaySyncRefreshRate = other.displaySyncRefreshRate;
         this.temporalReprojection = other.temporalReprojection;
         this.fullbright = other.fullbright;
+        this.fastAnimations = other.fastAnimations;
+        this.cachedEnumValues = other.cachedEnumValues;
+        this.fastWorldLoading = other.fastWorldLoading;
         this.overlayShowCoordinates = other.overlayShowCoordinates;
         this.overlayShowBiome = other.overlayShowBiome;
         this.devMode = other.devMode;

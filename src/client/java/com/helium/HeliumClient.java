@@ -15,6 +15,9 @@ import com.helium.memory.BufferPool;
 import com.helium.memory.NativeMemoryManager;
 import com.helium.memory.ObjectPool;
 import com.helium.network.PacketBatcher;
+import com.helium.render.EnumValueCache;
+import com.helium.render.FastAnimationOptimizer;
+import com.helium.render.FastWorldLoadingOptimizer;
 import com.helium.render.GLStateCache;
 import com.helium.render.HeliumBlockEntityCulling;
 import com.helium.render.ModelCache;
@@ -70,6 +73,9 @@ public class HeliumClient implements ClientModInitializer {
     private static boolean gpuOptsFailed = false;
     private static boolean adaptiveSyncFailed = false;
     private static boolean temporalReprojectionFailed = false;
+    private static boolean fastAnimFailed = false;
+    private static boolean enumCacheFailed = false;
+    private static boolean fastWorldLoadFailed = false;
     private static boolean gpuInitDeferred = true;
     private static boolean isAndroid = false;
 
@@ -179,6 +185,18 @@ public class HeliumClient implements ClientModInitializer {
         initFeatureSafely("TemporalReprojection", () -> {
             if (config.temporalReprojection) TemporalReprojection.init();
         }, () -> temporalReprojectionFailed = true);
+
+        initFeatureSafely("FastAnimations", () -> {
+            if (config.fastAnimations) FastAnimationOptimizer.init();
+        }, () -> fastAnimFailed = true);
+
+        initFeatureSafely("EnumValueCache", () -> {
+            if (config.cachedEnumValues) EnumValueCache.init();
+        }, () -> enumCacheFailed = true);
+
+        initFeatureSafely("FastWorldLoading", () -> {
+            if (config.fastWorldLoading) FastWorldLoadingOptimizer.init();
+        }, () -> fastWorldLoadFailed = true);
 
         fullbrightKey = KeyBindingHelper.registerKeyBinding(createKeyBinding(
                 "helium.key.fullbright",

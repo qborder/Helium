@@ -116,7 +116,9 @@
   "helium.option.adaptive_sync": "Adaptive Sync Detection",
   "helium.option.adaptive_sync.tooltip": "Detect G-Sync/FreeSync and adjust frame pacing to reduce input latency.",
   "helium.option.display_sync_optimization": "GPU Frame Scheduling",
-  "helium.option.display_sync_optimization.tooltip": "Experimental: Optimize frame delivery to reduce GPU overhead. Significantly boosts FPS on most hardware, may reduce smoothness on some systems.",
+  "helium.option.display_sync_optimization.tooltip": "Controls how frames are delivered to your display. Set to a specific refresh rate if Automatic doesn't match your monitor. Off disables the feature entirely.",
+  "helium.option.display_sync_optimization.off": "Off",
+  "helium.option.display_sync_optimization.auto": "Automatic",
 
   "helium.config.category.general": "General",
   "helium.config.category.general.tooltip": "Enable or disable the mod. Performance settings are in Sodium's video settings.",
@@ -154,6 +156,13 @@
   "helium.config.category.developer.tooltip": "Developer options for testing and debugging.",
   "helium.config.dev_mode": "Dev Mode",
   "helium.config.dev_mode.description": "Enable developer mode for enhanced performance metrics and testing features.",
+
+  "helium.option.fast_animations": "Fast Animations",
+  "helium.option.fast_animations.tooltip": "Cache entity model rotation quaternions. Skips redundant sin/cos calculations when limb angles haven't changed.",
+  "helium.option.cached_enum_values": "Cached Enum Values",
+  "helium.option.cached_enum_values.tooltip": "Cache Direction.values() and other hot enum arrays to avoid thousands of array allocations per tick. Reduces GC pressure.",
+  "helium.option.fast_world_loading": "Fast World Loading",
+  "helium.option.fast_world_loading.tooltip": "Reduce initial spawn chunk loading and allow cancelling the loading screen with ESC. Off by default.",
 
   "helium.suffix.blocks": "%d blocks",
   "helium.suffix.mb": "%d MB",

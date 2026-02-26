@@ -27,7 +27,10 @@
     "performance.WindowDisplayMixin",
     "compat.SodiumExtraFrameCounterMixin",
     "compat.FPShudMetricsMixin",
-    "compat.FpsDisplayHistoryMixin"
+    "compat.FpsDisplayHistoryMixin",
+    "render.ModelPartAnimationMixin",
+    "render.DirectionValuesMixin",
+    "render.LevelLoadingScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 0

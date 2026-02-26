@@ -12,17 +12,25 @@ public final class DisplaySyncOptimizer {
     private static volatile long lastDisplayUpdateTime = 0;
     private static volatile long updateIntervalNs = 0;
     private static volatile int cachedRefreshRate = 0;
+    private static volatile int appliedConfigRate = 0;
 
     private DisplaySyncOptimizer() {}
 
     public static boolean shouldPerformDisplayUpdate() {
         HeliumConfig config = HeliumClient.getConfig();
-        if (config == null || !config.modEnabled || !config.displaySyncOptimization) {
+        if (config == null || !config.modEnabled || config.displaySyncRefreshRate == 0) {
             return true;
         }
 
-        if (updateIntervalNs == 0) {
-            detectRefreshRate();
+        int configRate = config.displaySyncRefreshRate;
+        if (updateIntervalNs == 0 || appliedConfigRate != configRate) {
+            if (configRate == -1) {
+                detectRefreshRate();
+            } else {
+                cachedRefreshRate = configRate;
+                updateIntervalNs = 1_000_000_000L / configRate;
+            }
+            appliedConfigRate = configRate;
         }
 
         if (GpuDetector.isIntegratedOnly()) {
@@ -89,6 +97,7 @@ public final class DisplaySyncOptimizer {
         lastDisplayUpdateTime = 0;
         updateIntervalNs = 0;
         cachedRefreshRate = 0;
+        appliedConfigRate = 0;
     }
 
     public static int getDetectedRefreshRate() {

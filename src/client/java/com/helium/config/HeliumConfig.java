@@ -18,7 +18,7 @@ public class HeliumConfig {
     public boolean modEnabled = true;
 
     public boolean fastMath = true;
-    public boolean glStateCache = true;
+    public boolean glStateCache = false;
     public boolean memoryOptimizations = true;
     public boolean threadOptimizations = true;
     public boolean networkOptimizations = true;

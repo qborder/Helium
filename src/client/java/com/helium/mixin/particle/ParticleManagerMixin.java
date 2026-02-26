@@ -71,28 +71,34 @@ public abstract class ParticleManagerMixin {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
 
-        if (config.particleCulling) {
-            double dx = particle.getBoundingBox().getCenter().x - client.player.getX();
-            double dy = particle.getBoundingBox().getCenter().y - client.player.getY();
-            double dz = particle.getBoundingBox().getCenter().z - client.player.getZ();
+        boolean doCulling = config.particleCulling;
+        boolean doLimiting = config.particleLimiting;
+        boolean doBatching = config.particleBatching;
+
+        if (doCulling) {
+            int cullDist = config.particleCullDistance;
+            double px = client.player.getX();
+            double py = client.player.getY();
+            double pz = client.player.getZ();
+            double dx = particle.getBoundingBox().getCenter().x - px;
+            double dy = particle.getBoundingBox().getCenter().y - py;
+            double dz = particle.getBoundingBox().getCenter().z - pz;
             double dist = dx * dx + dy * dy + dz * dz;
-            double maxDist = config.particleCullDistance * config.particleCullDistance;
+            double maxDist = cullDist * cullDist;
             if (dist > maxDist) {
                 ci.cancel();
                 return;
             }
         }
 
-        if (config.particleLimiting && ParticleLimiter.isInitialized()) {
-            if (!ParticleLimiter.canAddParticle(particle)) {
-                ci.cancel();
-                return;
-            }
+        if (doLimiting && ParticleLimiter.isInitialized() && !ParticleLimiter.canAddParticle(particle)) {
+            ci.cancel();
+            return;
         }
 
         helium$particleAddCount++;
 
-        if (config.particleBatching && ParticleBatcher.isInitialized()) {
+        if (doBatching && ParticleBatcher.isInitialized()) {
             ParticleBatcher.recordParticleType(particle.getClass().getSimpleName());
         }
     }

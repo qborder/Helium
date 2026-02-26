@@ -47,7 +47,9 @@
   "helium.option.fast_math": "Fast Math",
   "helium.option.fast_math.tooltip": "Replace sin/cos/atan2 with faster approximations. Tiny accuracy loss, noticeable FPS gain.",
   "helium.option.gl_state_cache": "GL State Cache",
+  "helium.option.gl_state_cache.experimental": "GL State Cache (Experimental)",
   "helium.option.gl_state_cache.tooltip": "Cache OpenGL state to skip redundant calls. Auto-disabled with ImmediatelyFast.",
+  "helium.option.gl_state_cache.tooltip.experimental": "[EXPERIMENTAL] Cache OpenGL state to skip redundant calls. May cause input latency or visual issues on some systems. Disabled by default.",
   "helium.option.gl_state_cache.tooltip.android": "Disabled on Android. GL State Cache is not compatible with OpenGL ES.",
 
   "helium.option.model_cache": "Model Cache",

@@ -28,3 +28,7 @@ logs/
 CHANGELOG.md
 SUGGESTIONS.md
 *.uniqueId0
+/build
+*.class
+/build/classes
+/build

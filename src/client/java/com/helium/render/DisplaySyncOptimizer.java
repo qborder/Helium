@@ -23,7 +23,10 @@ public final class DisplaySyncOptimizer {
         }
 
         int configRate = config.displaySyncRefreshRate;
-        if (updateIntervalNs == 0 || appliedConfigRate != configRate) {
+        long interval = updateIntervalNs;
+        int applied = appliedConfigRate;
+        
+        if (interval == 0 || applied != configRate) {
             if (configRate == -1) {
                 detectRefreshRate();
             } else {
@@ -31,16 +34,18 @@ public final class DisplaySyncOptimizer {
                 updateIntervalNs = 1_000_000_000L / (configRate + 30);
             }
             appliedConfigRate = configRate;
-        }
-
-        if (GpuDetector.isIntegratedOnly()) {
-            return handleIntegratedGpu();
+            interval = updateIntervalNs;
         }
 
         long now = System.nanoTime();
-        long elapsed = now - lastDisplayUpdateTime;
+        long lastUpdate = lastDisplayUpdateTime;
+        long elapsed = now - lastUpdate;
 
-        if (elapsed >= updateIntervalNs) {
+        if (GpuDetector.isIntegratedOnly()) {
+            return handleIntegratedGpu(now, elapsed, interval);
+        }
+
+        if (elapsed >= interval) {
             lastDisplayUpdateTime = now;
             return true;
         }
@@ -48,16 +53,13 @@ public final class DisplaySyncOptimizer {
         return false;
     }
 
-    private static boolean handleIntegratedGpu() {
-        long now = System.nanoTime();
-        long elapsed = now - lastDisplayUpdateTime;
-        
-        if (elapsed >= updateIntervalNs) {
+    private static boolean handleIntegratedGpu(long now, long elapsed, long interval) {
+        if (elapsed >= interval) {
             lastDisplayUpdateTime = now;
             return true;
         }
         
-        long remaining = updateIntervalNs - elapsed;
+        long remaining = interval - elapsed;
         if (remaining > 1_000_000L && remaining < 8_000_000L) {
             try {
                 Thread.sleep(0, (int) Math.min(remaining, 999_999L));

@@ -140,13 +140,13 @@ public final class IdleManager {
 
         checkPlayerMovement();
 
-        long elapsed = now - lastActivityTime.get();
-        long timeoutMs = timeoutSeconds * 1000L;
+        long lastActivity = lastActivityTime.get();
+        int timeout = timeoutSeconds;
+        long elapsed = now - lastActivity;
+        long timeoutMs = timeout * 1000L;
 
-        if (elapsed >= timeoutMs) {
-            if (!idle.getAndSet(true)) {
-                HeliumClient.LOGGER.info("no activity for {}s, entering idle mode (fps={})", timeoutSeconds, idleFpsLimit);
-            }
+        if (elapsed >= timeoutMs && !idle.getAndSet(true)) {
+            HeliumClient.LOGGER.info("no activity for {}s, entering idle mode (fps={})", timeout, idleFpsLimit);
         }
     }
 

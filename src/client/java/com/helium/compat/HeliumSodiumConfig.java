@@ -167,18 +167,18 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         renderOptGroup.addOption(fastMathOpt);
 
         BooleanOptionBuilder glCache = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "gl_state_cache"));
-        glCache.setName(Text.translatable("helium.option.gl_state_cache"));
+        glCache.setName(Text.translatable("helium.option.gl_state_cache.experimental"));
         if (HeliumClient.isAndroid()) {
             glCache.setTooltip(Text.translatable("helium.option.gl_state_cache.tooltip.android"));
             glCache.setEnabled(false);
             glCache.setDefaultValue(false);
             glCache.setBinding(v -> {}, () -> false);
         } else {
-            glCache.setTooltip(Text.translatable("helium.option.gl_state_cache.tooltip"));
-            glCache.setDefaultValue(true);
+            glCache.setTooltip(Text.translatable("helium.option.gl_state_cache.tooltip.experimental"));
+            glCache.setDefaultValue(false);
             glCache.setBinding(v -> config.glStateCache = v, () -> config.glStateCache);
         }
-        glCache.setImpact(OptionImpact.LOW);
+        glCache.setImpact(OptionImpact.VARIES);
         glCache.setStorageHandler(storage);
         renderOptGroup.addOption(glCache);
 

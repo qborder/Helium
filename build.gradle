@@ -51,6 +51,7 @@ dependencies {
     include(modImplementation("dev.isxander:yet-another-config-lib:${project.yacl_version}"))
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
     modCompileOnly "net.caffeinemc:sodium-fabric-api:${project.sodium_api_version}"
+
 }
 
 processResources {

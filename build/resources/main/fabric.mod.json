@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "helium",
-  "version": "1.5.9",
+  "version": "1.6.1",
   "name": "Helium",
   "description": "Client-side performance optimizations for Minecraft. Faster math, less GC pressure, smarter rendering. Zero visual changes. Requires Sodium.",
   "authors": [],
@@ -28,7 +28,7 @@
     "minecraft": ">=1.21.1 <=1.21.11",
     "java": ">=21",
     "fabric-api": "*",
-    "sodium": ">=0.6.0"
+    "sodium": ">=0.5.0"
   },
   "suggests": {
     "lithium": "*",

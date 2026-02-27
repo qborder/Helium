@@ -38,6 +38,10 @@ public class HeliumConfig {
 
     public boolean smoothScrolling = true;
 
+    public boolean windowStyle = true;
+    public String windowMaterial = "TABBED";
+    public String windowCorner = "ROUND";
+
     public boolean fastServerPing = true;
     public boolean preserveScrollOnRefresh = true;
     public boolean directConnectPreview = true;
@@ -198,5 +202,9 @@ public class HeliumConfig {
         this.overlayShowCoordinates = other.overlayShowCoordinates;
         this.overlayShowBiome = other.overlayShowBiome;
         this.devMode = other.devMode;
+        this.smoothScrolling = other.smoothScrolling;
+        this.windowStyle = other.windowStyle;
+        this.windowMaterial = other.windowMaterial;
+        this.windowCorner = other.windowCorner;
     }
 }

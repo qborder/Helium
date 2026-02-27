@@ -363,6 +363,50 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         smoothScrollOpt.setBinding(v -> config.smoothScrolling = v, () -> config.smoothScrolling);
         universalQolGroup.addOption(smoothScrollOpt);
 
+        BooleanOptionBuilder windowStyleOpt = builder.createBooleanOption(VersionCompat.createIdentifier(NAMESPACE, "window_style"));
+        windowStyleOpt.setName(Text.translatable("helium.option.window_style"));
+        windowStyleOpt.setTooltip(Text.translatable("helium.option.window_style.tooltip"));
+        windowStyleOpt.setImpact(OptionImpact.LOW);
+        windowStyleOpt.setDefaultValue(true);
+        windowStyleOpt.setStorageHandler(storage);
+        windowStyleOpt.setBinding(v -> {
+            config.windowStyle = v;
+            com.helium.platform.DwmApi.applyWindowStyle(false, net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle());
+        }, () -> config.windowStyle);
+        universalQolGroup.addOption(windowStyleOpt);
+
+        EnumOptionBuilder<com.helium.platform.DwmEnums.WindowMaterial> windowMaterialOpt = builder.createEnumOption(
+                VersionCompat.createIdentifier(NAMESPACE, "window_material"),
+                com.helium.platform.DwmEnums.WindowMaterial.class
+        );
+        windowMaterialOpt.setName(Text.translatable("helium.option.window_material"));
+        windowMaterialOpt.setTooltip(Text.translatable("helium.option.window_material.tooltip"));
+        windowMaterialOpt.setImpact(OptionImpact.LOW);
+        windowMaterialOpt.setDefaultValue(com.helium.platform.DwmEnums.WindowMaterial.TABBED);
+        windowMaterialOpt.setElementNameProvider(v -> Text.translatable("helium.option.window_material." + v.id));
+        windowMaterialOpt.setStorageHandler(storage);
+        windowMaterialOpt.setBinding(v -> {
+            config.windowMaterial = v.name();
+            com.helium.platform.DwmApi.applyWindowStyle(false, net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle());
+        }, () -> com.helium.platform.DwmEnums.WindowMaterial.fromString(config.windowMaterial));
+        universalQolGroup.addOption(windowMaterialOpt);
+
+        EnumOptionBuilder<com.helium.platform.DwmEnums.WindowCorner> windowCornerOpt = builder.createEnumOption(
+                VersionCompat.createIdentifier(NAMESPACE, "window_corner"),
+                com.helium.platform.DwmEnums.WindowCorner.class
+        );
+        windowCornerOpt.setName(Text.translatable("helium.option.window_corner"));
+        windowCornerOpt.setTooltip(Text.translatable("helium.option.window_corner.tooltip"));
+        windowCornerOpt.setImpact(OptionImpact.LOW);
+        windowCornerOpt.setDefaultValue(com.helium.platform.DwmEnums.WindowCorner.ROUND);
+        windowCornerOpt.setElementNameProvider(v -> Text.translatable("helium.option.window_corner." + v.id));
+        windowCornerOpt.setStorageHandler(storage);
+        windowCornerOpt.setBinding(v -> {
+            config.windowCorner = v.name();
+            com.helium.platform.DwmApi.applyWindowStyle(false, net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle());
+        }, () -> com.helium.platform.DwmEnums.WindowCorner.fromString(config.windowCorner));
+        universalQolGroup.addOption(windowCornerOpt);
+
         qolPage.addOptionGroup(universalQolGroup);
 
         OptionGroupBuilder serverGroup = builder.createOptionGroup();

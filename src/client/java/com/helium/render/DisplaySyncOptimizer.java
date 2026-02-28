@@ -75,24 +75,25 @@ public final class DisplaySyncOptimizer {
 
     private static void detectRefreshRate() {
         try {
+            long monitor = 0L;
             MinecraftClient client = MinecraftClient.getInstance();
             if (client != null && client.getWindow() != null) {
-                long monitor = GLFW.glfwGetWindowMonitor(client.getWindow().getHandle());
-                if (monitor == 0L) {
-                    monitor = GLFW.glfwGetPrimaryMonitor();
-                }
-                if (monitor != 0L) {
-                    GLFWVidMode vidMode = GLFW.glfwGetVideoMode(monitor);
-                    if (vidMode != null) {
-                        cachedRefreshRate = vidMode.refreshRate();
-                        updateIntervalNs = 1_000_000_000L / (cachedRefreshRate + 30);
-                        return;
-                    }
+                monitor = GLFW.glfwGetWindowMonitor(client.getWindow().getHandle());
+            }
+            if (monitor == 0L) {
+                monitor = GLFW.glfwGetPrimaryMonitor();
+            }
+            if (monitor != 0L) {
+                GLFWVidMode vidMode = GLFW.glfwGetVideoMode(monitor);
+                if (vidMode != null && vidMode.refreshRate() > 0) {
+                    cachedRefreshRate = vidMode.refreshRate();
+                    updateIntervalNs = 1_000_000_000L / (cachedRefreshRate + 30);
+                    return;
                 }
             }
         } catch (Exception ignored) {}
         cachedRefreshRate = 60;
-        updateIntervalNs = 16_666_667L;
+        updateIntervalNs = 1_000_000_000L / (60 + 30);
     }
 
     public static void reset() {

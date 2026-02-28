@@ -16,6 +16,7 @@ import com.helium.memory.NativeMemoryManager;
 import com.helium.memory.ObjectPool;
 import com.helium.network.FastIpPingOptimizer;
 import com.helium.network.PacketBatcher;
+import com.helium.platform.DeviceDetector;
 import com.helium.render.EnumValueCache;
 import com.helium.render.FastAnimationOptimizer;
 import com.helium.render.FastWorldLoadingOptimizer;
@@ -40,7 +41,6 @@ import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 
 public class HeliumClient implements ClientModInitializer {
 
@@ -84,7 +84,7 @@ public class HeliumClient implements ClientModInitializer {
 
         config = HeliumConfig.load();
 
-        isAndroid = detectAndroid();
+        isAndroid = DeviceDetector.isAndroid();
         if (isAndroid) {
             LOGGER.warn("android detected - disabling gl state cache for compatibility");
             config.glStateCache = false;
@@ -169,7 +169,7 @@ public class HeliumClient implements ClientModInitializer {
         }, () -> packetBatcherFailed = true);
 
         initFeatureSafely("IdleManager", () -> {
-            IdleManager.init(config.idleTimeoutSeconds, config.idleFpsLimit);
+            if (config.autoPauseOnIdle) IdleManager.init(config.idleTimeoutSeconds, config.idleFpsLimit);
         }, () -> idleManagerFailed = true);
 
         initFeatureSafely("TemporalReprojection", () -> {
@@ -223,6 +223,10 @@ public class HeliumClient implements ClientModInitializer {
     }
 
     private void initDeferredGpuFeatures() {
+        initFeatureSafely("RenderThreadPriority", () -> {
+            if (config.threadOptimizations) ThreadPriorityManager.initRenderThread();
+        }, null);
+
         initFeatureSafely("GpuDetector", () -> {
             GpuDetector.init();
         }, () -> gpuDetectorFailed = true);
@@ -269,7 +273,7 @@ public class HeliumClient implements ClientModInitializer {
             init.run();
         } catch (Throwable t) {
             LOGGER.error("{} failed to initialize, feature disabled", name, t);
-            onFailure.run();
+            if (onFailure != null) onFailure.run();
         }
     }
 
@@ -291,20 +295,7 @@ public class HeliumClient implements ClientModInitializer {
     public static boolean isGpuOptsAvailable() { return !gpuOptsFailed; }
     public static boolean isAdaptiveSyncAvailable() { return !adaptiveSyncFailed; }
     public static boolean isTemporalReprojectionAvailable() { return !temporalReprojectionFailed; }
-    public static boolean isAndroid() { return isAndroid; }
-
-    private static boolean detectAndroid() {
-        if (new File("/system/build.prop").exists()) return true;
-        if (new File("/system/app").isDirectory()) return true;
-
-        String osArch = System.getProperty("os.arch", "").toLowerCase();
-        String osName = System.getProperty("os.name", "").toLowerCase();
-        if (osName.contains("linux") && osArch.contains("aarch64")) {
-            if (new File("/data/data").isDirectory()) return true;
-        }
-
-        return false;
-    }
+    public static boolean isAndroid() { return DeviceDetector.isAndroid(); }
 
     private static KeyBinding createKeyBinding(String id, InputUtil.Type type, int code, String category) {
         try {

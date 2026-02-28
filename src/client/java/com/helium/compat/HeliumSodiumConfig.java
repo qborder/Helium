@@ -2,7 +2,9 @@ package com.helium.compat;
 
 import com.helium.HeliumClient;
 import com.helium.config.HeliumConfig;
+import com.helium.gpu.GpuDetector;
 import com.helium.idle.IdleManager;
+import com.helium.platform.DeviceDetector;
 import com.helium.util.VersionCompat;
 import net.caffeinemc.mods.sodium.api.config.ConfigEntryPoint;
 import net.caffeinemc.mods.sodium.api.config.StorageEventHandler;
@@ -186,7 +188,7 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         fastAnimOpt.setName(Text.translatable("helium.option.fast_animations"));
         fastAnimOpt.setTooltip(Text.translatable("helium.option.fast_animations.tooltip"));
         fastAnimOpt.setImpact(OptionImpact.MEDIUM);
-        fastAnimOpt.setDefaultValue(true);
+        fastAnimOpt.setDefaultValue(false);
         fastAnimOpt.setStorageHandler(storage);
         fastAnimOpt.setBinding(v -> config.fastAnimations = v, () -> config.fastAnimations);
         renderOptGroup.addOption(fastAnimOpt);
@@ -369,6 +371,10 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         windowStyleOpt.setImpact(OptionImpact.LOW);
         windowStyleOpt.setDefaultValue(true);
         windowStyleOpt.setStorageHandler(storage);
+        windowStyleOpt.setEnabled(DeviceDetector.isWindows());
+        if (!DeviceDetector.isWindows()) {
+            windowStyleOpt.setTooltip(Text.translatable("helium.option.window_style.tooltip.non_windows"));
+        }
         windowStyleOpt.setBinding(v -> {
             config.windowStyle = v;
             com.helium.platform.DwmApi.applyWindowStyle(false, net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle());
@@ -385,6 +391,10 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         windowMaterialOpt.setDefaultValue(com.helium.platform.DwmEnums.WindowMaterial.TABBED);
         windowMaterialOpt.setElementNameProvider(v -> Text.translatable("helium.option.window_material." + v.id));
         windowMaterialOpt.setStorageHandler(storage);
+        windowMaterialOpt.setEnabled(DeviceDetector.isWindows());
+        if (!DeviceDetector.isWindows()) {
+            windowMaterialOpt.setTooltip(Text.translatable("helium.option.window_style.tooltip.non_windows"));
+        }
         windowMaterialOpt.setBinding(v -> {
             config.windowMaterial = v.name();
             com.helium.platform.DwmApi.applyWindowStyle(false, net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle());
@@ -401,6 +411,10 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         windowCornerOpt.setDefaultValue(com.helium.platform.DwmEnums.WindowCorner.ROUND);
         windowCornerOpt.setElementNameProvider(v -> Text.translatable("helium.option.window_corner." + v.id));
         windowCornerOpt.setStorageHandler(storage);
+        windowCornerOpt.setEnabled(DeviceDetector.isWindows());
+        if (!DeviceDetector.isWindows()) {
+            windowCornerOpt.setTooltip(Text.translatable("helium.option.window_style.tooltip.non_windows"));
+        }
         windowCornerOpt.setBinding(v -> {
             config.windowCorner = v.name();
             com.helium.platform.DwmApi.applyWindowStyle(false, net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle());
@@ -578,7 +592,7 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         simdOpt.setName(Text.translatable("helium.option.simd_math"));
         simdOpt.setTooltip(Text.translatable("helium.option.simd_math.tooltip"));
         simdOpt.setImpact(OptionImpact.MEDIUM);
-        simdOpt.setDefaultValue(false);
+        simdOpt.setDefaultValue(true);
         simdOpt.setStorageHandler(storage);
         simdOpt.setBinding(v -> config.simdMath = v, () -> config.simdMath);
         advancedGroup.addOption(simdOpt);
@@ -587,7 +601,7 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         asyncLightOpt.setName(Text.translatable("helium.option.async_light_updates"));
         asyncLightOpt.setTooltip(Text.translatable("helium.option.async_light_updates.tooltip"));
         asyncLightOpt.setImpact(OptionImpact.MEDIUM);
-        asyncLightOpt.setDefaultValue(false);
+        asyncLightOpt.setDefaultValue(true);
         asyncLightOpt.setStorageHandler(storage);
         asyncLightOpt.setBinding(v -> config.asyncLightUpdates = v, () -> config.asyncLightUpdates);
         advancedGroup.addOption(asyncLightOpt);
@@ -596,7 +610,7 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         packetBatchOpt.setName(Text.translatable("helium.option.packet_batching"));
         packetBatchOpt.setTooltip(Text.translatable("helium.option.packet_batching.tooltip"));
         packetBatchOpt.setImpact(OptionImpact.LOW);
-        packetBatchOpt.setDefaultValue(false);
+        packetBatchOpt.setDefaultValue(true);
         packetBatchOpt.setStorageHandler(storage);
         packetBatchOpt.setBinding(v -> config.packetBatching = v, () -> config.packetBatching);
         advancedGroup.addOption(packetBatchOpt);
@@ -621,6 +635,7 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         nvidiaOpt.setImpact(OptionImpact.MEDIUM);
         nvidiaOpt.setDefaultValue(true);
         nvidiaOpt.setStorageHandler(storage);
+        nvidiaOpt.setEnabled(!GpuDetector.isInitialized() || GpuDetector.isNvidia());
         nvidiaOpt.setBinding(v -> config.nvidiaOptimizations = v, () -> config.nvidiaOptimizations);
         gpuGroup.addOption(nvidiaOpt);
 
@@ -630,6 +645,7 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         amdOpt.setImpact(OptionImpact.MEDIUM);
         amdOpt.setDefaultValue(true);
         amdOpt.setStorageHandler(storage);
+        amdOpt.setEnabled(!GpuDetector.isInitialized() || GpuDetector.isAmd());
         amdOpt.setBinding(v -> config.amdOptimizations = v, () -> config.amdOptimizations);
         gpuGroup.addOption(amdOpt);
 
@@ -639,6 +655,7 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         intelOpt.setImpact(OptionImpact.MEDIUM);
         intelOpt.setDefaultValue(true);
         intelOpt.setStorageHandler(storage);
+        intelOpt.setEnabled(!GpuDetector.isInitialized() || GpuDetector.isIntel());
         intelOpt.setBinding(v -> config.intelOptimizations = v, () -> config.intelOptimizations);
         gpuGroup.addOption(intelOpt);
 
@@ -646,7 +663,7 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         adaptiveSyncOpt.setName(Text.translatable("helium.option.adaptive_sync"));
         adaptiveSyncOpt.setTooltip(Text.translatable("helium.option.adaptive_sync.tooltip"));
         adaptiveSyncOpt.setImpact(OptionImpact.LOW);
-        adaptiveSyncOpt.setDefaultValue(true);
+        adaptiveSyncOpt.setDefaultValue(false);
         adaptiveSyncOpt.setStorageHandler(storage);
         adaptiveSyncOpt.setBinding(v -> config.adaptiveSync = v, () -> config.adaptiveSync);
         gpuGroup.addOption(adaptiveSyncOpt);

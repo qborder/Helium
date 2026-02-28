@@ -91,6 +91,7 @@
 
   "helium.option.window_style": "Window Style",
   "helium.option.window_style.tooltip": "Apply Windows 11 visual effects to the game window. Requires Windows 11 build 22000+.",
+  "helium.option.window_style.tooltip.non_windows": "Windows 11 only. Not available on this platform.",
   "helium.option.window_material": "Window Material",
   "helium.option.window_material.tooltip": "The backdrop effect for the window titlebar. Tabbed gives a subtle tinted effect, Mica uses your wallpaper colors, Acrylic is translucent blur.",
   "helium.option.window_material.auto": "Auto",

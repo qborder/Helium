@@ -21,6 +21,8 @@ public final class WindowsVersion {
         if (initialized) return;
         initialized = true;
 
+        if (!DeviceDetector.isWindows()) return;
+
         try {
             long ntdll = WinBase.LoadLibrary("ntdll");
             if (ntdll == 0) return;

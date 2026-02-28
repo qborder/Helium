@@ -101,14 +101,12 @@ public final class DwmApi {
             DwmEnums.WindowMaterial material = DwmEnums.WindowMaterial.fromString(config.windowMaterial);
 
             if (material == DwmEnums.WindowMaterial.ACRYLIC) {
-                // Disable new backdrop API to avoid conflict, then apply real acrylic via WCA
                 if (WindowsVersion.supportsBackdrop()) {
                     setAttribute(hwnd, DWMWA_SYSTEMBACKDROP_TYPE, DwmEnums.WindowMaterial.NONE.ordinal());
                 }
                 // 0x00FFFFFF = no tint, full blur (AABBGGRR format)
                 setAccentPolicy(hwnd, ACCENT_ENABLE_ACRYLICBLURBEHIND, 0x00FFFFFF);
             } else {
-                // Clear any previous WCA acrylic
                 setAccentPolicy(hwnd, ACCENT_DISABLED, 0);
                 if (WindowsVersion.supportsBackdrop()) {
                     setAttribute(hwnd, DWMWA_SYSTEMBACKDROP_TYPE, material.ordinal());

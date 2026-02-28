@@ -8,11 +8,21 @@ public final class ThreadPriorityManager {
 
     public static void init() {
         try {
+            Thread initThread = Thread.currentThread();
+            initThread.setPriority(Thread.MAX_PRIORITY);
+            HeliumClient.LOGGER.info("init thread priority set to {}", initThread.getPriority());
+        } catch (SecurityException e) {
+            HeliumClient.LOGGER.warn("failed to set init thread priority", e);
+        }
+    }
+
+    public static void initRenderThread() {
+        try {
             Thread renderThread = Thread.currentThread();
             renderThread.setPriority(Thread.MAX_PRIORITY);
             HeliumClient.LOGGER.info("render thread priority set to {}", renderThread.getPriority());
         } catch (SecurityException e) {
-            HeliumClient.LOGGER.warn("failed to set thread priority", e);
+            HeliumClient.LOGGER.warn("failed to set render thread priority", e);
         }
     }
 

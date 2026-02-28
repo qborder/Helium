@@ -4,6 +4,9 @@ import com.helium.HeliumClient;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicLong;
@@ -16,6 +19,8 @@ public final class NativeMemoryManager {
     private static final ConcurrentLinkedDeque<ByteBuffer>[] POOLS = new ConcurrentLinkedDeque[POOL_SIZES.length];
 
     private static final ConcurrentHashMap<Long, AllocationInfo> allocations = new ConcurrentHashMap<>();
+    private static final AtomicLong cleanupCounter = new AtomicLong(0);
+    private static final int CLEANUP_INTERVAL = 1000;
     private static final AtomicLong allocationIdCounter = new AtomicLong(0);
     private static final AtomicLong totalAllocatedBytes = new AtomicLong(0);
     private static final AtomicLong totalPooledBytes = new AtomicLong(0);
@@ -75,7 +80,7 @@ public final class NativeMemoryManager {
         }
 
         long id = allocationIdCounter.incrementAndGet();
-        allocations.put(id, new AllocationInfo(buffer, actualSize, poolIndex));
+        allocations.put(id, new AllocationInfo(new WeakReference<>(buffer), actualSize, poolIndex));
 
         return buffer;
     }
@@ -87,9 +92,11 @@ public final class NativeMemoryManager {
         AllocationInfo info = null;
 
         for (var entry : allocations.entrySet()) {
-            if (entry.getValue().buffer == buffer) {
+            AllocationInfo ai = entry.getValue();
+            ByteBuffer ref = ai.bufferRef.get();
+            if (ref == buffer) {
                 idToRemove = entry.getKey();
-                info = entry.getValue();
+                info = ai;
                 break;
             }
         }
@@ -102,6 +109,20 @@ public final class NativeMemoryManager {
             buffer.clear();
             POOLS[info.poolIndex].offerFirst(buffer);
             totalPooledBytes.addAndGet(info.size);
+        }
+
+        if (cleanupCounter.incrementAndGet() % CLEANUP_INTERVAL == 0) {
+            cleanupStaleAllocations();
+        }
+    }
+
+    private static void cleanupStaleAllocations() {
+        Iterator<Map.Entry<Long, AllocationInfo>> it = allocations.entrySet().iterator();
+        while (it.hasNext()) {
+            AllocationInfo info = it.next().getValue();
+            if (info.bufferRef.get() == null) {
+                it.remove();
+            }
         }
     }
 
@@ -195,5 +216,5 @@ public final class NativeMemoryManager {
             getAllocationCount());
     }
 
-    private record AllocationInfo(ByteBuffer buffer, int size, int poolIndex) {}
+    private record AllocationInfo(WeakReference<ByteBuffer> bufferRef, int size, int poolIndex) {}
 }

@@ -6,9 +6,9 @@ public final class FastIntMap<V> {
 
     private static final int DEFAULT_CAPACITY = 64;
     private static final float LOAD_FACTOR = 0.75f;
-    private static final int EMPTY_KEY = Integer.MIN_VALUE;
 
     private int[] keys;
+    private boolean[] occupied;
     private Object[] values;
     private int size;
     private int capacity;
@@ -23,14 +23,14 @@ public final class FastIntMap<V> {
         threshold = (int) (capacity * LOAD_FACTOR);
         keys = new int[capacity];
         values = new Object[capacity];
-        Arrays.fill(keys, EMPTY_KEY);
+        occupied = new boolean[capacity];
     }
 
     @SuppressWarnings("unchecked")
     public V get(int key) {
         int index = indexOf(key);
         int i = index;
-        while (keys[i] != EMPTY_KEY) {
+        while (occupied[i]) {
             if (keys[i] == key) {
                 return (V) values[i];
             }
@@ -46,7 +46,7 @@ public final class FastIntMap<V> {
         }
 
         int i = indexOf(key);
-        while (keys[i] != EMPTY_KEY) {
+        while (occupied[i]) {
             if (keys[i] == key) {
                 values[i] = value;
                 return;
@@ -56,16 +56,17 @@ public final class FastIntMap<V> {
 
         keys[i] = key;
         values[i] = value;
+        occupied[i] = true;
         size++;
     }
 
     @SuppressWarnings("unchecked")
     public V remove(int key) {
         int i = indexOf(key);
-        while (keys[i] != EMPTY_KEY) {
+        while (occupied[i]) {
             if (keys[i] == key) {
                 V old = (V) values[i];
-                keys[i] = EMPTY_KEY;
+                occupied[i] = false;
                 values[i] = null;
                 size--;
                 rehashFrom(i);
@@ -81,7 +82,7 @@ public final class FastIntMap<V> {
     }
 
     public void clear() {
-        Arrays.fill(keys, EMPTY_KEY);
+        Arrays.fill(occupied, false);
         Arrays.fill(values, null);
         size = 0;
     }
@@ -93,10 +94,10 @@ public final class FastIntMap<V> {
     @SuppressWarnings("unchecked")
     private void rehashFrom(int start) {
         int i = (start + 1) & (capacity - 1);
-        while (keys[i] != EMPTY_KEY) {
+        while (occupied[i]) {
             int k = keys[i];
             Object v = values[i];
-            keys[i] = EMPTY_KEY;
+            occupied[i] = false;
             values[i] = null;
             size--;
             put(k, (V) v);
@@ -109,16 +110,17 @@ public final class FastIntMap<V> {
         int oldCapacity = capacity;
         int[] oldKeys = keys;
         Object[] oldValues = values;
+        boolean[] oldOccupied = occupied;
 
         capacity = oldCapacity << 1;
         threshold = (int) (capacity * LOAD_FACTOR);
         keys = new int[capacity];
         values = new Object[capacity];
-        Arrays.fill(keys, EMPTY_KEY);
+        occupied = new boolean[capacity];
         size = 0;
 
         for (int i = 0; i < oldCapacity; i++) {
-            if (oldKeys[i] != EMPTY_KEY) {
+            if (oldOccupied[i]) {
                 put(oldKeys[i], (V) oldValues[i]);
             }
         }

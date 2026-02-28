@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "com.helium",
+    "id": "helium",
+    "version": "${version}",
+    "metadata": {
+      "name": "Helium",
+      "description": "Client-side performance optimizations for Minecraft. Faster math, less GC pressure, smarter rendering. Zero visual changes. Requires Sodium.",
+      "contributors": {},
+      "contact": {},
+      "license": "MIT",
+      "icon": "assets/helium/icon.png"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "client_init": [
+        "com.helium.HeliumClient"
+      ],
+      "modmenu": [
+        "com.helium.compat.HeliumModMenuIntegration"
+      ],
+      "sodium:config_api_user": [
+        "com.helium.compat.HeliumSodiumConfig"
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "versions": ">=0.19.0"
+      },
+      {
+        "id": "quilted_fabric_api",
+        "versions": "*",
+        "unless": "fabric-api"
+      },
+      {
+        "id": "fabric-api",
+        "versions": "*",
+        "unless": "quilted_fabric_api"
+      },
+      {
+        "id": "minecraft",
+        "versions": ">=1.21.1 <=1.21.11"
+      },
+      {
+        "id": "java",
+        "versions": ">=21"
+      },
+      {
+        "id": "sodium",
+        "versions": ">=0.5.0"
+      }
+    ],
+    "provides": [
+      {
+        "id": "helium",
+        "version": "${version}"
+      }
+    ]
+  },
+  "mixin": [
+    "helium.mixins.json"
+  ]
+}

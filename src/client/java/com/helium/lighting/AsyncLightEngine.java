@@ -59,23 +59,18 @@ public final class AsyncLightEngine {
         }
     }
 
-    public static boolean submitUpdate(long posKey, int lightLevel, boolean isSky) {
-        if (!initialized.get() || queuedCount.get() >= MAX_QUEUED) return false;
+    public static boolean canAcceptUpdate() {
+        return initialized.get() && queuedCount.get() < MAX_QUEUED;
+    }
 
-        LightUpdate update = new LightUpdate(posKey, lightLevel, isSky);
-        pendingUpdates.offer(update);
+    public static void trackUpdate() {
+        if (!initialized.get()) return;
         queuedCount.incrementAndGet();
+    }
 
-        executor.submit(() -> {
-            try {
-                update.processed = true;
-                completedUpdates.offer(update);
-            } catch (Throwable t) {
-                HeliumClient.LOGGER.warn("async light update failed", t);
-            }
-        });
-
-        return true;
+    public static void onUpdateApplied() {
+        if (!initialized.get()) return;
+        queuedCount.updateAndGet(c -> Math.max(0, c - 1));
     }
 
     public static int applyCompleted() {

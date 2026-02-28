@@ -1,9 +1,11 @@
 package com.helium.render;
 
+import java.util.concurrent.atomic.AtomicIntegerArray;
+
 public final class GLStateCache {
 
     private static final int MAX_TEXTURE_UNITS = 16;
-    private static final int[] lastBoundTexturePerUnit = new int[MAX_TEXTURE_UNITS];
+    private static final AtomicIntegerArray lastBoundTexturePerUnit = new AtomicIntegerArray(MAX_TEXTURE_UNITS);
     private static volatile int activeTextureUnit = 0;
     private static volatile int lastBoundProgram = -1;
     private static volatile int lastBoundVao = -1;
@@ -39,7 +41,9 @@ public final class GLStateCache {
     }
 
     public static void reset() {
-        java.util.Arrays.fill(lastBoundTexturePerUnit, -1);
+        for (int i = 0; i < MAX_TEXTURE_UNITS; i++) {
+            lastBoundTexturePerUnit.set(i, -1);
+        }
         activeTextureUnit = 0;
         lastBoundProgram = -1;
         lastBoundVao = -1;
@@ -64,9 +68,8 @@ public final class GLStateCache {
     public static boolean shouldBindTexture(int textureId) {
         int unit = activeTextureUnit;
         if (unit >= 0 && unit < MAX_TEXTURE_UNITS) {
-            if (textureId == lastBoundTexturePerUnit[unit]) return false;
-            lastBoundTexturePerUnit[unit] = textureId;
-            return true;
+            int prev = lastBoundTexturePerUnit.getAndSet(unit, textureId);
+            return prev != textureId;
         }
         return true;
     }
@@ -123,7 +126,9 @@ public final class GLStateCache {
     }
 
     public static void invalidateTexture() {
-        java.util.Arrays.fill(lastBoundTexturePerUnit, -1);
+        for (int i = 0; i < MAX_TEXTURE_UNITS; i++) {
+            lastBoundTexturePerUnit.set(i, -1);
+        }
     }
 
     public static void invalidateProgram() {

@@ -16,6 +16,7 @@ import net.minecraft.util.Identifier;
 public class HeliumSodiumConfig implements ConfigEntryPoint {
 
     private static final String NAMESPACE = "helium";
+    private static final int[] DISPLAY_SYNC_HZ = {0, 60, 75, 120, 144, 165, 240, 360, 500, -1};
 
     @Override
     public void registerConfigLate(ConfigBuilder builder) {
@@ -675,22 +676,19 @@ public class HeliumSodiumConfig implements ConfigEntryPoint {
         displaySyncOpt.setDefaultValue(9);
         displaySyncOpt.setRange(0, 9, 1);
         displaySyncOpt.setValueFormatter(v -> {
-            int[] hz = {0, 60, 75, 120, 144, 165, 240, 360, 500, -1};
-            int val = hz[Math.min(v, hz.length - 1)];
+            int val = DISPLAY_SYNC_HZ[Math.min(v, DISPLAY_SYNC_HZ.length - 1)];
             if (val == 0) return Text.translatable("helium.option.display_sync_optimization.off");
             if (val == -1) return Text.translatable("helium.option.display_sync_optimization.auto");
             return Text.of(val + " Hz");
         });
         displaySyncOpt.setStorageHandler(storage);
         displaySyncOpt.setBinding(v -> {
-            int[] hz = {0, 60, 75, 120, 144, 165, 240, 360, 500, -1};
-            config.displaySyncRefreshRate = hz[Math.min(v, hz.length - 1)];
+            config.displaySyncRefreshRate = DISPLAY_SYNC_HZ[Math.min(v, DISPLAY_SYNC_HZ.length - 1)];
             com.helium.render.DisplaySyncOptimizer.reset();
         }, () -> {
-            int[] hz = {0, 60, 75, 120, 144, 165, 240, 360, 500, -1};
             int val = config.displaySyncRefreshRate;
-            for (int i = 0; i < hz.length; i++) {
-                if (hz[i] == val) return i;
+            for (int i = 0; i < DISPLAY_SYNC_HZ.length; i++) {
+                if (DISPLAY_SYNC_HZ[i] == val) return i;
             }
             return 9;
         });

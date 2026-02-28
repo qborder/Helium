@@ -39,6 +39,7 @@ public final class IdleManager {
     private static GLFWMouseButtonCallback prevMouseBtnCallback;
     private static GLFWWindowFocusCallback prevFocusCallback;
     private static GLFWScrollCallback prevScrollCallback;
+    private static volatile long registeredWindowHandle = 0;
 
     private IdleManager() {}
 
@@ -57,6 +58,7 @@ public final class IdleManager {
     public static void setWindow(long handle) {
         if (!initialized.get()) return;
 
+        registeredWindowHandle = handle;
         prevCursorCallback = GLFW.glfwSetCursorPosCallback(handle, IdleManager::onCursorPos);
         prevKeyCallback = GLFW.glfwSetKeyCallback(handle, IdleManager::onKey);
         prevMouseBtnCallback = GLFW.glfwSetMouseButtonCallback(handle, IdleManager::onMouseButton);
@@ -210,6 +212,21 @@ public final class IdleManager {
     }
 
     public static void shutdown() {
+        if (registeredWindowHandle != 0) {
+            try {
+                GLFW.glfwSetCursorPosCallback(registeredWindowHandle, prevCursorCallback);
+                GLFW.glfwSetKeyCallback(registeredWindowHandle, prevKeyCallback);
+                GLFW.glfwSetMouseButtonCallback(registeredWindowHandle, prevMouseBtnCallback);
+                GLFW.glfwSetWindowFocusCallback(registeredWindowHandle, prevFocusCallback);
+                GLFW.glfwSetScrollCallback(registeredWindowHandle, prevScrollCallback);
+            } catch (Throwable ignored) {}
+            registeredWindowHandle = 0;
+        }
+        prevCursorCallback = null;
+        prevKeyCallback = null;
+        prevMouseBtnCallback = null;
+        prevFocusCallback = null;
+        prevScrollCallback = null;
         idle.set(false);
         initialized.set(false);
     }

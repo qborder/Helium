@@ -8,11 +8,11 @@ this wiki covers how everything works, how to configure it, and what to do when 
 
 ## pages
 
-- [[Installation]] — how to get it running
-- [[Features]] — what every system does and why
-- [[Configuration]] — every config option explained
-- [[Compatibility]] — what works with what
-- [[FAQ]] — common questions and issues
+- [[Installation]] - how to get it running
+- [[Features]] - what every system does and why
+- [[Configuration]] - every config option explained
+- [[Compatibility]] - what works with what
+- [[FAQ]] - common questions and issues
 
 ---
 
@@ -40,6 +40,6 @@ if you just want to install and forget, that's fine. if you want to tune every k
 
 ## not supported
 
-- Android / PojavLauncher — Helium needs desktop OpenGL, not OpenGL ES. it auto-detects Android and disables the GL state cache to avoid crashes but most features won't work right
-- servers — Helium is client-only, nothing runs on the server side
-- Forge / NeoForge — Fabric and Quilt only
+- Android / PojavLauncher - Helium needs desktop OpenGL, not OpenGL ES. it auto-detects Android and disables the GL state cache to avoid crashes but most features won't work right
+- servers - Helium is client-only, nothing runs on the server side
+- Forge / NeoForge - Fabric and Quilt only

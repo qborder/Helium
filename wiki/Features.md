@@ -75,7 +75,7 @@ min, max, and abs using bitwise shifts instead of conditional branches. avoids b
 
 **JOML fast math**
 
-sets `joml.fastmath=true` as a JVM system property at startup. JOML is the matrix library Minecraft uses for all transformation math — this enables JOML's own internal fast approximations throughout the renderer with zero code changes on Helium's side.
+sets `joml.fastmath=true` as a JVM system property at startup. JOML is the matrix library Minecraft uses for all transformation math, so this enables JOML's own internal fast approximations throughout the renderer with zero code changes on Helium's side.
 
 ---
 

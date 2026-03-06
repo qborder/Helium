@@ -34,7 +34,7 @@ that's it. no config required out of the box.
 
 ## where is the config
 
-**Options > Video Settings > Helium** — it's a tab inside Sodium's settings panel.
+**Options > Video Settings > Helium** - it's a tab inside Sodium's settings panel.
 
 if you have ModMenu installed, there's also a shortcut from the mod list screen.
 

@@ -42,7 +42,7 @@ if you're bottlenecked by chunk rendering, Sodium itself is handling that and He
 
 **will Helium help with chunk loading lag?**
 
-not really. chunk building is Sodium's domain. Helium handles what happens after chunks are built — entity rendering, block entity rendering, particles, GL overhead.
+not really. chunk building is Sodium's domain. Helium handles what happens after chunks are built, so entity rendering, block entity rendering, particles, and GL overhead.
 
 **my FPS is the same as before**
 
@@ -68,7 +68,7 @@ delete `helium.json` and Helium will regenerate it with defaults on next launch.
 
 Sodium does frustum culling (skips things outside your field of view). Helium does distance culling (skips things too far away even if they're technically in view). they complement each other.
 
-**leaf culling mode — which one should I use?**
+**leaf culling mode, which one should I use?**
 
 - FAST is the default and safe for most people
 - CHECK gives better results in dense jungles, small CPU cost
@@ -78,7 +78,7 @@ Sodium does frustum culling (skips things outside your field of view). Helium do
 
 **temporal reprojection is off by default, should I turn it on?**
 
-only if you want to experiment. it skips re-rendering distant entities on alternating frames when the camera hasn't moved much. it works but it's marked experimental for a reason — fast camera movement or certain entity animations can look slightly off. leave it off unless you're specifically trying to squeeze more performance out of entity-heavy scenes.
+only if you want to experiment. it skips re-rendering distant entities on alternating frames when the camera hasn't moved much. it works but it's marked experimental for a reason. fast camera movement or certain entity animations can look slightly off. leave it off unless you're specifically trying to squeeze more performance out of entity-heavy scenes.
 
 ---
 
@@ -90,11 +90,11 @@ grab the crash report from `.minecraft/crash-reports/` and open an issue on GitH
 
 **game is stable but one feature seems broken**
 
-check `latest.log` for lines starting with `helium` — each feature logs its init status and any failures. if a feature throws during init it disables itself and logs the reason.
+check `latest.log` for lines starting with `helium`. each feature logs its init status and any failures. if a feature throws during init it disables itself and logs the reason.
 
 **GL state cache is causing visual glitches**
 
-turn off `glStateCache` in the config. also check if ImmediatelyFast is installed — if it is, Helium auto-disables its GL cache, and if you're seeing this issue it means the auto-detection may have failed. report it on GitHub.
+turn off `glStateCache` in the config. also check if ImmediatelyFast is installed. if it is, Helium auto-disables its GL cache, and if you're seeing this issue it means the auto-detection may have failed. report it on GitHub.
 
 **weird leaf rendering / missing leaves**
 

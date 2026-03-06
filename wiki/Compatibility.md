@@ -13,13 +13,13 @@
 
 | mod | status | notes |
 |---|---|---|
-| Lithium | works | no conflicts, they cover different areas — Lithium does game logic, Helium does rendering |
+| Lithium | works | no conflicts, they cover different areas. Lithium does game logic, Helium does rendering |
 | Iris | works | shader compatibility is fine, Helium's GL cache and DSA features work alongside Iris |
 | ImmediatelyFast | works | GL state cache auto-disables when ImmediatelyFast is detected to avoid double-tracking |
 | ViaFabricPlus | works | no protocol conflicts |
 | ModMenu | works | optional, adds a settings shortcut in the mod list |
 | Indium | works | Sodium rendering API compatibility layer, no conflicts |
-| Entity Culling | works | both can run simultaneously, Helium's culling uses a distance approach while Entity Culling does frustum/occlusion — they don't conflict |
+| Entity Culling | works | both can run simultaneously, Helium's culling uses a distance approach while Entity Culling does frustum/occlusion, no conflicts |
 | Reese's Sodium Options | works | just a Sodium UI mod, no issues |
 | Sodium Extra | works | no conflicts |
 

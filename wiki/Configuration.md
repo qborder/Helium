@@ -32,7 +32,7 @@ every feature has a safe fallback. if something fails to initialize it disables 
 | `particleLOD` | false | reduce particle detail at distance |
 | `particleLODDistance` | 16.0 | distance at which particle LOD kicks in |
 | `particleLODReduction` | 0.3 | how much particle detail is reduced in the LOD zone (0.0 to 1.0) |
-| `leafCullingMode` | "FAST" | leaf culling mode — OFF, FAST, VERTICAL, STATE, CHECK, GAP, DEPTH, RANDOM |
+| `leafCullingMode` | "FAST" | leaf culling mode: OFF, FAST, VERTICAL, STATE, CHECK, GAP, DEPTH, RANDOM |
 | `leafCullingDepth` | 2 | depth used by GAP and DEPTH modes (1 to 4) |
 | `leafCullingRandomRejection` | 0.2 | rejection probability for RANDOM mode |
 | `leafCullingMangroveRoots` | false | apply leaf culling logic to mangrove roots |
@@ -42,7 +42,7 @@ every feature has a safe fallback. if something fails to initialize it disables 
 | `fastFramebufferBlit` | true | optimized framebuffer blit operations |
 | `modelCache` | true | cache baked block models to avoid repeated re-baking |
 | `modelCacheMaxMb` | 64 | max size of the model cache in MB |
-| `temporalReprojection` | false | experimental — skip re-rendering distant entities on alternating frames |
+| `temporalReprojection` | false | experimental: skip re-rendering distant entities on alternating frames |
 | `shaderUniformCache` | true | cache uniform locations and skip unchanged glUniform calls |
 | `directStateAccess` | true | use DSA to modify GPU objects without binding (requires GL 4.5 or ARB_DSA) |
 | `fastBambooLight` | true | faster light calculation for bamboo blocks |
@@ -159,14 +159,14 @@ every feature has a safe fallback. if something fails to initialize it disables 
 | `overlayShowParticles` | false | show active particle count in the overlay |
 | `overlayShowCoordinates` | false | show player coordinates in the overlay |
 | `overlayShowBiome` | false | show current biome in the overlay |
-| `overlayPosition` | "TOP_LEFT" | overlay position — TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT |
+| `overlayPosition` | "TOP_LEFT" | overlay position: TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT |
 | `overlayTransparency` | 60 | overlay background transparency (0-100) |
 | `overlayBackgroundColor` | "#000000" | overlay background color as hex |
 | `overlayTextColor` | "#FFFFFF" | overlay text color as hex |
 | `smoothScrolling` | true | smoother scroll animations in list screens |
 | `windowStyle` | true | apply Windows 11 DWM styling to the game window |
-| `windowMaterial` | "TABBED" | window backdrop material — TABBED, ACRYLIC, MICA, NONE |
-| `windowCorner` | "ROUND" | window corner style — ROUND, ROUND_SMALL, SQUARE, DEFAULT |
+| `windowMaterial` | "TABBED" | window backdrop material: TABBED, ACRYLIC, MICA, NONE |
+| `windowCorner` | "ROUND" | window corner style: ROUND, ROUND_SMALL, SQUARE, DEFAULT |
 | `hotbarOptimizer` | true | reduce hotbar rendering overhead |
 | `hotbarMultiSwitch` | false | allow switching multiple hotbar slots at once |
 | `smoothHotbar` | true | smooth hotbar slot switching animation |
@@ -185,11 +185,11 @@ every feature has a safe fallback. if something fails to initialize it disables 
 
 if you're on a potato PC, the biggest wins in order are:
 
-1. `entityCullDistance` — bring it down to 32 if you're in high-entity areas
-2. `blockEntityCullDistance` — 32 is fine for most people
-3. `leafCullingMode` — set to CHECK or DEPTH if you play in forests
-4. `particleLimiting` + `maxParticles` — lower max particles if you're CPU-bottlenecked
-5. `reduceFpsWhenInactive` — free performance whenever you alt-tab
+1. `entityCullDistance` - bring it down to 32 if you're in high-entity areas
+2. `blockEntityCullDistance` - 32 is fine for most people
+3. `leafCullingMode` - set to CHECK or DEPTH if you play in forests
+4. `particleLimiting` + `maxParticles` - lower max particles if you're CPU-bottlenecked
+5. `reduceFpsWhenInactive` - free performance whenever you alt-tab
 
 if you're on a high-end machine and want lower input latency specifically:
 

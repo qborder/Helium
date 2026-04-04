@@ -4,6 +4,8 @@
 
 lightweight client-side performance mod for Minecraft
 
+NEW MOD: https://gitlab.com/mslow/Catalyst
+
 [![Modrinth](https://img.shields.io/modrinth/dt/heliummc?color=00AF5C&logo=modrinth&label=modrinth)](https://modrinth.com/mod/heliummc)
 [![GitHub](https://img.shields.io/github/stars/qborder/Helium?style=flat&logo=github&label=stars)](https://github.com/qborder/Helium)
 [![Build](https://img.shields.io/github/actions/workflow/status/qborder/Helium/build.yml?logo=github&label=build)](https://github.com/qborder/Helium/actions)
